@@ -1,0 +1,44 @@
+const int six = 666;
+
+void output(int num) {
+    printf("num is %d\n", num);
+    return;
+}
+
+int main() {
+    {}
+    printf("20373980\n");
+    int a = 10;
+    while ((a - 1) * 2 > 0) {
+        a = getint();
+        if (a > 5) {
+            output(a);
+            break;
+        }
+    }
+    if (a != 0) {
+        printf("a\n");
+    }
+    int i = 0, j;
+    while (1) {
+        j = getint();
+        if (j < 10) {
+            i = i + 1;
+        } else if (j > 10) {
+            continue;
+        } else {
+            break;
+        }
+    }
+    printf("The value of i is:%d\n", i);
+    int array[6] = {20373980, 2002, 6, 24, 2020, 675};
+    i = 0;
+    while (1) {
+        if (i > 5) {
+            break;
+        }
+        printf("Important number : %d\n", array[i]);
+        i = i + 1;
+    }
+    return 0;
+}

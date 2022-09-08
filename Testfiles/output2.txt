@@ -1,0 +1,10 @@
+20373980
+20373980
+20373980
+20373980
+20373980
+1223456678
+Finish outputting an array
+Get Sec Sum
+Get Sec Mul 240
+Finished

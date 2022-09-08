@@ -1,0 +1,60 @@
+int test_func1(int a) {
+    int b = 1;
+    int c = a * b;
+    int d = c + a * b;
+    int e = d / c;
+    int f = e % d;
+    c = a - b;
+    if (a == b && c == d)
+        a = 1;
+    if (a == b || c == d)
+        a = 1;
+    if (a == b)
+        f = c - 1;
+    if (a != b)
+        f = c + 1;
+    return f;
+}
+
+int cal(int a, int b) {
+    if (a < b) {
+        return a + b;
+    }
+    return a - b;
+}
+
+void test_func2(int a, int b) {
+    int c;
+    c = cal(a, b);
+    printf("The value of c is %d\n", c);
+    return;
+}
+
+int main() {
+    {}
+    printf("20373980\n");
+    int a, b;
+    a = getint();
+    b = test_func1(a);
+    int j, k;
+    j = getint();
+    k = getint();
+    test_func2(j, k);
+    printf("The value of b is %d\n", b);
+    int w = + -3, x = - + -8, y = + - +6, z = - +5;
+    printf("W and X and Y and Z tested\n");
+    int s1[6] = {0, 1, 2, 3, 6, 12};
+    int s2[2][3] = {{10, 11, 12},
+                    {13, 14, 15}};
+    if (!s1[0] == 1 && !(s1[0] * 2) && !0) {
+        printf("! is ok\n");
+    } else {
+        printf("! not ok\n");
+    }
+    int i = 0;
+    while (i < 5) {
+        printf("Bonjour\n");
+        i = i + 1;
+    }
+    return 0;
+}

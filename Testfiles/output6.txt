@@ -1,0 +1,10 @@
+20373980
+num is 6
+a
+The value of i is:2
+Important number : 20373980
+Important number : 2002
+Important number : 6
+Important number : 24
+Important number : 2020
+Important number : 675
