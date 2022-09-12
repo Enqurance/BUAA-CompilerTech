@@ -1,0 +1,83 @@
+package ClassFile;
+
+import java.util.HashMap;
+
+public class CategoryCode {
+    public static String IDENT = "IDENFR";
+    public static String INTCONST = "INTCON";
+    public static String FORMATSTRING = "STRCON";
+    public static String MAIN = "MAINTK";
+    public static String CONST = "CONSTTK";
+    public static String INT = "INTTK";
+    public static String BREAK = "BREAKTK";
+    public static String CONTINUE = "CONTINUETK";
+    public static String IF = "IFTK";
+    public static String ELSE = "ELSETK";
+    public static String NOT = "NOT";
+    public static String AND = "AND";
+    public static String OR = "OR";
+    public static String WHILE = "WHILETK";
+    public static String GETINT = "GETINTTK";
+    public static String PRINTF = "PRINTFTK";
+    public static String RETURN = "RETURNTK";
+    public static String PLUS = "PLUS";
+    public static String MINU = "MINU";
+    public static String VOID = "VOIDTK";
+    public static String MULT = "MULT";
+    public static String DIV = "DIV";
+    public static String MOD = "MOD";
+    public static String LSS = "LSS";
+    public static String LEQ = "LEQ";
+    public static String GRE = "GRE";
+    public static String GEQ = "GEQ";
+    public static String EQL = "EQL";
+    public static String NEQ = "NEQ";
+    public static String ASSIGN = "ASSIGN";
+    public static String SEMICN = "SEMICN";
+    public static String COMMA = "COMMA";
+    public static String LPARENT = "LPARENT";
+    public static String RPARENT = "RPARENT";
+    public static String LBRACK = "LBRACK";
+    public static String RBRACK = "RBRACK";
+    public static String LBRACE = "LBRACE";
+    public static String RBRACE = "RBRACE";
+    public static HashMap<String, String> TYPEMAP = new HashMap<String, String>() {
+        {
+            put("main", MAIN);
+            put("const", CONST);
+            put("int", INT);
+            put("break", BREAK);
+            put("continue", CONTINUE);
+            put("if", IF);
+            put("else", ELSE);
+            put("!", NOT);
+            put("&&", AND);
+            put("||", OR);
+            put("while", WHILE);
+            put("getint", GETINT);
+            put("printf", PRINTF);
+            put("return", RETURN);
+            put("+", PLUS);
+            put("-", MINU);
+            put("void", VOID);
+            put("*", MULT);
+            put("/", DIV);
+            put("%", MOD);
+            put("<", LSS);
+            put("<=", LEQ);
+            put(">", GRE);
+            put(">=", GEQ);
+            put("==", EQL);
+            put("!=", NEQ);
+            put("=", ASSIGN);
+            put(";", SEMICN);
+            put(",", COMMA);
+            put("(", LPARENT);
+            put(")", RPARENT);
+            put("[", LBRACK);
+            put("]", RBRACK);
+            put("{", LBRACE);
+            put("}", RBRACE);
+        }
+    };
+}
