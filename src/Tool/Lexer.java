@@ -186,4 +186,8 @@ public class Lexer {
             e.printStackTrace();
         }
     }
+
+    public ArrayList<Token> getTokenList() {
+        return tokenList;
+    }
 }

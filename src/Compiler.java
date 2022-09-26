@@ -1,4 +1,5 @@
 import Tool.Lexer;
+import Tool.Parser;
 
 import java.io.*;
 import java.util.Scanner;
@@ -6,11 +7,12 @@ import java.util.Scanner;
 public class Compiler {
     public static void main(String[] args) {
         String unit = readFile();
-        /* Debug */
-//        System.out.println(unit);
         Lexer lexer = new Lexer();
         lexer.lexerAnalyzer(unit);
-        lexer.outputToFile();
+        Parser parser = new Parser(lexer.getTokenList());
+        parser.parse();
+        /* Choose one to output */
+        parser.outputToFile();
     }
 
     public static String readFile() {
