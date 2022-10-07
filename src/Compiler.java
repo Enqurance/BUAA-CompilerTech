@@ -12,7 +12,8 @@ public class Compiler {
         Parser parser = new Parser(lexer.getTokenList());
         parser.parse();
         /* Choose one to output */
-        parser.outputToFile();
+//        parser.outputToFile();
+        parser.outputTreeToFile();
     }
 
     public static String readFile() {

@@ -14,6 +14,7 @@ public class Parser {
     private final ArrayList<Node> nodes = new ArrayList<>();
     private Token curToken;
     private int tokenPtr;
+    private Node head;
 
     public Parser(ArrayList<Token> tokens) {
         this.tokens = tokens;
@@ -34,67 +35,97 @@ public class Parser {
         }
     }
 
-    public void addNode(String context) {
-        Node tempNode = new Node(context);
-        nodes.add(tempNode);
+    public Node addNode(String context) {
 //        try {
 //            Thread.sleep(1);
 //        } catch (InterruptedException e) {
 //            e.printStackTrace();
 //        }
 //        System.out.println(context + curToken.context + tokens.get(tokenPtr - 1).context + " " + tokenPtr);
+        Node tempNode = new Node(context);
+        nodes.add(tempNode);
+        return tempNode;
+    }
+
+    public void connect(ArrayList<Node> children, Node parent) {
+        for (Node item : children) {
+            parent.addChild(item);
+        }
     }
 
     public void parse() {
-        CompUnit();
+        Node compUnit = CompUnit();
+        compUnit.addParent(null);
+        this.head = compUnit;
     }
 
-    public void CompUnit() {
+    public Node CompUnit() {
+        ArrayList<Node> children = new ArrayList<>();
         while (curToken.type.equals(CategoryCode.CONST) || (curToken.type.equals(CategoryCode.INT) &&
                 tokens.get(tokenPtr + 1).type.equals(CategoryCode.IDENT) && (
                 tokens.get(tokenPtr + 2).type.equals(CategoryCode.LBRACK) ||
                         tokens.get(tokenPtr + 2).type.equals(CategoryCode.ASSIGN) ||
                         tokens.get(tokenPtr + 2).type.equals(CategoryCode.COMMA) ||
                         tokens.get(tokenPtr + 2).type.equals(CategoryCode.SEMICN)))) {
-            Decl();
+            Node decl = Decl();
+            children.add(decl);
         }
         while ((curToken.type.equals(CategoryCode.VOID) || curToken.type.equals(CategoryCode.INT)) &&
                 tokens.get(tokenPtr + 1).type.equals(CategoryCode.IDENT) &&
                 tokens.get(tokenPtr + 2).type.equals(CategoryCode.LPARENT)) {
-            FuncDef();
+            Node funcDef = FuncDef();
+            children.add(funcDef);
         }
         if (curToken.type.equals(CategoryCode.INT) && tokens.get(tokenPtr + 1).type.equals(CategoryCode.MAIN)) {
-            MainFuncDef();
+            Node mainFuncDef = MainFuncDef();
+            children.add(mainFuncDef);
         } else {
             exceptionOccurred();
         }
-        addNode("<CompUnit>");
+        Node node = addNode("<CompUnit>");
+        connect(children, node);
+        return node;
     }
 
-    public void Decl() {
+    public Node Decl() {
+        ArrayList<Node> children = new ArrayList<>();
         if (curToken.type.equals(CategoryCode.CONST)) {
-            ConstDecl();
+            Node constDecl = ConstDecl();
+            children.add(constDecl);
         } else if (curToken.type.equals(CategoryCode.INT)) {
-            VarDecl();
+            Node varDecl = VarDecl();
+            children.add(varDecl);
         } else {
             exceptionOccurred();
         }
+        Node node = new Node("<Decl>");
+        connect(children, node);
+        return node;
     }
 
-    public void FuncDef() {
-        FuncType();
+    public Node FuncDef() {
+        ArrayList<Node> children = new ArrayList<>();
+        Node funcType = FuncType();
+        children.add(funcType);
         if (curToken.type.equals(CategoryCode.IDENT)) {
+            children.add(new Node(curToken));
             getToken();
             if (curToken.type.equals(CategoryCode.LPARENT)) {
+                children.add(new Node(curToken));
                 getToken();
                 if (curToken.type.equals(CategoryCode.RPARENT)) {
+                    children.add(new Node(curToken));
                     getToken();
-                    Block();
+                    Node block = Block();
+                    children.add(block);
                 } else {
-                    FuncFParams();
+                    Node funcFParams = FuncFParams();
+                    children.add(funcFParams);
                     if (curToken.type.equals(CategoryCode.RPARENT)) {
+                        children.add(new Node(curToken));
                         getToken();
-                        Block();
+                        Node block = Block();
+                        children.add(block);
                     } else {
                         exceptionOccurred();
                     }
@@ -105,19 +136,27 @@ public class Parser {
         } else {
             exceptionOccurred();
         }
-        addNode("<FuncDef>");
+        Node node = addNode("<FuncDef>");
+        connect(children, node);
+        return node;
     }
 
-    public void MainFuncDef() {
+    public Node MainFuncDef() {
+        ArrayList<Node> children = new ArrayList<>();
         if (curToken.type.equals(CategoryCode.INT)) {
+            children.add(new Node(curToken));
             getToken();
             if (curToken.type.equals(CategoryCode.MAIN)) {
+                children.add(new Node(curToken));
                 getToken();
                 if (curToken.type.equals(CategoryCode.LPARENT)) {
+                    children.add(new Node(curToken));
                     getToken();
                     if (curToken.type.equals(CategoryCode.RPARENT)) {
+                        children.add(new Node(curToken));
                         getToken();
-                        Block();
+                        Node block = Block();
+                        children.add(block);
                     } else {
                         exceptionOccurred();
                     }
@@ -130,19 +169,28 @@ public class Parser {
         } else {
             exceptionOccurred();
         }
-        addNode("<MainFuncDef>");
+        Node node = addNode("<MainFuncDef>");
+        connect(children, node);
+        return node;
     }
 
-    public void ConstDecl() {
+    public Node ConstDecl() {
+        ArrayList<Node> children = new ArrayList<>();
         if (curToken.type.equals(CategoryCode.CONST)) {
+            children.add(new Node(curToken));
             getToken();
-            BType();
-            ConstDef();
+            Node bType = BType();
+            children.add(bType);
+            Node constDef = ConstDef();
+            children.add(constDef);
             while (curToken.type.equals(CategoryCode.COMMA)) {
+                children.add(new Node(curToken));
                 getToken();
-                ConstDef();
+                Node constDef1 = ConstDef();
+                children.add(constDef1);
             }
             if (curToken.type.equals(CategoryCode.SEMICN)) {
+                children.add(new Node(curToken));
                 getToken();
             } else {
                 exceptionOccurred();
@@ -150,125 +198,183 @@ public class Parser {
         } else {
             exceptionOccurred();
         }
-        addNode("<ConstDecl>");
+        Node node = addNode("<ConstDecl>");
+        connect(children, node);
+        return node;
     }
 
-    public void VarDecl() {
-        BType();
-        VarDef();
+    public Node VarDecl() {
+        ArrayList<Node> children = new ArrayList<>();
+        Node bType = BType();
+        children.add(bType);
+        Node varDef = VarDef();
+        children.add(varDef);
         while (curToken.type.equals(CategoryCode.COMMA)) {
+            children.add(new Node(curToken));
             getToken();
-            VarDef();
+            Node varDef1 = VarDef();
+            children.add(varDef1);
         }
         if (curToken.type.equals(CategoryCode.SEMICN)) {
+            children.add(new Node(curToken));
             getToken();
         } else {
             exceptionOccurred();
         }
-        addNode("<VarDecl>");
+        Node node = addNode("<VarDecl>");
+        connect(children, node);
+        return node;
     }
 
-    public void FuncType() {
+    public Node FuncType() {
+        ArrayList<Node> children = new ArrayList<>();
         if (curToken.type.equals(CategoryCode.INT) || curToken.type.equals(CategoryCode.VOID)) {
+            children.add(new Node(curToken));
             getToken();
         } else {
             exceptionOccurred();
         }
-        addNode("<FuncType>");
+        Node node = addNode("<FuncType>");
+        connect(children, node);
+        return node;
     }
 
-    public void FuncFParams() {
-        FuncFParam();
+    public Node FuncFParams() {
+        ArrayList<Node> children = new ArrayList<>();
+        Node funcFParam = FuncFParam();
+        children.add(funcFParam);
         while (curToken.type.equals(CategoryCode.COMMA)) {
+            children.add(new Node(curToken));
             getToken();
-            FuncFParam();
+            Node funcFParam1 = FuncFParam();
+            children.add(funcFParam1);
         }
-        addNode("<FuncFParams>");
+        Node node = addNode("<FuncFParams>");
+        connect(children, node);
+        return node;
     }
 
-    public void Block() {
+    public Node Block() {
+        ArrayList<Node> children = new ArrayList<>();
         if (curToken.type.equals(CategoryCode.LBRACE)) {
+            children.add(new Node(curToken));
             getToken();
             if (curToken.type.equals(CategoryCode.RBRACE)) {
+                children.add(new Node(curToken));
                 getToken();
             } else {
                 while (!curToken.type.equals(CategoryCode.RBRACE)) {
-                    BlockItem();
+                    Node blockItem = BlockItem();
+                    children.add(blockItem);
                 }
+                children.add(new Node(curToken));
                 getToken();
             }
         } else {
             exceptionOccurred();
         }
-        addNode("<Block>");
+        Node node = addNode("<Block>");
+        connect(children, node);
+        return node;
     }
 
-    public void BType() {
+    public Node BType() {
+        ArrayList<Node> children = new ArrayList<>();
         if (curToken.type.equals(CategoryCode.INT)) {
+            children.add(new Node(curToken));
             getToken();
         } else {
             exceptionOccurred();
         }
+        Node node = new Node("<BType>");
+        connect(children, node);
+        return node;
     }
 
-    public void ConstDef() {
+    public Node ConstDef() {
+        ArrayList<Node> children = new ArrayList<>();
         if (curToken.type.equals(CategoryCode.IDENT)) {
+            children.add(new Node(curToken));
             getToken();
             while (curToken.type.equals(CategoryCode.LBRACK)) {
+                children.add(new Node(curToken));
                 getToken();
-                ConstExp();
+                Node constExp = ConstExp();
+                children.add(constExp);
                 if (curToken.type.equals(CategoryCode.RBRACK)) {
+                    children.add(new Node(curToken));
                     getToken();
                 } else {
                     exceptionOccurred();
                 }
             }
             if (curToken.type.equals(CategoryCode.ASSIGN)) {
+                children.add(new Node(curToken));
                 getToken();
-                ConstInitVal();
+                Node node = ConstInitVal();
+                children.add(node);
             } else {
                 exceptionOccurred();
             }
         } else {
             exceptionOccurred();
         }
-        addNode("<ConstDef>");
+        Node node = addNode("<ConstDef>");
+        connect(children, node);
+        return node;
     }
 
-    public void VarDef() {
+    public Node VarDef() {
+        ArrayList<Node> children = new ArrayList<>();
         if (curToken.type.equals(CategoryCode.IDENT)) {
+            children.add(new Node(curToken));
             getToken();
             while (curToken.type.equals(CategoryCode.LBRACK)) {
+                children.add(new Node(curToken));
                 getToken();
-                ConstExp();
+                Node constExp = ConstExp();
+                children.add(constExp);
                 if (curToken.type.equals(CategoryCode.RBRACK)) {
+                    children.add(new Node(curToken));
                     getToken();
                 } else {
                     exceptionOccurred();
                 }
             }
             if (curToken.type.equals(CategoryCode.ASSIGN)) {
+                children.add(new Node(curToken));
                 getToken();
-                InitVal();
+                Node initVal = InitVal();
+                children.add(initVal);
             }
         } else {
             exceptionOccurred();
         }
-        addNode("<VarDef>");
+        Node node = addNode("<VarDef>");
+        connect(children, node);
+        return node;
     }
 
-    public void FuncFParam() {
-        BType();
+    public Node FuncFParam() {
+        ArrayList<Node> children = new ArrayList<>();
+        Node bType = BType();
+        children.add(bType);
         if (curToken.type.equals(CategoryCode.IDENT)) {
+            children.add(new Node(curToken));
             getToken();
             if (curToken.type.equals(CategoryCode.LBRACK)) {
+                children.add(new Node(curToken));
                 getToken();
                 if (curToken.type.equals(CategoryCode.RBRACK)) {
+                    children.add(new Node(curToken));
                     getToken();
                     while (curToken.type.equals(CategoryCode.LBRACK)) {
+                        children.add(new Node(curToken));
                         getToken();
-                        ConstExp();
+                        Node constExp = ConstExp();
+                        children.add(constExp);
                         if (curToken.type.equals(CategoryCode.RBRACK)) {
+                            children.add(new Node(curToken));
                             getToken();
                         } else {
                             exceptionOccurred();
@@ -281,12 +387,16 @@ public class Parser {
         } else {
             exceptionOccurred();
         }
-        addNode("<FuncFParam>");
+        Node node = addNode("<FuncFParam>");
+        connect(children, node);
+        return node;
     }
 
-    public void BlockItem() {
+    public Node BlockItem() {
+        ArrayList<Node> children = new ArrayList<>();
         if (curToken.type.equals(CategoryCode.CONST) || curToken.type.equals(CategoryCode.INT)) {
-            Decl();
+            Node decl = Decl();
+            children.add(decl);
         } else if (curToken.type.equals(CategoryCode.IDENT) || curToken.type.equals(CategoryCode.LPARENT) ||
                 curToken.type.equals(CategoryCode.INTCONST) || curToken.type.equals(CategoryCode.PLUS) ||
                 curToken.type.equals(CategoryCode.MINU) || curToken.type.equals(CategoryCode.NOT) ||
@@ -294,56 +404,81 @@ public class Parser {
                 curToken.type.equals(CategoryCode.IF) || curToken.type.equals(CategoryCode.WHILE) ||
                 curToken.type.equals(CategoryCode.BREAK) || curToken.type.equals(CategoryCode.CONTINUE) ||
                 curToken.type.equals(CategoryCode.RETURN) || curToken.type.equals(CategoryCode.PRINTF)) {
-            Stmt();
+            Node stmt = Stmt();
+            children.add(stmt);
         }
+        Node node = new Node("<BlockItem>");
+        connect(children, node);
+        return node;
     }
 
-    public void ConstExp() {
-        AddExp();
-        addNode("<ConstExp>");
+    public Node ConstExp() {
+        ArrayList<Node> children = new ArrayList<>();
+        Node addExp = AddExp();
+        children.add(addExp);
+        Node node = addNode("<ConstExp>");
+        connect(children, node);
+        return node;
     }
 
-    public void ConstInitVal() {
+    public Node ConstInitVal() {
+        ArrayList<Node> children = new ArrayList<>();
         if (curToken.type.equals(CategoryCode.LBRACE)) {
+            children.add(new Node(curToken));
             getToken();
             if (curToken.type.equals(CategoryCode.LBRACE) || curToken.type.equals(CategoryCode.IDENT) ||
                     curToken.type.equals(CategoryCode.LPARENT) || curToken.type.equals(CategoryCode.PLUS) ||
                     curToken.type.equals(CategoryCode.MINU) || curToken.type.equals(CategoryCode.NOT) ||
                     curToken.type.equals(CategoryCode.INTCONST)) {
-                ConstInitVal();
+                Node constInitVal = ConstInitVal();
+                children.add(constInitVal);
                 while (curToken.type.equals(CategoryCode.COMMA)) {
+                    children.add(new Node(curToken));
                     getToken();
-                    ConstInitVal();
+                    Node constInitVal1 = ConstInitVal();
+                    children.add(constInitVal1);
                 }
                 if (curToken.type.equals(CategoryCode.RBRACE)) {
+                    children.add(new Node(curToken));
                     getToken();
                 }
             } else if (curToken.type.equals(CategoryCode.RBRACE)) {
+                children.add(new Node(curToken));
                 getToken();
             } else {
                 exceptionOccurred();
             }
         } else {
-            ConstExp();
+            Node constExp = ConstExp();
+            children.add(constExp);
         }
-        addNode("<ConstInitVal>");
+        Node node = addNode("<ConstInitVal>");
+        connect(children, node);
+        return node;
     }
 
-    public void InitVal() {
+    public Node InitVal() {
+        ArrayList<Node> children = new ArrayList<>();
         if (curToken.type.equals(CategoryCode.LBRACE)) {
+            children.add(new Node(curToken));
             getToken();
             if (curToken.type.equals(CategoryCode.RBRACE)) {
+                children.add(new Node(curToken));
                 getToken();
             } else if (curToken.type.equals(CategoryCode.LPARENT) || curToken.type.equals(CategoryCode.IDENT) ||
                     curToken.type.equals(CategoryCode.INTCONST) || curToken.type.equals(CategoryCode.PLUS) ||
                     curToken.type.equals(CategoryCode.MINU) || curToken.type.equals(CategoryCode.NOT) ||
                     curToken.type.equals(CategoryCode.LBRACE)) {
-                InitVal();
+                Node initVal = InitVal();
+                children.add(initVal);
                 while (curToken.type.equals(CategoryCode.COMMA)) {
+                    children.add(new Node(curToken));
                     getToken();
-                    InitVal();
+                    Node initVal1 = InitVal();
+                    children.add(initVal1);
                 }
                 if (curToken.type.equals(CategoryCode.RBRACE)) {
+                    children.add(new Node(curToken));
                     getToken();
                 } else {
                     exceptionOccurred();
@@ -352,24 +487,35 @@ public class Parser {
         } else if (curToken.type.equals(CategoryCode.IDENT) || curToken.type.equals(CategoryCode.LPARENT) ||
                 curToken.type.equals(CategoryCode.PLUS) || curToken.type.equals(CategoryCode.MINU) ||
                 curToken.type.equals(CategoryCode.NOT) || curToken.type.equals(CategoryCode.INTCONST)) {
-            Exp();
+            Node exp = Exp();
+            children.add(exp);
         }
-        addNode("<InitVal>");
+        Node node = addNode("<InitVal>");
+        connect(children, node);
+        return node;
     }
 
-    public void Stmt() {
+    public Node Stmt() {
+        ArrayList<Node> children = new ArrayList<>();
         if (curToken.type.equals(CategoryCode.PRINTF)) {
+            children.add(new Node(curToken));
             getToken();
             if (curToken.type.equals(CategoryCode.LPARENT)) {
+                children.add(new Node(curToken));
                 getToken();
-                FormatString();
+                Node formatString = FormatString();
+                children.add(formatString);
                 while (curToken.type.equals(CategoryCode.COMMA)) {
+                    children.add(new Node(curToken));
                     getToken();
-                    Exp();
+                    Node exp = Exp();
+                    children.add(exp);
                 }
                 if (curToken.type.equals(CategoryCode.RPARENT)) {
+                    children.add(new Node(curToken));
                     getToken();
                     if (curToken.type.equals(CategoryCode.SEMICN)) {
+                        children.add(new Node(curToken));
                         getToken();
                     } else {
                         exceptionOccurred();
@@ -381,34 +527,45 @@ public class Parser {
                 exceptionOccurred();
             }
         } else if (curToken.type.equals(CategoryCode.RETURN)) {
+            children.add(new Node(curToken));
             getToken();
             if (curToken.type.equals(CategoryCode.SEMICN)) {
+                children.add(new Node(curToken));
                 getToken();
             } else if (curToken.type.equals(CategoryCode.LPARENT) || curToken.type.equals(CategoryCode.IDENT) ||
                     curToken.type.equals(CategoryCode.INTCONST) || curToken.type.equals(CategoryCode.PLUS) ||
                     curToken.type.equals(CategoryCode.MINU) || curToken.type.equals(CategoryCode.NOT)) {
-                Exp();
+                Node exp = Exp();
+                children.add(exp);
                 if (curToken.type.equals(CategoryCode.SEMICN)) {
+                    children.add(new Node(curToken));
                     getToken();
                 } else {
                     exceptionOccurred();
                 }
             }
         } else if (curToken.type.equals(CategoryCode.BREAK) || curToken.type.equals(CategoryCode.CONTINUE)) {
+            children.add(new Node(curToken));
             getToken();
             if (curToken.type.equals(CategoryCode.SEMICN)) {
+                children.add(new Node(curToken));
                 getToken();
             } else {
                 exceptionOccurred();
             }
         } else if (curToken.type.equals(CategoryCode.WHILE)) {
+            children.add(new Node(curToken));
             getToken();
             if (curToken.type.equals(CategoryCode.LPARENT)) {
+                children.add(new Node(curToken));
                 getToken();
-                Cond();
+                Node cond = Cond();
+                children.add(cond);
                 if (curToken.type.equals(CategoryCode.RPARENT)) {
+                    children.add(new Node(curToken));
                     getToken();
-                    Stmt();
+                    Node stmt = Stmt();
+                    children.add(stmt);
                 } else {
                     exceptionOccurred();
                 }
@@ -416,25 +573,33 @@ public class Parser {
                 exceptionOccurred();
             }
         } else if (curToken.type.equals(CategoryCode.IF)) {
+            children.add(new Node(curToken));
             getToken();
             if (curToken.type.equals(CategoryCode.LPARENT)) {
+                children.add(new Node(curToken));
                 getToken();
-                Cond();
+                Node cond = Cond();
+                children.add(cond);
                 if (curToken.type.equals(CategoryCode.RPARENT)) {
+                    children.add(new Node(curToken));
                     getToken();
-                    Stmt();
+                    Node stmt = Stmt();
+                    children.add(stmt);
                 } else {
                     exceptionOccurred();
                 }
                 if (curToken.type.equals(CategoryCode.ELSE)) {
+                    children.add(new Node(curToken));
                     getToken();
-                    Stmt();
+                    Node stmt = Stmt();
+                    children.add(stmt);
                 }
             } else {
                 exceptionOccurred();
             }
         } else if (curToken.type.equals(CategoryCode.LBRACE)) {
-            Block();
+            Node block = Block();
+            children.add(block);
         } else {
             int i = 0, flag = 0;
             while (tokenPtr + i < tokens.size()) {
@@ -448,16 +613,22 @@ public class Parser {
                 i++;
             }
             if (flag == 1) {
-                LVal();
+                Node lVal = LVal();
+                children.add(lVal);
                 if (curToken.type.equals(CategoryCode.ASSIGN)) {
+                    children.add(new Node(curToken));
                     getToken();
                     if (curToken.type.equals(CategoryCode.GETINT)) {
+                        children.add(new Node(curToken));
                         getToken();
                         if (curToken.type.equals(CategoryCode.LPARENT)) {
+                            children.add(new Node(curToken));
                             getToken();
                             if (curToken.type.equals(CategoryCode.RPARENT)) {
+                                children.add(new Node(curToken));
                                 getToken();
                                 if (curToken.type.equals(CategoryCode.SEMICN)) {
+                                    children.add(new Node(curToken));
                                     getToken();
                                 } else {
                                     exceptionOccurred();
@@ -469,8 +640,10 @@ public class Parser {
                             exceptionOccurred();
                         }
                     } else {
-                        Exp();
+                        Node exp = Exp();
+                        children.add(exp);
                         if (curToken.type.equals(CategoryCode.SEMICN)) {
+                            children.add(new Node(curToken));
                             getToken();
                         } else {
                             exceptionOccurred();
@@ -483,9 +656,11 @@ public class Parser {
                 if (curToken.type.equals(CategoryCode.LPARENT) || curToken.type.equals(CategoryCode.IDENT) ||
                         curToken.type.equals(CategoryCode.INTCONST) || curToken.type.equals(CategoryCode.PLUS) ||
                         curToken.type.equals(CategoryCode.MINU) || curToken.type.equals(CategoryCode.NOT)) {
-                    Exp();
+                    Node exp = Exp();
+                    children.add(exp);
                 }
                 if (curToken.type.equals(CategoryCode.SEMICN)) {
+                    children.add(new Node(curToken));
                     getToken();
                 } else {
                     exceptionOccurred();
@@ -494,101 +669,157 @@ public class Parser {
                 exceptionOccurred();
             }
         }
-        addNode("<Stmt>");
+        Node node = addNode("<Stmt>");
+        connect(children, node);
+        return node;
     }
 
-    public void AddExp() {
-        MulExp();
-        addNode("<AddExp>");
+    public Node AddExp() {
+        ArrayList<Node> children = new ArrayList<>();
+        Node mulExp = MulExp();
+        children.add(mulExp);
+        Node node = addNode("<AddExp>");
         while (curToken.type.equals(CategoryCode.PLUS) || curToken.type.equals(CategoryCode.MINU)) {
+            Node tNode = new Node(curToken);
             getToken();
-            MulExp();
-            addNode("<AddExp>");
+            Node mulExp1 = MulExp();
+            Node addExp = addNode("<AddExp>");
+            children.add(addExp);
+            children.add(tNode);
+            children.add(mulExp1);
         }
+        connect(children, node);
+        return node;
     }
 
-    public void Exp() {
-        AddExp();
-        addNode("<Exp>");
+    public Node Exp() {
+        Node addExp = AddExp();
+        Node node = addNode("<Exp>");
+        node.addChild(addExp);
+        return node;
     }
 
-    public void Cond() {
-        LOrExp();
-        addNode("<Cond>");
+    public Node Cond() {
+        Node lOrExp = LOrExp();
+        Node node = addNode("<Cond>");
+        node.addChild(lOrExp);
+        return node;
     }
 
-    public void LVal() {
+    public Node LVal() {
+        ArrayList<Node> children = new ArrayList<>();
         if (curToken.type.equals(CategoryCode.IDENT)) {
+            children.add(new Node(curToken));
             getToken();
             while (curToken.type.equals(CategoryCode.LBRACK)) {
+                children.add(new Node(curToken));
                 getToken();
-                Exp();
+                Node exp = Exp();
+                children.add(exp);
                 if (curToken.type.equals(CategoryCode.RBRACK)) {
+                    children.add(new Node(curToken));
                     getToken();
                 } else {
                     exceptionOccurred();
                 }
             }
         }
-        addNode("<LVal>");
+        Node node = addNode("<LVal>");
+        connect(children, node);
+        return node;
     }
 
-    public void LOrExp() {
-        LAndExp();
-        addNode("<LOrExp>");
+    public Node LOrExp() {
+        ArrayList<Node> children = new ArrayList<>();
+        Node lAndExp = LAndExp();
+        children.add(lAndExp);
+        Node node = addNode("<LOrExp>");
         while (curToken.type.equals(CategoryCode.OR)) {
+            Node tNode = new Node(curToken);
             getToken();
-            LAndExp();
-            addNode("<LOrExp>");
+            Node lAndExp1 = LAndExp();
+            Node addExp = addNode("<LOrExp>");
+            children.add(addExp);
+            children.add(tNode);
+            children.add(lAndExp1);
         }
+        connect(children, node);
+        return node;
     }
 
-    public void FormatString() {
+    public Node FormatString() {
+        Node formatString = null;
         if (curToken.type.equals(CategoryCode.FORMATSTRING)) {
+            formatString = new Node(curToken);
             getToken();
         } else {
             exceptionOccurred();
         }
+        return formatString;
     }
 
-    public void MulExp() {
-        UnaryExp();
-        addNode("<MulExp>");
+    public Node MulExp() {
+        ArrayList<Node> children = new ArrayList<>();
+        Node unaryExp = UnaryExp();
+        children.add(unaryExp);
+        Node node = addNode("<MulExp>");
         while (curToken.type.equals(CategoryCode.MULT) || curToken.type.equals(CategoryCode.DIV) ||
                 curToken.type.equals(CategoryCode.MOD)) {
+            Node tNode = new Node(curToken);
             getToken();
-            UnaryExp();
-            addNode("<MulExp>");
+            Node unaryExp1 = UnaryExp();
+            Node mulExp = addNode("<MulExp>");
+            children.add(mulExp);
+            children.add(tNode);
+            children.add(unaryExp1);
         }
+        connect(children, node);
+        return node;
     }
 
-    public void LAndExp() {
-        EqExp();
-        addNode("<LAndExp>");
+    public Node LAndExp() {
+        ArrayList<Node> children = new ArrayList<>();
+        Node eqExp = EqExp();
+        children.add(eqExp);
+        Node node = addNode("<LAndExp>");
         while (curToken.type.equals(CategoryCode.AND)) {
+            Node tNode = new Node(curToken);
             getToken();
-            EqExp();
-            addNode("<LAndExp>");
+            Node eqExp1 = EqExp();
+            Node lAndExp = addNode("<LAndExp>");
+            children.add(lAndExp);
+            children.add(tNode);
+            children.add(eqExp1);
         }
+        connect(children, node);
+        return node;
     }
 
-    public void UnaryExp() {
+    public Node UnaryExp() {
+        ArrayList<Node> children = new ArrayList<>();
         if (curToken.type.equals(CategoryCode.PLUS) || curToken.type.equals(CategoryCode.MINU) ||
                 curToken.type.equals(CategoryCode.NOT)) {
-            UnaryOp();
-            UnaryExp();
+            Node node = UnaryOp();
+            children.add(node);
+            Node unaryExp = UnaryExp();
+            children.add(unaryExp);
         } else if (curToken.type.equals(CategoryCode.IDENT) &&
                 tokens.get(tokenPtr + 1).type.equals(CategoryCode.LPARENT)) {
+            children.add(new Node(curToken));
             getToken();
             if (curToken.type.equals(CategoryCode.LPARENT)) {
+                children.add(new Node(curToken));
                 getToken();
                 if (curToken.type.equals(CategoryCode.RPARENT)) {
+                    children.add(new Node(curToken));
                     getToken();
                 } else if (curToken.type.equals(CategoryCode.IDENT) || curToken.type.equals(CategoryCode.LPARENT) ||
                         curToken.type.equals(CategoryCode.INTCONST) || curToken.type.equals(CategoryCode.PLUS) ||
                         curToken.type.equals(CategoryCode.MINU) || curToken.type.equals(CategoryCode.NOT)) {
-                    FuncRParams();
+                    Node funcRParams = FuncRParams();
+                    children.add(funcRParams);
                     if (curToken.type.equals(CategoryCode.RPARENT)) {
+                        children.add(new Node(curToken));
                         getToken();
                     } else {
                         exceptionOccurred();
@@ -599,79 +830,120 @@ public class Parser {
             }
         } else if (curToken.type.equals(CategoryCode.IDENT) || curToken.type.equals(CategoryCode.INTCONST) ||
                 curToken.type.equals(CategoryCode.LPARENT)) {
-            PrimaryExp();
+            Node primaryExp = PrimaryExp();
+            children.add(primaryExp);
         } else {
             exceptionOccurred();
         }
-        addNode("<UnaryExp>");
+        Node node = addNode("<UnaryExp>");
+        connect(children, node);
+        return node;
     }
 
-    public void EqExp() {
-        RelExp();
-        addNode("<EqExp>");
+    public Node EqExp() {
+        ArrayList<Node> children = new ArrayList<>();
+        Node relExp = RelExp();
+        children.add(relExp);
+        Node node = addNode("<EqExp>");
         while (curToken.type.equals(CategoryCode.EQL) || curToken.type.equals(CategoryCode.NEQ)) {
+            Node tNode = new Node(curToken);
             getToken();
-            RelExp();
-            addNode("<EqExp>");
+            Node relExp1 = RelExp();
+            Node eqExp = addNode("<EqExp>");
+            children.add(eqExp);
+            children.add(tNode);
+            children.add(relExp1);
         }
+        connect(children, node);
+        return node;
     }
 
-    public void PrimaryExp() {
+    public Node PrimaryExp() {
+        ArrayList<Node> children = new ArrayList<>();
         if (curToken.type.equals(CategoryCode.LPARENT)) {
+            children.add(new Node(curToken));
             getToken();
-            Exp();
+            Node exp = Exp();
+            children.add(exp);
             if (curToken.type.equals(CategoryCode.RPARENT)) {
+                children.add(new Node(curToken));
                 getToken();
             } else {
                 exceptionOccurred();
             }
         } else if (curToken.type.equals(CategoryCode.IDENT)) {
-            LVal();
+            Node lVal = LVal();
+            children.add(lVal);
         } else if (curToken.type.equals(CategoryCode.INTCONST)) {
-            Number();
+            Node number = Number();
+            children.add(number);
         } else {
             exceptionOccurred();
         }
-        addNode("<PrimaryExp>");
+        Node node = addNode("<PrimaryExp>");
+        connect(children, node);
+        return node;
     }
 
-    public void UnaryOp() {
+    public Node UnaryOp() {
+        ArrayList<Node> children = new ArrayList<>();
         if (curToken.type.equals(CategoryCode.PLUS) || curToken.type.equals(CategoryCode.MINU) ||
                 curToken.type.equals(CategoryCode.NOT)) {
+            children.add(new Node(curToken));
             getToken();
         } else {
             exceptionOccurred();
         }
-        addNode("<UnaryOp>");
+        Node node = addNode("<UnaryOp>");
+        connect(children, node);
+        return node;
     }
 
-    public void FuncRParams() {
-        Exp();
+    public Node FuncRParams() {
+        ArrayList<Node> children = new ArrayList<>();
+        Node exp = Exp();
+        children.add(exp);
         while (curToken.type.equals(CategoryCode.COMMA)) {
+            children.add(new Node(curToken));
             getToken();
-            Exp();
+            Node exp1 = Exp();
+            children.add(exp1);
         }
-        addNode("<FuncRParams>");
+        Node node = addNode("<FuncRParams>");
+        connect(children, node);
+        return node;
     }
 
-    public void RelExp() {
-        AddExp();
-        addNode("<RelExp>");
+    public Node RelExp() {
+        ArrayList<Node> children = new ArrayList<>();
+        Node addExp = AddExp();
+        children.add(addExp);
+        Node node = addNode("<RelExp>");
         while (curToken.type.equals(CategoryCode.LSS) || curToken.type.equals(CategoryCode.LEQ) ||
                 curToken.type.equals(CategoryCode.GRE) || curToken.type.equals(CategoryCode.GEQ)) {
+            Node tNode = new Node(curToken);
             getToken();
-            AddExp();
-            addNode("<RelExp>");
+            Node addExp1 = AddExp();
+            Node relExp = addNode("<RelExp>");
+            children.add(relExp);
+            children.add(tNode);
+            children.add(addExp1);
         }
+        connect(children, node);
+        return node;
     }
 
-    public void Number() {
+    public Node Number() {
+        ArrayList<Node> children = new ArrayList<>();
         if (curToken.type.equals(CategoryCode.INTCONST)) {
+            children.add(new Node(curToken));
             getToken();
         } else {
             exceptionOccurred();
         }
-        addNode("<Number>");
+        Node node = addNode("<Number>");
+        connect(children, node);
+        return node;
     }
 
     public void outputToFile() {
@@ -685,6 +957,21 @@ public class Parser {
                 } else {
                     writer.write(item.getContext() + "\n");
                 }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void outputTreeToFile() {
+        ArrayList<String> total = new ArrayList<>();
+        head.printAll(total);
+        String path = "output.txt";
+        File file = new File(path);
+        System.out.println(nodes.size());
+        try (FileWriter writer = new FileWriter(file)) {
+            for (String str : total) {
+                writer.write(str);
             }
         } catch (IOException e) {
             e.printStackTrace();

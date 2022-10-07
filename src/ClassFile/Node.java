@@ -37,4 +37,25 @@ public class Node {
         }
         return null;
     }
+
+    public void addChild(Node node) {
+        node.addParent(this);
+        children.add(node);
+    }
+
+    public void addParent(Node node) {
+        parent = node;
+    }
+
+    public void printAll(ArrayList<String> total) {
+        for (Node item : children) {
+            item.printAll(total);
+        }
+        if (type == 0) {
+            total.add(getCode() + " " + getContext() + "\n");
+        } else {
+            if (!context.equals("<BlockItem>") && !context.equals("<BType>") && !context.equals("<Decl>"))
+                total.add(getContext() + "\n");
+        }
+    }
 }
