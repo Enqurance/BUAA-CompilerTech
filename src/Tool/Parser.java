@@ -1,6 +1,7 @@
 package Tool;
 
 import ClassFile.CategoryCode;
+import ClassFile.Error;
 import ClassFile.Node;
 import ClassFile.Token;
 
@@ -26,6 +27,17 @@ public class Parser {
 
     }
 
+    public Token error(String lack, int line) {
+        if (lack.equals(CategoryCode.SEMICN)) {
+            Error.addErrorMessage(line, "i");
+        } else if (lack.equals(CategoryCode.RPARENT)) {
+            Error.addErrorMessage(line, "j");
+        } else if (lack.equals(CategoryCode.RBRACK)) {
+            Error.addErrorMessage(line, "k");
+        }
+        return new Token(lack, line, 4);
+    }
+
     public void getToken() {
         Node tempNode = new Node(tokens.get(tokenPtr));
         nodes.add(tempNode);
@@ -36,12 +48,6 @@ public class Parser {
     }
 
     public Node addNode(String context) {
-//        try {
-//            Thread.sleep(1);
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        }
-//        System.out.println(context + curToken.context + tokens.get(tokenPtr - 1).context + " " + tokenPtr);
         Node tempNode = new Node(context);
         nodes.add(tempNode);
         return tempNode;
@@ -119,8 +125,10 @@ public class Parser {
                     Node block = Block();
                     children.add(block);
                 } else {
-                    Node funcFParams = FuncFParams();
-                    children.add(funcFParams);
+                    if (!curToken.type.equals(CategoryCode.LBRACE)) {
+                        Node funcFParams = FuncFParams();
+                        children.add(funcFParams);
+                    }
                     if (curToken.type.equals(CategoryCode.RPARENT)) {
                         children.add(new Node(curToken));
                         getToken();
@@ -128,6 +136,9 @@ public class Parser {
                         children.add(block);
                     } else {
                         exceptionOccurred();
+                        children.add(new Node(error(CategoryCode.RPARENT, tokens.get(tokenPtr - 1).line)));
+                        Node block = Block();
+                        children.add(block);
                     }
                 }
             } else {
@@ -194,6 +205,7 @@ public class Parser {
                 getToken();
             } else {
                 exceptionOccurred();
+                children.add(new Node(error(CategoryCode.SEMICN, tokens.get(tokenPtr - 1).line)));
             }
         } else {
             exceptionOccurred();
@@ -220,6 +232,7 @@ public class Parser {
             getToken();
         } else {
             exceptionOccurred();
+            children.add(new Node(error(CategoryCode.SEMICN, tokens.get(tokenPtr - 1).line)));
         }
         Node node = addNode("<VarDecl>");
         connect(children, node);
@@ -306,6 +319,7 @@ public class Parser {
                     getToken();
                 } else {
                     exceptionOccurred();
+                    children.add(new Node(error(CategoryCode.RBRACK, tokens.get(tokenPtr - 1).line)));
                 }
             }
             if (curToken.type.equals(CategoryCode.ASSIGN)) {
@@ -339,6 +353,7 @@ public class Parser {
                     getToken();
                 } else {
                     exceptionOccurred();
+                    children.add(new Node(error(CategoryCode.RBRACK, tokens.get(tokenPtr - 1).line)));
                 }
             }
             if (curToken.type.equals(CategoryCode.ASSIGN)) {
@@ -378,10 +393,25 @@ public class Parser {
                             getToken();
                         } else {
                             exceptionOccurred();
+                            children.add(new Node(error(CategoryCode.RBRACK, tokens.get(tokenPtr - 1).line)));
                         }
                     }
                 } else {
                     exceptionOccurred();
+                    children.add(new Node(error(CategoryCode.RBRACK, tokens.get(tokenPtr - 1).line)));
+                    while (curToken.type.equals(CategoryCode.LBRACK)) {
+                        children.add(new Node(curToken));
+                        getToken();
+                        Node constExp = ConstExp();
+                        children.add(constExp);
+                        if (curToken.type.equals(CategoryCode.RBRACK)) {
+                            children.add(new Node(curToken));
+                            getToken();
+                        } else {
+                            exceptionOccurred();
+                            children.add(new Node(error(CategoryCode.RBRACK, tokens.get(tokenPtr - 1).line)));
+                        }
+                    }
                 }
             }
         } else {
@@ -519,9 +549,18 @@ public class Parser {
                         getToken();
                     } else {
                         exceptionOccurred();
+                        children.add(new Node(error(CategoryCode.SEMICN, tokens.get(tokenPtr - 1).line)));
                     }
                 } else {
                     exceptionOccurred();
+                    children.add(new Node(error(CategoryCode.RPARENT, tokens.get(tokenPtr - 1).line)));
+                    if (curToken.type.equals(CategoryCode.SEMICN)) {
+                        children.add(new Node(curToken));
+                        getToken();
+                    } else {
+                        exceptionOccurred();
+                        children.add(new Node(error(CategoryCode.SEMICN, tokens.get(tokenPtr - 1).line)));
+                    }
                 }
             } else {
                 exceptionOccurred();
@@ -542,6 +581,7 @@ public class Parser {
                     getToken();
                 } else {
                     exceptionOccurred();
+                    children.add(new Node(error(CategoryCode.SEMICN, tokens.get(tokenPtr - 1).line)));
                 }
             }
         } else if (curToken.type.equals(CategoryCode.BREAK) || curToken.type.equals(CategoryCode.CONTINUE)) {
@@ -552,6 +592,7 @@ public class Parser {
                 getToken();
             } else {
                 exceptionOccurred();
+                children.add(new Node(error(CategoryCode.SEMICN, tokens.get(tokenPtr - 1).line)));
             }
         } else if (curToken.type.equals(CategoryCode.WHILE)) {
             children.add(new Node(curToken));
@@ -568,6 +609,9 @@ public class Parser {
                     children.add(stmt);
                 } else {
                     exceptionOccurred();
+                    children.add(new Node(error(CategoryCode.RPARENT, tokens.get(tokenPtr - 1).line)));
+                    Node stmt = Stmt();
+                    children.add(stmt);
                 }
             } else {
                 exceptionOccurred();
@@ -587,6 +631,9 @@ public class Parser {
                     children.add(stmt);
                 } else {
                     exceptionOccurred();
+                    children.add(new Node(error(CategoryCode.RPARENT, tokens.get(tokenPtr - 1).line)));
+                    Node stmt = Stmt();
+                    children.add(stmt);
                 }
                 if (curToken.type.equals(CategoryCode.ELSE)) {
                     children.add(new Node(curToken));
@@ -632,9 +679,18 @@ public class Parser {
                                     getToken();
                                 } else {
                                     exceptionOccurred();
+                                    children.add(new Node(error(CategoryCode.SEMICN, tokens.get(tokenPtr - 1).line)));
                                 }
                             } else {
                                 exceptionOccurred();
+                                children.add(new Node(error(CategoryCode.RPARENT, tokens.get(tokenPtr - 1).line)));
+                                if (curToken.type.equals(CategoryCode.SEMICN)) {
+                                    children.add(new Node(curToken));
+                                    getToken();
+                                } else {
+                                    exceptionOccurred();
+                                    children.add(new Node(error(CategoryCode.SEMICN, tokens.get(tokenPtr - 1).line)));
+                                }
                             }
                         } else {
                             exceptionOccurred();
@@ -647,6 +703,7 @@ public class Parser {
                             getToken();
                         } else {
                             exceptionOccurred();
+                            children.add(new Node(error(CategoryCode.SEMICN, tokens.get(tokenPtr - 1).line)));
                         }
                     }
                 } else {
@@ -664,6 +721,7 @@ public class Parser {
                     getToken();
                 } else {
                     exceptionOccurred();
+                    children.add(new Node(error(CategoryCode.SEMICN, tokens.get(tokenPtr - 1).line)));
                 }
             } else {
                 exceptionOccurred();
@@ -721,6 +779,7 @@ public class Parser {
                     getToken();
                 } else {
                     exceptionOccurred();
+                    children.add(new Node(error(CategoryCode.RBRACK, tokens.get(tokenPtr - 1).line)));
                 }
             }
         }
@@ -751,6 +810,7 @@ public class Parser {
         Node formatString = null;
         if (curToken.type.equals(CategoryCode.FORMATSTRING)) {
             formatString = new Node(curToken);
+            judgeFormatString(formatString);
             getToken();
         } else {
             exceptionOccurred();
@@ -823,6 +883,7 @@ public class Parser {
                         getToken();
                     } else {
                         exceptionOccurred();
+                        children.add(new Node(error(CategoryCode.RPARENT, tokens.get(tokenPtr - 1).line)));
                     }
                 }
             } else {
@@ -944,6 +1005,23 @@ public class Parser {
         Node node = addNode("<Number>");
         connect(children, node);
         return node;
+    }
+
+    public Node getHead() {
+        return head;
+    }
+
+    public void judgeFormatString(Node format) {
+        int len = format.getContext().length();
+        for (int i = 1; i < len - 1; i++) {
+            char c = format.getContext().charAt(i);
+            if (!((c == 32) || (c == 33) || (c >= 40 && c <= 126 && c != 92) ||
+                    (c == 92 && format.getContext().charAt(i + 1) == 'n') ||
+                    (c == 37 && format.getContext().charAt(i + 1) == 'd'))) {
+                Error.addErrorMessage(format.getLine(), "a");
+                break;
+            }
+        }
     }
 
     public void outputToFile() {

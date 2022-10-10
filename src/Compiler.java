@@ -1,3 +1,5 @@
+import ClassFile.Error;
+import Tool.TableMaster;
 import Tool.Lexer;
 import Tool.Parser;
 
@@ -13,7 +15,11 @@ public class Compiler {
         parser.parse();
         /* Choose one to output */
 //        parser.outputToFile();
-        parser.outputTreeToFile();
+//        parser.outputTreeToFile();
+        TableMaster master = new TableMaster(parser.getHead());
+        master.Build();
+//        master.printAllTables();
+        Error.printErrorMessage();
     }
 
     public static String readFile() {

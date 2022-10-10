@@ -8,6 +8,7 @@ public class Node {
     private final String context;
     private Node parent;
     private final ArrayList<Node> children = new ArrayList<>();
+    private final int line;
 
     /* type == 0 ==> isEnd*/
     /* type == 1 ==> isNotEnd*/
@@ -15,10 +16,12 @@ public class Node {
         this.token = token;
         this.type = 0;
         this.context = token.context;
+        line = token.line;
     }
 
     public Node(String context) {
         this.token = null;
+        this.line = -1;
         this.type = 1;
         this.context = context;
     }
@@ -54,8 +57,33 @@ public class Node {
         if (type == 0) {
             total.add(getCode() + " " + getContext() + "\n");
         } else {
-            if (!context.equals("<BlockItem>") && !context.equals("<BType>") && !context.equals("<Decl>"))
+            if (!context.equals("<BlockItem>") && !context.equals("<BType>") && !context.equals("<Decl>")) {
                 total.add(getContext() + "\n");
+            }
         }
+    }
+
+    public void printChildren(){
+        System.out.println("A Node's Children:");
+        for(Node node :children){
+            System.out.print(node.getContext() + " ");
+        }
+        System.out.println();
+    }
+
+    public ArrayList<Node> getChildren() {
+        return children;
+    }
+
+    public Node getParent() {
+        return parent;
+    }
+
+    public Token getToken() {
+        return token;
+    }
+
+    public int getLine() {
+        return line;
     }
 }
