@@ -1,9 +1,13 @@
-int main(){
-    while(i > 1){
-        {
-            break;
-            continue;
-        }
-    }
-    int b = c;
+void f1({
+
+}
+
+void f2(){
+
+}
+
+int main() {
+    int a = 10;
+    f2(a;
+    return 0;
 }

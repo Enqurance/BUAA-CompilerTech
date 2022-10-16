@@ -885,6 +885,9 @@ public class Parser {
                         exceptionOccurred();
                         children.add(new Node(error(CategoryCode.RPARENT, tokens.get(tokenPtr - 1).line)));
                     }
+                } else {
+                    exceptionOccurred();
+                    children.add(new Node(error(CategoryCode.RPARENT, tokens.get(tokenPtr - 1).line)));
                 }
             } else {
                 exceptionOccurred();
