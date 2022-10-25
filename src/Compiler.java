@@ -1,4 +1,7 @@
 import ClassFile.Error;
+import ClassFile.Node;
+import Tool.Generator;
+import Tool.ICodeStorage;
 import Tool.TableMaster;
 import Tool.Lexer;
 import Tool.Parser;
@@ -13,13 +16,14 @@ public class Compiler {
         lexer.lexerAnalyzer(unit);
         Parser parser = new Parser(lexer.getTokenList());
         parser.parse();
-        /* Choose one to output */
-//        parser.outputToFile();
-//        parser.outputTreeToFile();
         TableMaster master = new TableMaster(parser.getHead());
         master.Build();
-//        master.printAllTables();
+        //  master.printAllTables();
         Error.printErrorMessage();
+        Generator generator = new Generator(parser.getHead(), master.getHeadTable());
+        generator.Generate();
+        ICodeStorage storage = new ICodeStorage(generator.getCodes());
+        storage.OutputAllICode();
     }
 
     public static String readFile() {

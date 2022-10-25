@@ -5,6 +5,7 @@ import java.util.ArrayList;
 public class VarSymbol extends Symbol {
     private final boolean isConst;
     private final int dimension;
+    private int ident;
     private final int sizeOne = 0;
     private final int sizeTwo = 1;
     private final boolean isRealParam;
@@ -45,5 +46,21 @@ public class VarSymbol extends Symbol {
 
     public void setValue(int value) {
         this.value = value;
+    }
+
+    public void SearchLastSymbol(SymbolTable table) {
+        if (table == null) {
+            return;
+        }
+        Symbol symbol = table.findName(getName());
+        if (symbol instanceof VarSymbol) {
+            ident = ((VarSymbol) symbol).getIdent() + 1;
+        } else {
+            SearchLastSymbol(table.getParent());
+        }
+    }
+
+    public int getIdent() {
+        return ident;
     }
 }

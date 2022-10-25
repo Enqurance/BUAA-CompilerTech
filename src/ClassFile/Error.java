@@ -30,5 +30,8 @@ public class Error {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        if (errorMessage.size() != 0) {
+            throw new RuntimeException("-----Testfile includes ERROR-----");
+        }
     }
 }

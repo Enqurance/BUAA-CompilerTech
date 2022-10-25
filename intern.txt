@@ -1,0 +1,44 @@
+_#Init#_:
+const int a$0 = 10
+const str str$0 = Bonjour
+const str str$1 = \n
+_#f1#_:
+int f1
+para int a$1
+para int b$0
+para int c$0
+_#f2#_:
+void f2
+para int a$1
+para int b$0[]
+printf str$0
+#t0# = a$1 + 2
+printf #t0#
+printf str$1
+_#main#_:
+int main
+var int a$1
+a$1 = 10
+var int b$0
+scanf #t1#
+b$0 = #t1#
+var int c$0
+#t2# = a$1 + b$0
+c$0 = #t2#
+push a$1
+push a$1
+push b$0
+call f1
+#t3# = RET
+b$0 = #t3#
+#t4# = - 5
+#t5# = 3 * #t4#
+#t6# = #t5# + 2
+a$1 = #t6#
+#t7# = b$0 % b$0
+#t8# = #t7# + a$1
+a$1 = #t8#
+var int a$2
+a$2 = 2
+var int a$3
+a$3 = 3

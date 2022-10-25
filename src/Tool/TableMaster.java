@@ -9,6 +9,7 @@ import ClassFile.Token;
 import ClassFile.VarSymbol;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 
 public class TableMaster {
@@ -25,7 +26,6 @@ public class TableMaster {
         curTable = headTable;
         symbolTables.add(headTable);
     }
-
     public void Build() {
         CompUnit(treeHead);
     }
@@ -66,6 +66,7 @@ public class TableMaster {
         FuncSymbol funcSymbol = new FuncSymbol(ident, type);
         if (curTable.addSymbol(funcSymbol)) {
             CreateTable(curTable);
+            curTable.setTableName(ident.context);
             for (Node item : children) {
                 if (item.getType() == 1) {
                     switch (item.getContext()) {
@@ -90,6 +91,7 @@ public class TableMaster {
 
     public void MainFuncDef(Node node) {
         CreateTable(curTable);
+        curTable.setTableName("main");
         ArrayList<Node> children = node.getChildren();
         for (Node item : children) {
             if (item.getType() == 1 && item.getContext().equals("<Block>")) {
@@ -655,6 +657,10 @@ public class TableMaster {
 
     public void BackTable() {
         curTable = curTable.getParent();
+    }
+
+    public SymbolTable getHeadTable() {
+        return headTable;
     }
 
     public void printAllTables() {

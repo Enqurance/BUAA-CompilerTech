@@ -6,14 +6,17 @@ import java.util.HashMap;
 public class SymbolTable {
     private final boolean isGlobal;
     private final boolean isWhile;
+    private String tableName;
     private SymbolTable parent;
     private final ArrayList<SymbolTable> children = new ArrayList<>();
+    private int childrenCount = 0;
     private final HashMap<String, FuncSymbol> funcSymbols = new HashMap<>();
     private final HashMap<String, VarSymbol> varSymbols = new HashMap<>();
 
     public SymbolTable(boolean isGlobal, boolean isWhile) {
         this.isGlobal = isGlobal;
         this.isWhile = isWhile;
+        this.tableName = null;
     }
 
     public boolean addSymbol(Symbol symbol) {
@@ -28,6 +31,7 @@ public class SymbolTable {
                 error(symbol);
             } else {
                 varSymbols.put(symbol.getName(), (VarSymbol) symbol);
+                ((VarSymbol) symbol).SearchLastSymbol(this.getParent());
             }
         } else if (symbol instanceof FuncSymbol) {
             if (funcSymbols.containsKey(symbol.getName())) {
@@ -46,6 +50,10 @@ public class SymbolTable {
             return funcSymbols.get(name);
         }
         return null;
+    }
+
+    public VarSymbol FindVarSymbolByName(String name) {
+        return varSymbols.get(name);
     }
 
     public int matchFunc(String name, ArrayList<ArrayList<Symbol>> tables) {
@@ -77,6 +85,26 @@ public class SymbolTable {
         return isWhile;
     }
 
+    public ArrayList<SymbolTable> getChildren() {
+        return children;
+    }
+
+    public HashMap<String, FuncSymbol> getFuncSymbols() {
+        return funcSymbols;
+    }
+
+    public SymbolTable getTableByName(String name) {
+        for (SymbolTable table : children) {
+            if (table.tableName != null && table.tableName.equals(name)) {
+                return table;
+            }
+        }
+        return null;
+    }
+    public void setTableName(String tableName) {
+        this.tableName = tableName;
+    }
+
     public void printSymbols() {
         System.out.println("Table");
         for (String str : funcSymbols.keySet()) {
@@ -88,5 +116,16 @@ public class SymbolTable {
         for (SymbolTable table : children) {
             table.printSymbols();
         }
+    }
+
+    public SymbolTable GetNextChild() {
+        if (childrenCount < children.size()) {
+            return children.get(childrenCount++);
+        }
+        return null;
+    }
+
+    public HashMap<String, VarSymbol> getVarSymbols() {
+        return varSymbols;
     }
 }
