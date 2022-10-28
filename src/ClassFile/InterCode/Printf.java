@@ -17,4 +17,8 @@ public class Printf extends ICode {
         super.PrintString();
         System.out.println(this);
     }
+
+    public String getName() {
+        return name;
+    }
 }

@@ -11,22 +11,25 @@ public class ConstDecl extends ICode {
     private String rightSym;
     private final int type;
     private final ArrayList<VarSymbol> symbols = new ArrayList<>();
+    private final boolean isGlobal;
 
-    public ConstDecl(String name, int type) {
+    public ConstDecl(String name, int type, boolean isGlobal) {
         this.leftSym = name;
         this.type = type;
+        this.isGlobal = isGlobal;
     }
 
-    public ConstDecl(String name, int type, int strCount) {
-        this.leftSym = "str$" + strCount;
+    public ConstDecl(String context, int type, int strCount, boolean isGlobal) {
+        this.leftSym = "$str$" + strCount;
         this.type = type;
-        this.rightSym = name;
+        this.rightSym = context;
+        this.isGlobal = isGlobal;
     }
 
     @Override
     public String toString() {
         if (type == 1) {
-            return "const int " + leftSym + " = " + rightSym;
+            return "const int " + leftSym;
         } else {
             return "const str " + leftSym + " = " + rightSym;
         }
@@ -38,15 +41,20 @@ public class ConstDecl extends ICode {
         System.out.println(this);
     }
 
-    public void setRightSym(String rightSym) {
-        this.rightSym = rightSym;
+    @Override
+    public String GetLSym() {
+        return leftSym;
+    }
+
+    public String GetRSym() {
+        return rightSym;
     }
 
     public ArrayList<VarSymbol> getSymbols() {
         return symbols;
     }
 
-    public String getLeftSym() {
-        return leftSym;
+    public boolean isGlobal() {
+        return isGlobal;
     }
 }

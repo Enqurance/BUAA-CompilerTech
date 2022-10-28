@@ -1,0 +1,63 @@
+$$Init$$:
+#t0# = 1 + 1
+#t1# = #t0# + 1
+#t2# = #t1# + 1
+#t3# = #t2# + 1
+#t4# = #t3# + 1
+#t5# = #t4# + 1
+#t6# = #t5# + 1
+#t7# = #t6# + 1
+#t8# = #t7# + 1
+#t9# = #t8# + 1
+const int a$0
+a$0 = #t9#
+#t10# = + 3
+const int c$0
+c$0 = #t10#
+var int x$0
+$$f1$$:
+int f1
+para int a$1
+para int b$0
+para int c$1
+RET = 1
+$$f2$$:
+void f2
+para int a$1
+para int b$0
+var int c$1
+#t11# = a$1 + b$0
+c$1 = #t11#
+const str $str$0 = c is 
+printf $str$0
+printf c$1
+const str $str$1 = \n
+printf $str$1
+$$f3$$:
+int f3
+RET = 114514
+$$main$$:
+int main
+var int y$0
+y$0 = 4
+x$0 = 3
+push x$0
+push 1
+call f2
+#t13# = 1 + 1
+push #t13#
+push 1
+push 1
+call f1
+#t14# = RET
+printf a$0
+const str $str$2 = \n
+printf $str$2
+const str $str$3 = Laughing:
+printf $str$3
+call f3
+#t15# = RET
+printf #t15#
+const str $str$4 = \n
+printf $str$4
+RET = 0

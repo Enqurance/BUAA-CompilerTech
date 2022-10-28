@@ -33,4 +33,8 @@ public class FuncParam extends ICode {
         super.PrintString();
         System.out.println(this);
     }
+
+    public String getName() {
+        return name;
+    }
 }

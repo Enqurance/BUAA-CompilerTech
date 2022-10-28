@@ -43,4 +43,20 @@ public class Exp extends ICode {
         super.PrintString();
         System.out.println(this);
     }
+
+    public String getLSym() {
+        return lSym;
+    }
+
+    public String getRSym_1() {
+        return rSym_1;
+    }
+
+    public String getRSym_2() {
+        return rSym_2;
+    }
+
+    public String getOperator() {
+        return operator;
+    }
 }

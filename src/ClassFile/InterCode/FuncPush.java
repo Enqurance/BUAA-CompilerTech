@@ -17,4 +17,8 @@ public class FuncPush extends ICode {
         super.PrintString();
         System.out.println(this);
     }
+
+    public String getTarget() {
+        return target;
+    }
 }

@@ -108,12 +108,13 @@ public class Generator {
 
     public void GenConstDef(Node node) {
         ArrayList<Node> children = node.getChildren();
-        VarSymbol symbol = (VarSymbol) curTable.findName(children.get(0).getContext());
+        VarSymbol symbol = FindVarSymbolByName(curTable,
+                children.get(0).getContext(), children.get(1).getLine());
         if (symbol.getDimension() == 0) {
             String initVal = GenConstInitValForVar(children.get(2));
             VarSymbol var = curTable.FindVarSymbolByName(children.get(0).getContext());
-            ConstDecl constDecl = AddConstDecl(IdentifyVarLevel(var));
-            constDecl.setRightSym(initVal);
+            ConstDecl constDecl = AddConstDecl(IdentifyVarLevel(var), var.isGlobal());
+            AddExp(constDecl.GetLSym(), initVal);
         } else if (symbol.getDimension() == 1) {
             String DimOne = GenConstExp(children.get(2));
             ArrayDecl arrayDecl = AddArrayDecl(symbol);
@@ -254,6 +255,12 @@ public class Generator {
             case "<break>":
                 break;
             case "return":
+                if (children.size() == 2) {
+                    break;
+                } else {
+                    String exp = GenExp(children.get(1));
+                    AddExp("RET", exp);
+                }
                 break;
             case "printf":
                 Node format = children.get(2);
@@ -284,8 +291,8 @@ public class Generator {
                 }
                 for (String str : slices) {
                     if (!str.equals("%d")) {
-                        ConstDecl ConstStr = AddConstDecl(str, strCount++);
-                        AddPrintf(ConstStr.getLeftSym());
+                        ConstDecl ConstStr = AddConstDecl(str, strCount++, true);
+                        AddPrintf(ConstStr.GetLSym());
                     } else {
                         String tempVar = GenExp(exps.get(ExpCount++));
                         AddPrintf(tempVar);
@@ -414,8 +421,10 @@ public class Generator {
 
     public String GenLVal(Node node) {
         ArrayList<Node> children = node.getChildren();
+//        System.out.println(children.get(0).getContext());
         if (children.size() == 1) {
-            VarSymbol varSymbol = (VarSymbol) curTable.findName(children.get(0).getContext());
+            VarSymbol varSymbol = FindVarSymbolByName(curTable, children.get(0).getContext(),
+                    children.get(0).getLine());
 //            System.out.println(varSymbol.getIdent() + varSymbol.getName());
             return IdentifyVarLevel(varSymbol);
         }
@@ -435,14 +444,14 @@ public class Generator {
         }
     }
 
-    public ConstDecl AddConstDecl(String name) {
-        ConstDecl constDecl = new ConstDecl(name, ConstDecl.INT);
+    public ConstDecl AddConstDecl(String name, boolean isGlobal) {
+        ConstDecl constDecl = new ConstDecl(name, ConstDecl.INT, isGlobal);
         iCodes.add(constDecl);
         return constDecl;
     }
 
-    public ConstDecl AddConstDecl(String name, int strCount) {
-        ConstDecl constDecl = new ConstDecl(name, ConstDecl.STR, strCount);
+    public ConstDecl AddConstDecl(String name, int strCount, boolean isGlobal) {
+        ConstDecl constDecl = new ConstDecl(name, ConstDecl.STR, strCount, isGlobal);
         iCodes.add(constDecl);
         return constDecl;
     }
@@ -464,14 +473,15 @@ public class Generator {
     }
 
     public FuncParam AddFuncParam(ArrayList<Node> children) {
-        VarSymbol varSymbol = (VarSymbol) (curTable.findName(children.get(1).getContext()));
+        VarSymbol varSymbol = FindVarSymbolByName(curTable,
+                children.get(1).getContext(), children.get(1).getLine());
         FuncParam funcParam = new FuncParam(varSymbol, IdentifyVarLevel(varSymbol));
         iCodes.add(funcParam);
         return funcParam;
     }
 
     public VarDecl AddVarDecl(VarSymbol symbol, String name) {
-        VarDecl varDecl = new VarDecl(symbol, name);
+        VarDecl varDecl = new VarDecl(symbol, name, symbol.isGlobal());
         iCodes.add(varDecl);
         return varDecl;
     }
@@ -528,6 +538,18 @@ public class Generator {
 
     public ArrayStore AddArrayStore() {
         return new ArrayStore();
+    }
+
+    public VarSymbol FindVarSymbolByName(SymbolTable table, String name, int line) {
+        if (table == null) {
+            return null;
+        } else {
+            VarSymbol symbol = (VarSymbol) table.findName(name);
+            if (symbol != null && line >= symbol.getLine()) {
+                return (VarSymbol) table.findName(name);
+            }
+            return FindVarSymbolByName(table.getParent(), name, line);
+        }
     }
 
     public String IdentifyVarLevel(VarSymbol var) {

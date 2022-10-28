@@ -17,4 +17,8 @@ public class FuncCall extends ICode {
         super.PrintString();
         System.out.println(this);
     }
+
+    public String getFuncName() {
+        return FuncName;
+    }
 }

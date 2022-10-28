@@ -19,4 +19,12 @@ public class Get extends ICode {
         super.PrintString();
         System.out.println(this);
     }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getTempVar() {
+        return tempVar;
+    }
 }

@@ -9,7 +9,6 @@ import ClassFile.Token;
 import ClassFile.VarSymbol;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 
 public class TableMaster {
@@ -26,6 +25,7 @@ public class TableMaster {
         curTable = headTable;
         symbolTables.add(headTable);
     }
+
     public void Build() {
         CompUnit(treeHead);
     }
@@ -106,6 +106,8 @@ public class TableMaster {
         ArrayList<Node> children = node.getChildren();
         for (Node item : children) {
             if (item.getType() == 1 && item.getContext().equals("<ConstDef>")) {
+//                System.out.println(symbol.getIdent() + " " + symbol.getName());
+//                curTable.addSymbol(symbol);
                 curTable.addSymbol(ConsDef(item));
             }
         }
@@ -129,7 +131,10 @@ public class TableMaster {
                 }
             }
         }
-        return new VarSymbol(ident, true, dimension, initVal);
+        if (curTable.equals(headTable)) {
+            return new VarSymbol(ident, true, dimension, initVal, true, ident.line);
+        }
+        return new VarSymbol(ident, true, dimension, initVal, false, ident.line);
     }
 
     public void ConstInitVal(Node node, int depth, int line, ArrayList<ArrayList<Integer>> array) {
@@ -195,9 +200,15 @@ public class TableMaster {
             }
         }
         if (hasInitValue) {
-            return new VarSymbol(ident, false, dimension, initValue);
+            if (curTable.equals(headTable)) {
+                return new VarSymbol(ident, false, dimension, initValue, true, ident.line);
+            }
+            return new VarSymbol(ident, false, dimension, initValue, false, ident.line);
         }
-        return new VarSymbol(ident, false, dimension);
+        if (curTable.equals(headTable)) {
+            return new VarSymbol(ident, false, dimension, true, ident.line);
+        }
+        return new VarSymbol(ident, false, dimension, false, ident.line);
     }
 
     public void InitValue(Node node, int depth, int line, ArrayList<ArrayList<Integer>> array) {
@@ -285,7 +296,8 @@ public class TableMaster {
     }
 
     public Symbol Number(Node node) {
-        return new VarSymbol(Ident(node.getChildren().get(0)), false, 0);
+        return new VarSymbol(Ident(node.getChildren().get(0)),
+                false, 0, false, node.getChildren().get(0).getLine());
     }
 
     public ArrayList<Symbol> UnaryExp(Node node) {
@@ -370,7 +382,7 @@ public class TableMaster {
                 }
             }
         }
-        return new VarSymbol(ident, false, dimension);
+        return new VarSymbol(ident, false, dimension, false, children.get(1).getLine());
     }
 
     public void Block(Node node) {
@@ -503,7 +515,10 @@ public class TableMaster {
                     dimension--;
                 }
             }
-            return new VarSymbol(identNode.getToken(), false, dimension);
+            if (curTable.equals(headTable)) {
+                return new VarSymbol(identNode.getToken(), false, dimension, true, children.get(0).getLine());
+            }
+            return new VarSymbol(identNode.getToken(), false, dimension, false, children.get(0).getLine());
         }
         return originSymbol;
     }

@@ -1,7 +1,7 @@
 import ClassFile.Error;
-import ClassFile.Node;
 import Tool.Generator;
 import Tool.ICodeStorage;
+import Tool.MIPSTranslator;
 import Tool.TableMaster;
 import Tool.Lexer;
 import Tool.Parser;
@@ -18,12 +18,17 @@ public class Compiler {
         parser.parse();
         TableMaster master = new TableMaster(parser.getHead());
         master.Build();
+//        master.getHeadTable().printSymbols();
         //  master.printAllTables();
         Error.printErrorMessage();
         Generator generator = new Generator(parser.getHead(), master.getHeadTable());
         generator.Generate();
         ICodeStorage storage = new ICodeStorage(generator.getCodes());
-        storage.OutputAllICode();
+        storage.OutputAllICodeA();
+        storage.OutputAllICodeB();
+        MIPSTranslator translator = new MIPSTranslator(storage);
+        translator.Translate();
+        translator.OutputMipsCode();
     }
 
     public static String readFile() {

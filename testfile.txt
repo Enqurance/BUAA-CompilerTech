@@ -1,26 +1,26 @@
-const int a = 10;
+const int a = 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1;
+const int c = + 3;
+int x;
 
 int f1(int a, int b, int c){
     return 1;
 }
 
-void f2(int a, int b[]){
-    printf("Bonjour%d\n",a + 2);
+void f2(int a, int b){
+    int c = a + b;
+    printf("c is %d\n", c);
+}
+
+int f3(){
+    return 114514;
 }
 
 int main() {
-    int a = 10, b;
-    b = getint();
-    int c = a + b;
-    b = f1(a,a,b);
-    a = 3 * -5 + 2;
-    a = b % b + a;
-    {
-        int a;
-        a = 2;
-        {
-            int a = 3;
-        }
-    }
+    int y = 4;
+    x = 3;
+    f2(x, 1);
+    f1(1 + 1,1,1);
+    printf("%d\n", a);
+    printf("Laughing:%d\n", f3());
     return 0;
 }

@@ -9,7 +9,7 @@ public class Label extends ICode {
 
     @Override
     public String toString() {
-        return "_#" + labelName + "#_:";
+        return "$$" + labelName + "$$:";
     }
 
     @Override
