@@ -497,6 +497,11 @@ public class TableMaster {
                 if (expCnt != posNote) {
                     Error.addErrorMessage(children.get(0).getLine(), "l");
                 }
+                for (Node item : children) {
+                    if (item.getContext().equals("<Exp>")) {
+                        Exp(item);
+                    }
+                }
                 break;
         }
     }

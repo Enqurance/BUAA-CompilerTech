@@ -1,26 +1,17 @@
-const int a = 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1;
-const int c = + 3;
-int x;
-
-int f1(int a, int b, int c){
+int f3(int a, int b){
+    int c = a + b - 1 + 1 - 1 + 1 - 1 + 1 - 1 + 1 - 1 + 1 - 1 + 1;
+    return c;
+}
+int f2(){
     return 1;
 }
 
-void f2(int a, int b){
-    int c = a + b;
-    printf("c is %d\n", c);
-}
-
-int f3(){
-    return 114514;
-}
-
 int main() {
+    int a = 0;
+    //printf("%d%d%d%d%d%d%d%d%d",a + 1,a + 2,a + 3,a + 4,a + 5,a + 6,a + 7,a + 8,a + 9);
     int y = 4;
-    x = 3;
-    f2(x, 1);
-    f1(1 + 1,1,1);
-    printf("%d\n", a);
-    printf("Laughing:%d\n", f3());
+    int x = 3;
+    f3(1,2);
+    printf("Laughing:%d\n", 3 - 6 + f3(x-1,4) + x - 2 * 3);
     return 0;
 }

@@ -263,6 +263,13 @@ public class Generator {
                 }
                 break;
             case "printf":
+                ArrayList<Node> exps = new ArrayList<>();
+                int ExpCount = 0;
+                for (Node item : children) {
+                    if (item.getContext().equals("<Exp>")) {
+                        exps.add(item);
+                    }
+                }
                 Node format = children.get(2);
                 String context = format.getContext();
                 int len = context.length(), i = 1;
@@ -281,13 +288,6 @@ public class Generator {
                         i = i + 2;
                     }
                     slices.add(slice.toString());
-                }
-                ArrayList<Node> exps = new ArrayList<>();
-                int ExpCount = 0;
-                for (Node item : children) {
-                    if (item.getContext().equals("<Exp>")) {
-                        exps.add(item);
-                    }
                 }
                 for (String str : slices) {
                     if (!str.equals("%d")) {

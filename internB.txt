@@ -1,63 +1,52 @@
-const int a$0
-const int c$0
-var int x$0
-const str $str$0 = c is 
+const str $str$0 = Laughing:
 const str $str$1 = \n
-const str $str$2 = \n
-const str $str$3 = Laughing:
-const str $str$4 = \n
 $$Init$$:
-#t0# = 1 + 1
-#t1# = #t0# + 1
-#t2# = #t1# + 1
-#t3# = #t2# + 1
-#t4# = #t3# + 1
-#t5# = #t4# + 1
-#t6# = #t5# + 1
-#t7# = #t6# + 1
-#t8# = #t7# + 1
-#t9# = #t8# + 1
-a$0 = #t9#
-#t10# = + 3
-c$0 = #t10#
 $$main$$:
 int main
+var int a$0
+a$0 = 0
 var int y$0
 y$0 = 4
+var int x$0
 x$0 = 3
-push x$0
 push 1
-call f2
-#t13# = 1 + 1
-push #t13#
-push 1
-push 1
-call f1
-#t14# = RET
-printf a$0
-printf $str$2
-printf $str$3
+push 2
 call f3
-#t15# = RET
-printf #t15#
-printf $str$4
-RET = 0
-$$f1$$:
-int f1
-para int a$1
-para int b$0
-para int c$1
-RET = 1
-$$f2$$:
-void f2
-para int a$1
-para int b$0
-var int c$1
-#t11# = a$1 + b$0
-c$1 = #t11#
+#t13# = RET
 printf $str$0
-printf c$1
+#t14# = 3 - 6
+#t15# = x$0 - 1
+push #t15#
+push 4
+call f3
+#t16# = RET
+#t17# = #t14# + #t16#
+#t18# = #t17# + x$0
+#t19# = 2 * 3
+#t20# = #t18# - #t19#
+printf #t20#
 printf $str$1
+RET = 0
+$$f2$$:
+int f2
+RET = 1
 $$f3$$:
 int f3
-RET = 114514
+para int a$0
+para int b$0
+var int c$0
+#t0# = a$0 + b$0
+#t1# = #t0# - 1
+#t2# = #t1# + 1
+#t3# = #t2# - 1
+#t4# = #t3# + 1
+#t5# = #t4# - 1
+#t6# = #t5# + 1
+#t7# = #t6# - 1
+#t8# = #t7# + 1
+#t9# = #t8# - 1
+#t10# = #t9# + 1
+#t11# = #t10# - 1
+#t12# = #t11# + 1
+c$0 = #t12#
+RET = c$0

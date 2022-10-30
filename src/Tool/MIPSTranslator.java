@@ -28,6 +28,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Stack;
 
 public class MIPSTranslator {
@@ -47,7 +48,7 @@ public class MIPSTranslator {
      * 这样在新的函数中，根据现有的寄存器分配原则，它的值可能会被覆盖。所以设计一个
      * HashMap，用于保存未消亡的临时变量和它的偏移。由于临时变量名称唯一，仅保存
      * 偏移即可。在Fetch的时候加入，Use的时候取出 */
-    private final HashMap<String, Integer> TempVarStorage = new HashMap<>();
+    private final HashSet<String> UnusedTempVar = new HashSet<>();
 
     public MIPSTranslator(ICodeStorage storage) {
         this.storage = storage;
@@ -158,6 +159,7 @@ public class MIPSTranslator {
     }
 
     public void TranslateVarDecl(ICode code) {
+        /* 遇到变量声明，填写符号表 */
         curTable.PutSymbol(new AddrSym(code.GetLSym(), Integer.toString(SPOffset)));
         StackGrow();
         curTable.setStackTop(SPOffset);
@@ -192,7 +194,7 @@ public class MIPSTranslator {
             AddAssign(reg, RegDistributor.A0Reg, Assign.MOVE);
             AddAssign(Integer.toString(Syscall.PRINT_INTEGER), RegDistributor.V0Reg, Assign.LI);
             AddSyscall();
-        } else {
+        } else if (isVar(target)) {
             if (isGlobalStr(target)) {
                 AddLoad(RegDistributor.A0Reg, target, Load.LA);
                 AddAssign(Integer.toString(Syscall.PRINT_STRING), RegDistributor.V0Reg, Assign.LI);
@@ -207,6 +209,10 @@ public class MIPSTranslator {
                 AddAssign(Integer.toString(Syscall.PRINT_INTEGER), RegDistributor.V0Reg, Assign.LI);
                 AddSyscall();
             }
+        } else if (isDigit(target)) {
+            AddAssign(target, RegDistributor.A0Reg, Assign.LI);
+            AddAssign(Integer.toString(Syscall.PRINT_INTEGER), RegDistributor.V0Reg, Assign.LI);
+            AddSyscall();
         }
     }
 
@@ -225,6 +231,7 @@ public class MIPSTranslator {
         AddCalculate("-", RegDistributor.SPReg, RegDistributor.SPReg, Integer.toString(Math.abs(SPOffset)));
         AddJumpTo(FuncLabel, JumpTo.JAL);
         AddCalculate("+", RegDistributor.SPReg, RegDistributor.SPReg, Integer.toString(Math.abs(SPOffset)));
+        PutTempVarAddrSymbol();
     }
 
     public void TranslateFunParams(ArrayList<FuncParam> funcParams) {
@@ -234,12 +241,13 @@ public class MIPSTranslator {
             curTable.PutSymbol(newSym);
             size--;
         }
-        PrintAllAddrSym();
+//        PrintAllAddrSym();
     }
 
     public void TranslatePush(ICode code) {
         FuncPush push = (FuncPush) code;
         String target = FetchSym(push.getTarget());
+        PutTempVarAddrSymbol();
         AddStore(target, RegDistributor.SPReg, Integer.toString(SPOffset));
         StackGrow();
     }
@@ -266,7 +274,14 @@ public class MIPSTranslator {
                 AddLoad(reg, RegDistributor.SPReg, addrSym.getOffset());
                 return reg;
             }
-        } else if (isTemp(sym)) {   /* 临时变量，如果该临时变量已经被分配在，则返回其对应寄存器；否则，为其分配一个寄存器 */
+        } else if (isTemp(sym)) {   /* 临时变量，如果该临时变量已经被分配，则返回其对应寄存器；否则，为其分配一个寄存器 */
+            RemoveTempVar(sym);
+            if (curTable.FindSymbol(sym)) {
+                AddrSym addrSym = curTable.FindAddrSym(sym);
+                String reg = DistributeReg(sym);
+                AddLoad(reg, RegDistributor.SPReg, addrSym.getOffset());
+                return reg;
+            }
             if (TempReg.containsKey(sym)) {
                 return TempReg.get(sym);
             }
@@ -303,6 +318,7 @@ public class MIPSTranslator {
             String reg2 = FetchSym(rSym2);
             TempReg.remove(rSym1);
             TempReg.remove(rSym2);
+            MarkTempVar(lSym);
             AddCalculate(exp.getOperator(), reg, reg1, reg2);
         }
     }
@@ -327,6 +343,7 @@ public class MIPSTranslator {
             String reg = DistributeReg(lSym);
             AddAssign(rSym1, reg, Assign.MOVE);
             TempReg.put(rSym1, lSym);
+            MarkTempVar(lSym);
         } else if (isFuncRet(lSym)) {
             /* 左侧是返回值，向V1中保存右侧值 */
             AddAssign(rSym1, RegDistributor.V1Reg, Assign.MOVE);
@@ -387,6 +404,10 @@ public class MIPSTranslator {
         SPOffset -= 4;
     }
 
+    public void StackBack() {
+        SPOffset += 4;
+    }
+
     public boolean isEmpty(String string) {
         return string.isEmpty();
     }
@@ -422,6 +443,26 @@ public class MIPSTranslator {
             }
         }
         return true;
+    }
+
+    public void MarkTempVar(String temp) {
+        UnusedTempVar.add(temp);
+        StackGrow();
+    }
+
+    public void RemoveTempVar(String temp) {
+        UnusedTempVar.remove(temp);
+        StackBack();
+    }
+
+    public void PutTempVarAddrSymbol() {
+        for (String tempVar : UnusedTempVar) {
+            System.out.print(tempVar + " ");
+            curTable.PutSymbol(new AddrSym(tempVar, Integer.toString(SPOffset)));
+            AddStore(TempReg.get(tempVar), RegDistributor.SPReg, Integer.toString(SPOffset));
+            StackGrow();
+        }
+        UnusedTempVar.clear();
     }
 
     public void AddTable() {

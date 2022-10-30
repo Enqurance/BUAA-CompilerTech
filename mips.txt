@@ -1,105 +1,91 @@
 .data
-	a$0: .word 0
-	c$0: .word 0
-	x$0: .word 0
-	$str$0: .asciiz "c is "
+	$str$0: .asciiz "Laughing:"
 	$str$1: .asciiz "\n"
-	$str$2: .asciiz "\n"
-	$str$3: .asciiz "Laughing:"
-	$str$4: .asciiz "\n"
 .text
-	li $t1 1
-	li $t2 1
-	addu $t0 $t1 $t2
-	li $t4 1
-	addu $t3 $t0 $t4
-	li $t6 1
-	addu $t5 $t3 $t6
-	li $t0 1
-	addu $t7 $t5 $t0
-	li $t2 1
-	addu $t1 $t7 $t2
-	li $t4 1
-	addu $t3 $t1 $t4
-	li $t6 1
-	addu $t5 $t3 $t6
-	li $t0 1
-	addu $t7 $t5 $t0
-	li $t2 1
-	addu $t1 $t7 $t2
-	li $t4 1
-	addu $t3 $t1 $t4
-	sw $t3 a$0
-	li $t5 3
-	move $t6 $t5
-	sw $t6 c$0
 $$main$$:
-	li $t7 4
-	sw $t7 0($sp)
-	li $t0 3
-	sw $t0 x$0
-	lw $t1 x$0
+	li $t0 0
+	sw $t0 0($sp)
+	li $t1 4
 	sw $t1 -4($sp)
-	li $t2 1
+	li $t2 3
 	sw $t2 -8($sp)
-	subu $sp $sp 12
-	jal $$f2$$
-	addu $sp $sp 12
-	li $t4 1
-	li $t5 1
-	addu $t3 $t4 $t5
-	sw $t3 -12($sp)
-	li $t6 1
-	sw $t6 -16($sp)
-	li $t7 1
-	sw $t7 -20($sp)
-	subu $sp $sp 24
-	jal $$f1$$
-	addu $sp $sp 24
-	move $t0 $v1
-	lw $a0 a$0
-	li $v0 1
-	syscall
-	la $a0 $str$2
-	li $v0 4
-	syscall
-	la $a0 $str$3
-	li $v0 4
-	syscall
-	subu $sp $sp 24
-	jal $$f3$$
-	addu $sp $sp 24
-	move $t1 $v1
-	move $a0 $t1
-	li $v0 1
-	syscall
-	la $a0 $str$4
-	li $v0 4
-	syscall
-	li $t2 0
-	move $v1 $t2
-	li $v0 10
-	syscall
-$$f1$$:
 	li $t3 1
-	move $v1 $t3
-	jr $ra
-$$f2$$:
-	lw $t5 8($sp)
-	lw $t6 4($sp)
-	addu $t4 $t5 $t6
-	sw $t4 0($sp)
+	sw $t3 -12($sp)
+	li $t4 2
+	sw $t4 -16($sp)
+	subu $sp $sp 20
+	jal $$f3$$
+	addu $sp $sp 20
+	move $t5 $v1
 	la $a0 $str$0
 	li $v0 4
 	syscall
-	lw $a0 0($sp)
+	li $t7 3
+	li $t0 6
+	subu $t6 $t7 $t0
+	lw $t2 -8($sp)
+	li $t3 1
+	subu $t1 $t2 $t3
+	sw $t5 -28($sp)
+	sw $t6 -32($sp)
+	sw $t1 -36($sp)
+	li $t4 4
+	sw $t4 -40($sp)
+	subu $sp $sp 44
+	jal $$f3$$
+	addu $sp $sp 44
+	move $t5 $v1
+	lw $t7 -32($sp)
+	addu $t6 $t7 $t5
+	lw $t1 -8($sp)
+	addu $t0 $t6 $t1
+	li $t3 2
+	li $t4 3
+	mul $t2 $t3 $t4
+	subu $t5 $t0 $t2
+	move $a0 $t5
 	li $v0 1
 	syscall
 	la $a0 $str$1
 	li $v0 4
 	syscall
-	jr $ra
+	li $t6 0
+	move $v1 $t6
+	li $v0 10
+	syscall
 $$f3$$:
-	li $t7 114514
-	move $v1 $t7
+	lw $t0 8($sp)
+	lw $t1 4($sp)
+	addu $t7 $t0 $t1
+	li $t3 1
+	subu $t2 $t7 $t3
+	li $t5 1
+	addu $t4 $t2 $t5
+	li $t7 1
+	subu $t6 $t4 $t7
+	li $t1 1
+	addu $t0 $t6 $t1
+	li $t3 1
+	subu $t2 $t0 $t3
+	li $t5 1
+	addu $t4 $t2 $t5
+	li $t7 1
+	subu $t6 $t4 $t7
+	li $t1 1
+	addu $t0 $t6 $t1
+	li $t3 1
+	subu $t2 $t0 $t3
+	li $t5 1
+	addu $t4 $t2 $t5
+	li $t7 1
+	subu $t6 $t4 $t7
+	li $t1 1
+	addu $t0 $t6 $t1
+	sw $t0 0($sp)
+	lw $t2 0($sp)
+	move $v1 $t2
+	jr $ra
+$$f2$$:
+	li $t3 1
+	move $v1 $t3
 	jr $ra
