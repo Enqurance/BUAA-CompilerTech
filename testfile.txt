@@ -1,17 +1,26 @@
-int f3(int a, int b){
-    int c = a + b - 1 + 1 - 1 + 1 - 1 + 1 - 1 + 1 - 1 + 1 - 1 + 1;
-    return c;
+const int a = +-3;
+const int n[9 - 2 * a] = {2,3 - 2,3};
+const int h[3][2] = {{1,1},{4,5},{1,4}};
+
+int f1(int a) {
+    return 0;
 }
-int f2(){
-    return 1;
+
+int f3(int a[], int b){
+    return b;
 }
 
 int main() {
-    int a = 0;
-    //printf("%d%d%d%d%d%d%d%d%d",a + 1,a + 2,a + 3,a + 4,a + 5,a + 6,a + 7,a + 8,a + 9);
-    int y = 4;
-    int x = 3;
-    f3(1,2);
-    printf("Laughing:%d\n", 3 - 6 + f3(x-1,4) + x - 2 * 3);
+    int array[3], y = 3, x, z;
+    array[2] = getint();
+    z = getint();
+    f1(h[0][0]);
+    if(y == 3 || y > 6){
+        printf("YES");
+    } else {
+        printf("NO");
+    }
+    x = z + +-+3;
+    //x = array[2] + h[2][1] - 2 + - + y;
     return 0;
 }

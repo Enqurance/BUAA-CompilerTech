@@ -19,9 +19,9 @@ public class Node {
         line = token.line;
     }
 
-    public Node(String context) {
+    public Node(String context, int line) {
         this.token = null;
-        this.line = -1;
+        this.line = line;
         this.type = 1;
         this.context = context;
     }
@@ -63,9 +63,9 @@ public class Node {
         }
     }
 
-    public void printChildren(){
+    public void printChildren() {
         System.out.println("A Node's Children:");
-        for(Node node :children){
+        for (Node node : children) {
             System.out.print(node.getContext() + " ");
         }
         System.out.println();

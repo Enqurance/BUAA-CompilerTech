@@ -18,8 +18,6 @@ public class Compiler {
         parser.parse();
         TableMaster master = new TableMaster(parser.getHead());
         master.Build();
-//        master.getHeadTable().printSymbols();
-        //  master.printAllTables();
         Error.printErrorMessage();
         Generator generator = new Generator(parser.getHead(), master.getHeadTable());
         generator.Generate();

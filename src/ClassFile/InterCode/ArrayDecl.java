@@ -7,14 +7,16 @@ import java.util.ArrayList;
 public class ArrayDecl extends ICode {
     private final String name;
     private final VarSymbol varSymbol;
+    private final boolean isGlobal;
     private String sym1;
     private String sym2;
     private final ArrayList<ArrayLoad> load = new ArrayList<>();
 
 
-    public ArrayDecl(VarSymbol symbol, String name) {
+    public ArrayDecl(VarSymbol symbol, String name,boolean isGlobal) {
         this.name = name;
         this.varSymbol = symbol;
+        this.isGlobal = isGlobal;
     }
 
     @Override
@@ -38,5 +40,9 @@ public class ArrayDecl extends ICode {
 
     public void setSym2(String sym2) {
         this.sym2 = sym2;
+    }
+
+    public boolean isGlobal() {
+        return isGlobal;
     }
 }

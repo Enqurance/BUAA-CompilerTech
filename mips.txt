@@ -1,91 +1,47 @@
 .data
-	$str$0: .asciiz "Laughing:"
-	$str$1: .asciiz "\n"
+	a$0: .word 0
+	ICodeParent: .word 0
+	ICodeParent: .word 0
+	$str$0: .asciiz "YES"
+	$str$1: .asciiz "NO"
 .text
+	li $t0 -3
+	sw $t0 a$0
 $$main$$:
-	li $t0 0
-	sw $t0 0($sp)
-	li $t1 4
-	sw $t1 -4($sp)
-	li $t2 3
-	sw $t2 -8($sp)
-	li $t3 1
-	sw $t3 -12($sp)
-	li $t4 2
-	sw $t4 -16($sp)
-	subu $sp $sp 20
-	jal $$f3$$
-	addu $sp $sp 20
-	move $t5 $v1
+	li $t1 3
+	sw $t1 0($sp)
+	li $v0 5
+	syscall
+	sw $v0 -8($sp)
+	li $t2 1
+	sw $t2 -12($sp)
+	subu $sp $sp 16
+	jal $$f1$$
+	addu $sp $sp 16
+	move $t3 $v1
+	lw $t5 0($sp)
+	li $t6 3
+	lw $t0 0($sp)
+	li $t1 6
 	la $a0 $str$0
 	li $v0 4
-	syscall
-	li $t7 3
-	li $t0 6
-	subu $t6 $t7 $t0
-	lw $t2 -8($sp)
-	li $t3 1
-	subu $t1 $t2 $t3
-	sw $t5 -28($sp)
-	sw $t6 -32($sp)
-	sw $t1 -36($sp)
-	li $t4 4
-	sw $t4 -40($sp)
-	subu $sp $sp 44
-	jal $$f3$$
-	addu $sp $sp 44
-	move $t5 $v1
-	lw $t7 -32($sp)
-	addu $t6 $t7 $t5
-	lw $t1 -8($sp)
-	addu $t0 $t6 $t1
-	li $t3 2
-	li $t4 3
-	mul $t2 $t3 $t4
-	subu $t5 $t0 $t2
-	move $a0 $t5
-	li $v0 1
 	syscall
 	la $a0 $str$1
 	li $v0 4
 	syscall
-	li $t6 0
-	move $v1 $t6
+	lw $t3 -8($sp)
+	li $t4 -3
+	addu $t2 $t3 $t4
+	sw $t2 -4($sp)
+	li $t5 0
+	move $v1 $t5
 	li $v0 10
 	syscall
-$$f3$$:
-	lw $t0 8($sp)
-	lw $t1 4($sp)
-	addu $t7 $t0 $t1
-	li $t3 1
-	subu $t2 $t7 $t3
-	li $t5 1
-	addu $t4 $t2 $t5
-	li $t7 1
-	subu $t6 $t4 $t7
-	li $t1 1
-	addu $t0 $t6 $t1
-	li $t3 1
-	subu $t2 $t0 $t3
-	li $t5 1
-	addu $t4 $t2 $t5
-	li $t7 1
-	subu $t6 $t4 $t7
-	li $t1 1
-	addu $t0 $t6 $t1
-	li $t3 1
-	subu $t2 $t0 $t3
-	li $t5 1
-	addu $t4 $t2 $t5
-	li $t7 1
-	subu $t6 $t4 $t7
-	li $t1 1
-	addu $t0 $t6 $t1
-	sw $t0 0($sp)
-	lw $t2 0($sp)
-	move $v1 $t2
+$$f1$$:
+	li $t6 0
+	move $v1 $t6
 	jr $ra
-$$f2$$:
-	li $t3 1
-	move $v1 $t3
+$$f3$$:
+	lw $t7 4($sp)
+	move $v1 $t7
 	jr $ra

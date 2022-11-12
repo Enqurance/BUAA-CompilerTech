@@ -31,7 +31,12 @@ public class Error {
             e.printStackTrace();
         }
         if (errorMessage.size() != 0) {
-            throw new RuntimeException("-----Testfile includes ERROR-----");
+            System.out.println("-----Testfile includes ERROR-----");
+            try {
+                System.exit(1);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 }

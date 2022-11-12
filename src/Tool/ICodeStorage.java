@@ -1,5 +1,6 @@
 package Tool;
 
+import ClassFile.InterCode.ArrayDecl;
 import ClassFile.InterCode.ConstDecl;
 import ClassFile.InterCode.FuncDecl;
 import ClassFile.InterCode.ICode;
@@ -76,6 +77,8 @@ public class ICodeStorage {
             return ((ConstDecl) (code)).isGlobal();
         } else if (code instanceof VarDecl) {
             return ((VarDecl) (code)).isGlobal();
+        } else if (code instanceof ArrayDecl){
+            return ((ArrayDecl) (code)).isGlobal();
         }
         return false;
     }

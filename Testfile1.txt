@@ -1,0 +1,25 @@
+const int a = 3;
+const int n[9 - 2 * a] = {2,3 - 2,3};
+const int h[3][2] = {{1,1},{4,5},{1,4}};
+
+int f1() {
+    return 0;
+}
+
+int f3(int a, int b){
+    return a + b;
+}
+
+int main() {
+    int a[3 * 2], b, c;
+    b = getint();
+    c = getint();
+    a[1] = getint();
+    a[2] = b;
+    a[b + c] = f1();
+    int y = 4;
+    int x = 2;
+    f3(1,2);
+    printf("Laughing:%d\n", 3 - 6 + a[1 + 1 + 1] * f3(x-1,4) / h[2][0] + x - 2 * 3);
+    return 0;
+}

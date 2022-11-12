@@ -7,14 +7,13 @@ public class VarSymbol extends Symbol {
     private final boolean isConst;
     private final int dimension;
     private int ident;
-    private final int sizeOne = 0;
-    private final int sizeTwo = 1;
+    private int sizeOne = 0;
+    private int sizeTwo = 0;
     private final boolean isRealParam;
     private final boolean hasValue;
-    private int value;
-    private int line;
-    private final ArrayList<Integer> oneDimArray = new ArrayList<>();
-    private final ArrayList<ArrayList<Integer>> twoDimArray = new ArrayList<>();
+    private String value = null;
+    private final int line;
+    private final ArrayList<Integer> initVal = new ArrayList<>();
 
     public VarSymbol(Token token, boolean isConst, int dimension,
                      ArrayList<ArrayList<Integer>> initVal, boolean isGlobal, int line) {
@@ -47,11 +46,11 @@ public class VarSymbol extends Symbol {
         return dimension;
     }
 
-    public int getValue() {
+    public String getValue() {
         return value;
     }
 
-    public void setValue(int value) {
+    public void setValue(String value) {
         this.value = value;
     }
 
@@ -78,5 +77,40 @@ public class VarSymbol extends Symbol {
     @Override
     public int getLine() {
         return line;
+    }
+
+    public void SetSize(int size) {
+        if (sizeOne == 0) {
+            sizeOne = size;
+            InitializeArray(sizeOne, 1);
+        } else if (sizeTwo == 0) {
+            sizeTwo = size;
+            InitializeArray(sizeOne, sizeTwo);
+        }
+    }
+
+    public void InitializeArray(int size1, int size2) {
+        int MaxSize = size1 * size2;
+        if (size1 * size2 > initVal.size()) {
+            while (initVal.size() < MaxSize) {
+                initVal.add(0);
+            }
+        }
+    }
+
+    public void SetArrayValue(int index, int value) {
+        initVal.set(index, value);
+    }
+
+    public ArrayList<Integer> getInitVal() {
+        return initVal;
+    }
+
+    public int getSizeOne() {
+        return sizeOne;
+    }
+
+    public int getSizeTwo() {
+        return sizeTwo;
     }
 }

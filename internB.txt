@@ -1,52 +1,44 @@
-const str $str$0 = Laughing:
-const str $str$1 = \n
+const int a$0
+arr int n$0[15]
+arr int h$0[3][2]
+const str $str$0 = YES
+const str $str$1 = NO
 $$Init$$:
+a$0 = -3
 $$main$$:
 int main
-var int a$0
-a$0 = 0
+arr int array$0[3]
 var int y$0
-y$0 = 4
+y$0 = 3
 var int x$0
-x$0 = 3
+var int z$0
+scanf #t0#
+z$0 = #t0#
 push 1
-push 2
-call f3
-#t13# = RET
+call f1
+#t1# = RET
+$IfLabel_0_Cond_0$:
+#t2# = y$0 == 3
+if #t2# goto $IfLabel_0
+$IfLabel_0_Cond_1$:
+#t3# = y$0 > 6
+if #t3# goto $IfLabel_0
+goto $ElseLabel_0
+$IfLabel_0:
 printf $str$0
-#t14# = 3 - 6
-#t15# = x$0 - 1
-push #t15#
-push 4
-call f3
-#t16# = RET
-#t17# = #t14# + #t16#
-#t18# = #t17# + x$0
-#t19# = 2 * 3
-#t20# = #t18# - #t19#
-printf #t20#
+$IfLabel_End_0:
+$ElseLabel_0:
 printf $str$1
+$ElseLabel_End0:
+#t4# = z$0 + -3
+x$0 = #t4#
 RET = 0
-$$f2$$:
-int f2
-RET = 1
+$$f1$$:
+int f1
+para int a$1
+RET = 0
 $$f3$$:
 int f3
-para int a$0
+para int a$1[]
 para int b$0
-var int c$0
-#t0# = a$0 + b$0
-#t1# = #t0# - 1
-#t2# = #t1# + 1
-#t3# = #t2# - 1
-#t4# = #t3# + 1
-#t5# = #t4# - 1
-#t6# = #t5# + 1
-#t7# = #t6# - 1
-#t8# = #t7# + 1
-#t9# = #t8# - 1
-#t10# = #t9# + 1
-#t11# = #t10# - 1
-#t12# = #t11# + 1
-c$0 = #t12#
-RET = c$0
+RET = b$0

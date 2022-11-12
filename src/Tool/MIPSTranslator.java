@@ -439,6 +439,9 @@ public class MIPSTranslator {
     public boolean isDigit(String string) {
         for (int i = string.length() - 1; i >= 0; i--) {
             if (!Character.isDigit(string.charAt(i))) {
+                if (i == 0 && string.charAt(i) == '-' && string.length() != 1) {
+                    continue;
+                }
                 return false;
             }
         }
@@ -457,7 +460,6 @@ public class MIPSTranslator {
 
     public void PutTempVarAddrSymbol() {
         for (String tempVar : UnusedTempVar) {
-            System.out.print(tempVar + " ");
             curTable.PutSymbol(new AddrSym(tempVar, Integer.toString(SPOffset)));
             AddStore(TempReg.get(tempVar), RegDistributor.SPReg, Integer.toString(SPOffset));
             StackGrow();
