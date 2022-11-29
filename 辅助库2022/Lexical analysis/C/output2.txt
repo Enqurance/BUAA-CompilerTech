@@ -1,0 +1,19 @@
+INTTK int
+MAINTK main
+LPARENT (
+RPARENT )
+LBRACE {
+PRINTFTK printf
+LPARENT (
+STRCON "19241091\n"
+RPARENT )
+SEMICN ;
+PRINTFTK printf
+LPARENT (
+STRCON "==================testfile4 end=================="
+RPARENT )
+SEMICN ;
+RETURNTK return
+INTCON 0
+SEMICN ;
+RBRACE }

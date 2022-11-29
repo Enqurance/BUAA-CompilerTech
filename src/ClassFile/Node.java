@@ -9,6 +9,7 @@ public class Node {
     private Node parent;
     private final ArrayList<Node> children = new ArrayList<>();
     private final int line;
+    private boolean PushingParams = false;
 
     /* type == 0 ==> isEnd*/
     /* type == 1 ==> isNotEnd*/
@@ -75,6 +76,12 @@ public class Node {
         return children;
     }
 
+    public void AdjustPushingParam(boolean pushing) {
+        for (Node child : children) {
+            child.setPushingParams(pushing);
+        }
+    }
+
     public Node getParent() {
         return parent;
     }
@@ -85,5 +92,13 @@ public class Node {
 
     public int getLine() {
         return line;
+    }
+
+    public void setPushingParams(boolean pushingParams) {
+        PushingParams = pushingParams;
+    }
+
+    public boolean isPushingParams() {
+        return PushingParams;
     }
 }

@@ -26,4 +26,8 @@ public class FuncDecl extends ICode {
     public ArrayList<FuncParam> getFuncParams() {
         return funcParams;
     }
+
+    public String getFuncType() {
+        return funcType;
+    }
 }

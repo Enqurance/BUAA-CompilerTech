@@ -39,4 +39,8 @@ public class Get extends ICode {
     public String getTempVar() {
         return tempVar;
     }
+
+    public boolean isArrayEle() {
+        return isArrayEle;
+    }
 }

@@ -59,7 +59,7 @@ public class VarSymbol extends Symbol {
             return;
         }
         Symbol symbol = table.findName(getName());
-        if (symbol instanceof VarSymbol) {
+        if (symbol instanceof VarSymbol) {  /* 找到了，就分配所在层次 */
             ident = ((VarSymbol) symbol).getIdent() + 1;
         } else {
             SearchLastSymbol(table.getParent());
@@ -87,6 +87,15 @@ public class VarSymbol extends Symbol {
             sizeTwo = size;
             InitializeArray(sizeOne, sizeTwo);
         }
+    }
+
+    public int GetSize() {
+        if (sizeOne == 0) {
+            return 0;
+        } else if (sizeTwo == 0) {
+            return sizeOne * 4;
+        }
+        return sizeOne * sizeTwo * 4;
     }
 
     public void InitializeArray(int size1, int size2) {

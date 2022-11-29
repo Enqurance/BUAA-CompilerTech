@@ -71,7 +71,8 @@ public class TableMaster {
                 if (item.getType() == 1) {
                     switch (item.getContext()) {
                         case "<FuncFParams>":
-                            funcSymbol.getVarSymbols().addAll(FuncFParams(item));
+                            ArrayList<VarSymbol> symbols = FuncFParams(item);
+                            funcSymbol.getVarSymbols().addAll(symbols);
                             break;
                         case "<Block>":
                             Block(item);
@@ -518,6 +519,8 @@ public class TableMaster {
             for (Node item : children) {
                 if (item.getContext().equals("[")) {
                     dimension--;
+                } else if (item.getContext().equals("<Exp>")) {
+                    Exp(item);
                 }
             }
             if (curTable.equals(headTable)) {

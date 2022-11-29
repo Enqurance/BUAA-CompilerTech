@@ -30,8 +30,8 @@ public class SymbolTable {
             if (varSymbols.containsKey(symbol.getName())) {
                 error(symbol);
             } else {
-                varSymbols.put(symbol.getName(), (VarSymbol) symbol);
-                ((VarSymbol) symbol).SearchLastSymbol(this.getParent());
+                varSymbols.put(symbol.getName(), (VarSymbol) symbol);   /* 填符号表 */
+                ((VarSymbol) symbol).SearchLastSymbol(this.getParent());    /* 查看该符号是否来自外层，从上一层开始查找 */
             }
         } else if (symbol instanceof FuncSymbol) {
             if (funcSymbols.containsKey(symbol.getName())) {

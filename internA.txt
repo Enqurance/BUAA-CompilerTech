@@ -1,44 +1,201 @@
 $$Init$$:
-const int a$0
-a$0 = -3
-arr int n$0[15]
-arr int h$0[3][2]
-$$f1$$:
-int f1
-para int a$1
-RET = 0
-$$f3$$:
-int f3
-para int a$1[]
-para int b$0
-RET = b$0
+const int simple_const_a$0
+simple_const_a$0 = 1
+arr int arr_1d_a$0[5]
+arr int arr_2d_a$0[2][2]
+arr int arr_2d_b$0[3][2]
+const int simple_cosnt_b$0
+simple_cosnt_b$0 = 11
+arr int arr_1d_b$0[9]
+var int simple_var_c$0
+simple_var_c$0 = 327
+var int simple_var_d$0
+arr int arr_1d_c$0[2]
+store arr_1d_c$0[0] 896
+store arr_1d_c$0[1] 1
+arr int arr_1d_d$0[10]
+arr int arr_2d_c$0[3][3]
+arr int arr_2d_d$0[2][2]
+store arr_2d_d$0[0][0] 3
+store arr_2d_d$0[0][1] 56
+store arr_2d_d$0[1][0] 45
+store arr_2d_d$0[1][1] 16
+arr int arr_2d_e$0[10][10]
+$$empty_func$$:
+void empty_func
+$$para_only$$:
+void para_only
+para int a$0
+para int b$0[]
+para int c$0[][2]
+const str $str$0 = Successfully call a function with 3 types of paras.\n
+printf $str$0
+goto $ra
+$$put_stu_id$$:
+void put_stu_id
+const str $str$1 = 20373453\n\n
+printf $str$1
+goto $ra
+$$sum_arr_1d$$:
+int sum_arr_1d
+para int arr$0[]
+para int length$0
+var int i$0
+i$0 = 0
+var int sum$0
+sum$0 = 0
+$WhileLabel_0_Cond_0$:
+#t0# = length$0 - 1
+#t1# = i$0 <= #t0#
+if not #t1# goto $WhileLabel_End_0$
+$WhileLabel_0$:
+load #t2# arr$0[i$0]
+#t3# = sum$0 + #t2#
+sum$0 = #t3#
+#t4# = i$0 + 1
+i$0 = #t4#
+goto $WhileLabel_0_Cond_0$
+$WhileLabel_End_0$:
+RET = sum$0
+$$get_then_print$$:
+int get_then_print
+arr int const_tmp$0[2]
+store const_tmp$0[0] 66
+store const_tmp$0[1] 88
+var int tmp$0
+var int ans$0
+arr int ret$0[2][3]
+scanf #t5#
+tmp$0 = #t5#
+$IfLabel_0_Cond_0$:
+#t6# = tmp$0 > 100
+if not #t6# goto $IfLabel_End_0$
+$IfLabel_0$:
+const str $str$2 = \nJust get a number [
+printf $str$2
+printf tmp$0
+const str $str$3 = ] (greater than 100).\n
+printf $str$3
+goto $ElseLabel_End_0$
+$IfLabel_End_0$:
+$ElseLabel_0$:
+const str $str$4 = \nJust get a number [
+printf $str$4
+printf tmp$0
+const str $str$5 = ] (smaller than or equal to 100).\n
+printf $str$5
+$ElseLabel_End_0$:
+store ret$0[0][0] tmp$0
+#t7# = tmp$0 + 33
+store ret$0[0][1] #t7#
+store ret$0[0][2] 5808
+load address #t8# ret$0[0]
+push #t8#
+push 3
+call sum_arr_1d
+#t9# = RET
+ans$0 = #t9#
+RET = ans$0
+$$put_global_simple_var_c$$:
+void put_global_simple_var_c
+const str $str$6 = GLOBAL simple_var_c: 
+printf $str$6
+printf simple_var_c$0
+const str $str$7 = \n
+printf $str$7
+goto $ra
 $$main$$:
 int main
-arr int array$0[3]
-var int y$0
-y$0 = 3
-var int x$0
-var int z$0
-scanf #t0#
-z$0 = #t0#
-push 1
-call f1
-#t1# = RET
-$IfLabel_0_Cond_0$:
-#t2# = y$0 == 3
-if #t2# goto $IfLabel_0
-$IfLabel_0_Cond_1$:
-#t3# = y$0 > 6
-if #t3# goto $IfLabel_0
-goto $ElseLabel_0
-$IfLabel_0:
-const str $str$0 = YES
-printf $str$0
-$IfLabel_End_0:
-$ElseLabel_0:
-const str $str$1 = NO
-printf $str$1
-$ElseLabel_End0:
-#t4# = z$0 + -3
-x$0 = #t4#
+arr int kkk$0[2]
+store kkk$0[0] 111
+store kkk$0[1] 222
+var int n$0
+arr int ans$0[10]
+var int t$0
+t$0 = 10
+call put_stu_id
+call empty_func
+simple_var_d$0 = 2
+push simple_var_d$0
+load address #t12# arr_1d_c$0
+push #t12#
+load address #t13# arr_2d_d$0
+push #t13#
+call para_only
+$WhileLabel_1_Cond_0$:
+if not t$0 goto $WhileLabel_End_1$
+$WhileLabel_1$:
+#t15# = t$0 - 1
+t$0 = #t15#
+call get_then_print
+#t16# = RET
+#t17# = #t16# % 10
+#t18# = #t17# + 10
+n$0 = #t18#
+$IfLabel_1_Cond_0$:
+#t19# = n$0 >= 10
+if not #t19# goto $IfLabel_End_1$
+$IfLabel_1$:
+#t20# = n$0 - 10
+n$0 = #t20#
+$IfLabel_End_1$:
+const str $str$8 = lucky number: 
+printf $str$8
+printf n$0
+const str $str$9 = \n
+printf $str$9
+var int simple_var_c$1
+simple_var_c$1 = 0
+var int index$0
+index$0 = 0
+$WhileLabel_2_Cond_0$:
+#t21# = simple_var_c$1 < 8
+if not #t21# goto $WhileLabel_End_2$
+$WhileLabel_2$:
+$IfLabel_2_Cond_0$:
+#t22# = simple_var_c$1 == 2
+if not #t22# goto $IfLabel_End_2$
+$IfLabel_2$:
+#t23# = simple_var_c$1 + 1
+simple_var_c$1 = #t23#
+goto $WhileLabel_2$
+goto $ElseLabel_End_2$
+$IfLabel_End_2$:
+$ElseLabel_2$:
+$IfLabel_3_Cond_0$:
+#t24# = n$0 + 1
+#t25# = #t24# <= simple_var_c$1
+if not #t25# goto $IfLabel_End_3$
+$IfLabel_3$:
+goto $WhileLabel_End_2$
+$IfLabel_End_3$:
+$ElseLabel_End_2$:
+load #t26# arr_1d_b$0[simple_var_c$1]
+const str $str$10 = (
+printf $str$10
+printf simple_var_c$1
+const str $str$11 = )
+printf $str$11
+printf #t26#
+const str $str$12 = \n
+printf $str$12
+load #t27# arr_1d_b$0[simple_var_c$1]
+store ans$0[index$0] #t27#
+#t28# = index$0 + 1
+index$0 = #t28#
+#t29# = simple_var_c$1 + 1
+simple_var_c$1 = #t29#
+goto $WhileLabel_2_Cond_0$
+$WhileLabel_End_2$:
+$IfLabel_4_Cond_0$:
+#t30# = n$0 + 1
+#t31# = #t30# != simple_var_c$1
+if not #t31# goto $IfLabel_End_4$
+$IfLabel_4$:
+const str $str$13 = The ones digit of the lucky number is greater than 7.\n
+printf $str$13
+$IfLabel_End_4$:
+goto $WhileLabel_1_Cond_0$
+$WhileLabel_End_1$:
+call put_global_simple_var_c
 RET = 0

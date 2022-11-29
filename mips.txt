@@ -1,47 +1,526 @@
 .data
-	a$0: .word 0
-	ICodeParent: .word 0
-	ICodeParent: .word 0
-	$str$0: .asciiz "YES"
-	$str$1: .asciiz "NO"
+	simple_const_a$0: .word 0
+	arr_1d_a$0:
+	.word 2
+	.word 3
+	.word 4
+	.word 5
+	.word 6
+	arr_2d_a$0:
+	.word 7
+	.word 8
+	.word 9
+	.word 10
+	arr_2d_b$0:
+	.word 44
+	.word 55
+	.word 66
+	.word 77
+	.word 88
+	.word 99
+	simple_cosnt_b$0: .word 0
+	arr_1d_b$0:
+	.word 11
+	.word 22
+	.word 33
+	.word 44
+	.word 55
+	.word 66
+	.word 77
+	.word 88
+	.word 99
+	simple_var_c$0: .word 0
+	simple_var_d$0: .word 0
+	arr_1d_c$0:
+	.word 0
+	.word 0
+	arr_1d_d$0:
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	arr_2d_c$0:
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	arr_2d_d$0:
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	arr_2d_e$0:
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	.word 0
+	$str$0: .asciiz "Successfully call a function with 3 types of paras.\n"
+	$str$1: .asciiz "20373453\n\n"
+	$str$2: .asciiz "\nJust get a number ["
+	$str$3: .asciiz "] (greater than 100).\n"
+	$str$4: .asciiz "\nJust get a number ["
+	$str$5: .asciiz "] (smaller than or equal to 100).\n"
+	$str$6: .asciiz "GLOBAL simple_var_c: "
+	$str$7: .asciiz "\n"
+	$str$8: .asciiz "lucky number: "
+	$str$9: .asciiz "\n"
+	$str$10: .asciiz "("
+	$str$11: .asciiz ")"
+	$str$12: .asciiz "\n"
+	$str$13: .asciiz "The ones digit of the lucky number is greater than 7.\n"
 .text
-	li $t0 -3
-	sw $t0 a$0
-$$main$$:
-	li $t1 3
-	sw $t1 0($sp)
-	li $v0 5
-	syscall
-	sw $v0 -8($sp)
+	li $t0 1
+	sw $t0 simple_const_a$0
+	li $t1 11
+	sw $t1 simple_cosnt_b$0
+	li $t2 327
+	sw $t2 simple_var_c$0
+	li $t3 896
+	li $t4 0
+	mul $t4 $t4 4
+	sw $t3 arr_1d_c$0($t4)
+	li $t5 1
+	li $t6 1
+	mul $t6 $t6 4
+	sw $t5 arr_1d_c$0($t6)
+	li $t7 3
+	li $t0 0
+	li $t1 0
+	mul $t0 $t0 2
+	addu $t0 $t0 $t1
+	mul $t0 $t0 4
+	sw $t7 arr_2d_d$0($t0)
+	li $t2 56
+	li $t3 0
+	li $t4 1
+	mul $t3 $t3 2
+	addu $t3 $t3 $t4
+	mul $t3 $t3 4
+	sw $t2 arr_2d_d$0($t3)
+	li $t5 45
+	li $t6 1
+	li $t7 0
+	mul $t6 $t6 2
+	addu $t6 $t6 $t7
+	mul $t6 $t6 4
+	sw $t5 arr_2d_d$0($t6)
+	li $t0 16
+	li $t1 1
 	li $t2 1
-	sw $t2 -12($sp)
-	subu $sp $sp 16
-	jal $$f1$$
-	addu $sp $sp 16
-	move $t3 $v1
-	lw $t5 0($sp)
-	li $t6 3
-	lw $t0 0($sp)
-	li $t1 6
+	mul $t1 $t1 2
+	addu $t1 $t1 $t2
+	mul $t1 $t1 4
+	sw $t0 arr_2d_d$0($t1)
+$$main$$:
+	li $t3 111
+	li $t4 0
+	mul $t4 $t4 4
+	addu $t4 $t4 -4
+	addu $t4 $sp $t4
+	sw $t3 0($t4)
+	li $t5 222
+	li $t6 1
+	mul $t6 $t6 4
+	addu $t6 $t6 -4
+	addu $t6 $sp $t6
+	sw $t5 0($t6)
+	li $t7 10
+	sw $t7 -52($sp)
+	subu $sp $sp 56
+	jal $$put_stu_id$$
+	addu $sp $sp 56
+	subu $sp $sp 56
+	jal $$empty_func$$
+	addu $sp $sp 56
+	li $t0 2
+	sw $t0 simple_var_d$0
+	lw $t1 simple_var_d$0
+	sw $t1 -56($sp)
+	la $t2 arr_1d_c$0
+	sw $t2 -60($sp)
+	la $t3 arr_2d_d$0
+	sw $t3 -64($sp)
+	subu $sp $sp 68
+	jal $$para_only$$
+	addu $sp $sp 68
+$WhileLabel_1_Cond_0$:
+	lw $t4 -52($sp)
+	beq $t4 $0 $WhileLabel_End_1$
+$WhileLabel_1$:
+	lw $t6 -52($sp)
+	li $t7 1
+	subu $t5 $t6 $t7
+	sw $t5 -52($sp)
+	subu $sp $sp 68
+	jal $$get_then_print$$
+	addu $sp $sp 68
+	move $t0 $v1
+	li $t2 10
+	div $t0 $t2
+	mfhi $t1
+	li $t4 10
+	addu $t3 $t1 $t4
+	sw $t3 -8($sp)
+$IfLabel_1_Cond_0$:
+	lw $t6 -8($sp)
+	li $t7 10
+	sge $t5 $t6 $t7
+	beq $t5 $0 $IfLabel_End_1$
+$IfLabel_1$:
+	lw $t1 -8($sp)
+	li $t2 10
+	subu $t0 $t1 $t2
+	sw $t0 -8($sp)
+$IfLabel_End_1$:
+	la $a0 $str$8
+	li $v0 4
+	syscall
+	lw $a0 -8($sp)
+	li $v0 1
+	syscall
+	la $a0 $str$9
+	li $v0 4
+	syscall
+	li $t3 0
+	sw $t3 -68($sp)
+	li $t4 0
+	sw $t4 -72($sp)
+$WhileLabel_2_Cond_0$:
+	lw $t6 -68($sp)
+	li $t7 8
+	slt $t5 $t6 $t7
+	beq $t5 $0 $WhileLabel_End_2$
+$WhileLabel_2$:
+$IfLabel_2_Cond_0$:
+	lw $t1 -68($sp)
+	li $t2 2
+	seq $t0 $t1 $t2
+	beq $t0 $0 $IfLabel_End_2$
+$IfLabel_2$:
+	lw $t4 -68($sp)
+	li $t5 1
+	addu $t3 $t4 $t5
+	sw $t3 -68($sp)
+	j $WhileLabel_2$
+	j $ElseLabel_End_2$
+$IfLabel_End_2$:
+$ElseLabel_2$:
+$IfLabel_3_Cond_0$:
+	lw $t7 -8($sp)
+	li $t0 1
+	addu $t6 $t7 $t0
+	lw $t2 -68($sp)
+	sle $t1 $t6 $t2
+	beq $t1 $0 $IfLabel_End_3$
+$IfLabel_3$:
+	j $WhileLabel_End_2$
+$IfLabel_End_3$:
+$ElseLabel_End_2$:
+	lw $t4 -68($sp)
+	mul $t4 $t4 4
+	lw $t3 arr_1d_b$0($t4)
+	la $a0 $str$10
+	li $v0 4
+	syscall
+	lw $a0 -68($sp)
+	li $v0 1
+	syscall
+	la $a0 $str$11
+	li $v0 4
+	syscall
+	move $a0 $t3
+	li $v0 1
+	syscall
+	la $a0 $str$12
+	li $v0 4
+	syscall
+	lw $t6 -68($sp)
+	mul $t6 $t6 4
+	lw $t5 arr_1d_b$0($t6)
+	lw $t7 -72($sp)
+	mul $t7 $t7 4
+	addu $t7 $t7 -48
+	addu $t7 $sp $t7
+	sw $t5 0($t7)
+	lw $t1 -72($sp)
+	li $t2 1
+	addu $t0 $t1 $t2
+	sw $t0 -72($sp)
+	lw $t4 -68($sp)
+	li $t5 1
+	addu $t3 $t4 $t5
+	sw $t3 -68($sp)
+	j $WhileLabel_2_Cond_0$
+$WhileLabel_End_2$:
+$IfLabel_4_Cond_0$:
+	lw $t7 -8($sp)
+	li $t0 1
+	addu $t6 $t7 $t0
+	lw $t2 -68($sp)
+	sne $t1 $t6 $t2
+	beq $t1 $0 $IfLabel_End_4$
+$IfLabel_4$:
+	la $a0 $str$13
+	li $v0 4
+	syscall
+$IfLabel_End_4$:
+	j $WhileLabel_1_Cond_0$
+$WhileLabel_End_1$:
+	subu $sp $sp 76
+	jal $$put_global_simple_var_c$$
+	addu $sp $sp 76
+	li $t3 0
+	move $v1 $t3
+	li $v0 10
+	syscall
+$$empty_func$$:
+	jr $ra
+$$para_only$$:
 	la $a0 $str$0
 	li $v0 4
 	syscall
+	jr $ra
+$$put_stu_id$$:
 	la $a0 $str$1
 	li $v0 4
 	syscall
-	lw $t3 -8($sp)
-	li $t4 -3
-	addu $t2 $t3 $t4
-	sw $t2 -4($sp)
-	li $t5 0
-	move $v1 $t5
-	li $v0 10
-	syscall
-$$f1$$:
-	li $t6 0
-	move $v1 $t6
 	jr $ra
-$$f3$$:
+$$sum_arr_1d$$:
+	li $t4 0
+	sw $t4 0($sp)
+	li $t5 0
+	sw $t5 -4($sp)
+$WhileLabel_0_Cond_0$:
 	lw $t7 4($sp)
-	move $v1 $t7
+	li $t0 1
+	subu $t6 $t7 $t0
+	lw $t2 0($sp)
+	sle $t1 $t2 $t6
+	beq $t1 $0 $WhileLabel_End_0$
+$WhileLabel_0$:
+	lw $t4 0($sp)
+	mul $t4 $t4 4
+	lw $t3 8($sp)
+	addu $t3 $t3 $t4
+	lw $t3 0($t3)
+	lw $t6 -4($sp)
+	addu $t5 $t6 $t3
+	sw $t5 -4($sp)
+	lw $t0 0($sp)
+	li $t1 1
+	addu $t7 $t0 $t1
+	sw $t7 0($sp)
+	j $WhileLabel_0_Cond_0$
+$WhileLabel_End_0$:
+	lw $t2 -4($sp)
+	move $v1 $t2
+	jr $ra
+$$get_then_print$$:
+	sw $ra 0($sp)
+	li $t3 66
+	li $t4 0
+	mul $t4 $t4 4
+	addu $t4 $t4 -8
+	addu $t4 $sp $t4
+	sw $t3 0($t4)
+	li $t5 88
+	li $t6 1
+	mul $t6 $t6 4
+	addu $t6 $t6 -8
+	addu $t6 $sp $t6
+	sw $t5 0($t6)
+	li $v0 5
+	syscall
+	sw $v0 -12($sp)
+$IfLabel_0_Cond_0$:
+	lw $t0 -12($sp)
+	li $t1 100
+	sgt $t7 $t0 $t1
+	beq $t7 $0 $IfLabel_End_0$
+$IfLabel_0$:
+	la $a0 $str$2
+	li $v0 4
+	syscall
+	lw $a0 -12($sp)
+	li $v0 1
+	syscall
+	la $a0 $str$3
+	li $v0 4
+	syscall
+	j $ElseLabel_End_0$
+$IfLabel_End_0$:
+$ElseLabel_0$:
+	la $a0 $str$4
+	li $v0 4
+	syscall
+	lw $a0 -12($sp)
+	li $v0 1
+	syscall
+	la $a0 $str$5
+	li $v0 4
+	syscall
+$ElseLabel_End_0$:
+	lw $t2 -12($sp)
+	li $t3 0
+	li $t4 0
+	mul $t3 $t3 3
+	addu $t3 $t3 $t4
+	mul $t3 $t3 4
+	addu $t3 $t3 -40
+	addu $t3 $sp $t3
+	sw $t2 0($t3)
+	lw $t6 -12($sp)
+	li $t7 33
+	addu $t5 $t6 $t7
+	li $t0 0
+	li $t1 1
+	mul $t0 $t0 3
+	addu $t0 $t0 $t1
+	mul $t0 $t0 4
+	addu $t0 $t0 -40
+	addu $t0 $sp $t0
+	sw $t5 0($t0)
+	li $t2 5808
+	li $t3 0
+	li $t4 2
+	mul $t3 $t3 3
+	addu $t3 $t3 $t4
+	mul $t3 $t3 4
+	addu $t3 $t3 -40
+	addu $t3 $sp $t3
+	sw $t2 0($t3)
+	li $t5 0x7fffefd4
+	li $t6 0
+	mul $t6 $t6 3
+	mul $t6 $t6 4
+	addu $t5 $t5 $t6
+	sw $t5 -44($sp)
+	li $t7 3
+	sw $t7 -48($sp)
+	subu $sp $sp 52
+	jal $$sum_arr_1d$$
+	addu $sp $sp 52
+	move $t0 $v1
+	sw $t0 -16($sp)
+	lw $t1 -16($sp)
+	move $v1 $t1
+	lw $ra 0($sp)
+	jr $ra
+$$put_global_simple_var_c$$:
+	la $a0 $str$6
+	li $v0 4
+	syscall
+	lw $a0 simple_var_c$0
+	li $v0 1
+	syscall
+	la $a0 $str$7
+	li $v0 4
+	syscall
 	jr $ra

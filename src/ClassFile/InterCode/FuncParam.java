@@ -7,7 +7,7 @@ import java.util.ArrayList;
 public class FuncParam extends ICode {
     private final VarSymbol paramSymbol;
     private final String name;
-    private final ArrayList<Exp> exps = new ArrayList<>();
+    private String dim2 = null;
 
     public FuncParam(VarSymbol varSymbol, String name) {
         this.paramSymbol = varSymbol;
@@ -24,6 +24,7 @@ public class FuncParam extends ICode {
         } else if (paramSymbol.getDimension() == 2) {
             /*TODO: Add Exp Later*/
             context.append("[]");
+            context.append("[").append(dim2).append("]");
         }
         return context.toString();
     }
@@ -36,5 +37,17 @@ public class FuncParam extends ICode {
 
     public String getName() {
         return name;
+    }
+
+    public VarSymbol getParamSymbol() {
+        return paramSymbol;
+    }
+
+    public String getDim2() {
+        return dim2;
+    }
+
+    public void setDim2(String dim2) {
+        this.dim2 = dim2;
     }
 }

@@ -17,6 +17,8 @@ import ClassFile.InterCode.Jump;
 import ClassFile.InterCode.Label;
 import ClassFile.InterCode.Printf;
 import ClassFile.InterCode.VarDecl;
+import ClassFile.MipsInstr.Branch;
+import ClassFile.MipsInstr.JumpTo;
 import ClassFile.Node;
 import ClassFile.SymbolTable;
 import ClassFile.VarSymbol;
@@ -34,7 +36,7 @@ public class Generator {
     private SymbolTable curTable;
     private final ArrayList<ICode> iCodes = new ArrayList<>();
     private int variableCount = 0;
-    private int whileLabelCount = 0;
+    private int whileLabelCount = -1;
     private int ifLabelCount = 0;
     private int strCount = 0;
 
@@ -135,6 +137,12 @@ public class Generator {
                     GenConstInitValForArrayDimOne(item, symbol, 0);
                 }
             }
+            if (!symbol.isGlobal()) {
+                int length = symbol.getInitVal().size();
+                for (int i = 0; i < length; i++) {
+                    AddArrayStore(IdentifyVarLevel(symbol), String.valueOf(symbol.getInitVal().get(i)), String.valueOf(i));
+                }
+            }
         } else if (symbol.getDimension() == 2) {
             String DimOne = GenConstExp(children.get(2));
             String DimTwo = GenConstExp(children.get(5));
@@ -147,6 +155,12 @@ public class Generator {
                     symbol.SetSize(Integer.parseInt(size));
                 } else if (item.getContext().equals("<ConstInitVal>")) {
                     GenConstInitValForArrayDimTwo(item, symbol);
+                }
+            }
+            if (!symbol.isGlobal()) {
+                int length = symbol.getInitVal().size();
+                for (int i = 0; i < length; i++) {
+                    AddArrayStore(IdentifyVarLevel(symbol), String.valueOf(symbol.getInitVal().get(i)), String.valueOf(i));
                 }
             }
         }
@@ -244,18 +258,74 @@ public class Generator {
         } else if (symbol.getDimension() == 1) {
             String DimOne = GenConstExp(children.get(2));
             ArrayDecl arrayDecl = AddArrayDecl(symbol);
+            symbol.SetSize(Integer.parseInt(DimOne));
             arrayDecl.setSym1(DimOne);
+            if (symbol.isGlobal()) {
+                symbol.InitializeArray(Integer.parseInt(DimOne), 1);
+            }
+            ArrayList<String> values = new ArrayList<>();
+            for (Node item : children) {
+                if (item.getContext().equals("<InitVal>")) {
+                    values.addAll(GenInitValForArrayDimOne(item));
+                }
+            }
+            int length = values.size();
+            for (int i = 0; i < length; i++) {
+                AddArrayStore(IdentifyVarLevel(symbol), values.get(i), String.valueOf(i));
+            }
         } else if (symbol.getDimension() == 2) {
             String DimOne = GenConstExp(children.get(2));
             String DimTwo = GenConstExp(children.get(5));
             ArrayDecl arrayDecl = AddArrayDecl(symbol);
+            symbol.SetSize(Integer.parseInt(DimOne));
+            symbol.SetSize(Integer.parseInt(DimTwo));
+            VarSymbol varSymbol = FindVarSymbolByName(curTable, GetVarName(DimTwo), node.getLine());
+            if (varSymbol != null) {
+                System.out.println(varSymbol.getValue());
+            }
             arrayDecl.setSym1(DimOne);
             arrayDecl.setSym2(DimTwo);
+            if (symbol.isGlobal()) {
+                symbol.InitializeArray(Integer.parseInt(DimOne), Integer.parseInt(DimTwo));
+            }
+            ArrayList<String> values = new ArrayList<>();
+            for (Node item : children) {
+                if (item.getContext().equals("<InitVal>")) {
+                    values.addAll(GenInitValForArrayDimTwo(item));
+                }
+            }
+            int length = values.size();
+            for (int i = 0; i < length; i++) {
+                AddArrayStore(IdentifyVarLevel(symbol), values.get(i),
+                        String.valueOf(i / symbol.getSizeTwo()), String.valueOf(i % symbol.getSizeTwo()));
+            }
         }
     }
 
     public String GenInitValForVar(Node node) {
         return GenExp(node.getChildren().get(0));
+    }
+
+    public ArrayList<String> GenInitValForArrayDimOne(Node node) {
+        ArrayList<Node> children = node.getChildren();
+        ArrayList<String> values = new ArrayList<>();
+        for (Node item : children) {
+            if (item.getContext().equals("<InitVal>")) {
+                values.add(GenInitValForVar(item));
+            }
+        }
+        return values;
+    }
+
+    public ArrayList<String> GenInitValForArrayDimTwo(Node node) {
+        ArrayList<Node> children = node.getChildren();
+        ArrayList<String> values = new ArrayList<>();
+        for (Node item : children) {
+            if (item.getContext().equals("<InitVal>")) {
+                values.addAll(GenInitValForArrayDimOne(item));
+            }
+        }
+        return values;
     }
 
     public void GenStmt(Node node) {
@@ -292,8 +362,8 @@ public class Generator {
                 if (children.size() == 5) {
                     String IfBegin = DistributeIfLabel();
                     String IfEnd = DistributeIfEndLabel();
-                    GenCond(children.get(2), IfBegin, IfEnd, false);
-                    AddJump(IfEnd);
+                    GenCond(children.get(2), IfBegin, IfEnd, 1);
+                    ifLabelCount++;
                     AddLabel(IfBegin, true);
                     GenStmt(children.get(4));
                     AddLabel(IfEnd, true);
@@ -302,35 +372,36 @@ public class Generator {
                     String IfEnd = DistributeIfEndLabel();
                     String ElseBegin = DistributeElseLabel();
                     String ElseEnd = DistributeElseEndLabel();
-                    GenCond(children.get(2), IfBegin, IfEnd, false);
-                    AddJump(ElseBegin);
+                    GenCond(children.get(2), IfBegin, IfEnd, 1);
+                    ifLabelCount++;
                     AddLabel(IfBegin, true);
                     GenStmt(children.get(4));
+                    AddJump(ElseEnd, JumpTo.J);
                     AddLabel(IfEnd, true);
                     AddLabel(ElseBegin, true);
                     GenStmt(children.get(6));
                     AddLabel(ElseEnd, true);
                 }
-                ifLabelCount++;
                 break;
             case "while":
+                whileLabelCount++;
                 String endLabel = DistributeWhileLabelEnd();
                 String beginLabel = DistributeWhileLabel();
-                String CondBegin = GenCond(children.get(2), beginLabel, endLabel, true);
+                String CondBegin = GenCond(children.get(2), beginLabel, endLabel, 0);
                 AddLabel(beginLabel, true);
                 GenStmt(children.get(4));
-                AddJump(CondBegin);
+                AddJump(CondBegin, JumpTo.J);
                 AddLabel(endLabel, true);
-                whileLabelCount++;
                 break;
             case "break":
-                AddJump(GetWhileLabelEnd());
+                AddJump(GetWhileLabelEnd(), JumpTo.J);
                 break;
             case "continue":
-                AddJump(GetWhileLabel());
+                AddJump(GetWhileLabel(), JumpTo.J);
                 break;
             case "return":
                 if (children.size() == 2) {
+                    AddJump(RegDistributor.RAReg, JumpTo.JR);
                     break;
                 } else {
                     String exp = GenExp(children.get(1));
@@ -339,7 +410,6 @@ public class Generator {
                 break;
             case "printf":
                 ArrayList<Node> exps = new ArrayList<>();
-                int ExpCount = 0;
                 for (Node item : children) {
                     if (item.getContext().equals("<Exp>")) {
                         exps.add(item);
@@ -364,13 +434,17 @@ public class Generator {
                     }
                     slices.add(slice.toString());
                 }
+                ArrayList<String> Outputs = new ArrayList<>();
+                for (Node exp : exps) {
+                    Outputs.add(GenExp(exp));
+                }
+                int OutputCnt = 0;
                 for (String str : slices) {
                     if (!str.equals("%d")) {
                         ConstDecl ConstStr = AddConstDecl(str, strCount++, true);
                         AddPrintf(ConstStr.GetLSym());
                     } else {
-                        String tempVar = GenExp(exps.get(ExpCount++));
-                        AddPrintf(tempVar);
+                        AddPrintf(Outputs.get(OutputCnt++));
                     }
                 }
                 break;
@@ -382,11 +456,18 @@ public class Generator {
     }
 
     public String GenAddExp(Node node) {
+        if (node.isPushingParams()) {
+            node.AdjustPushingParam(true);
+        }
         ArrayList<Node> children = node.getChildren();
         ArrayList<String> symbols = new ArrayList<>();
         Stack<String> ResultStack = new Stack<>();
         if (children.size() == 1) {
-            return GenMulExp(children.get(0));
+            String res = GenMulExp(children.get(0));
+            if (node.isPushingParams()) {
+                node.AdjustPushingParam(true);
+            }
+            return res;
         }
         for (Node item : children) {
             if (item.getContext().equals("<MulExp>")) {
@@ -396,13 +477,17 @@ public class Generator {
             }
         }
         MergeCountable(node.getLine(), symbols, ResultStack);
+        ReverseStack(ResultStack);
         if (ResultStack.size() != 1) {
             while (ResultStack.size() > 1) {
                 String num1 = ResultStack.pop(), op = ResultStack.pop(), num2 = ResultStack.pop();
                 String tempVar = DistributeVariable();
-                AddExp(op, tempVar, num2, num1);
+                AddExp(op, tempVar, num1, num2);
                 ResultStack.add(tempVar);
             }
+        }
+        if (node.isPushingParams()) {
+            node.AdjustPushingParam(false);
         }
         return ResultStack.pop();
     }
@@ -414,7 +499,7 @@ public class Generator {
                 if (resultStack.size() != 0) {
                     /* 栈顶为运算符，top-1是一个运算数。临时变量、*/
                     String operator = resultStack.pop(), topVar = resultStack.pop();
-                    if (CanMerge(GetVarName(topVar), line)) {
+                    if (CanMerge(topVar, line, resultStack, operator)) {
                         if (isDigit(topVar)) {
                             int top = Integer.parseInt(topVar), now = Integer.parseInt(symbol);
                             int res = CalculateTwo(operator, top, now);
@@ -438,7 +523,7 @@ public class Generator {
                 if (resultStack.size() != 0) {
                     if (var.getValue() != null) {
                         String operator = resultStack.pop(), topVar = resultStack.pop();
-                        if (CanMerge(GetVarName(topVar), line)) {
+                        if (CanMerge(topVar, line, resultStack, operator)) {
                             if (isDigit(topVar)) {
                                 int top = Integer.parseInt(topVar), now = Integer.parseInt(var.getValue());
                                 int res = CalculateTwo(operator, top, now);
@@ -466,13 +551,37 @@ public class Generator {
         }
     }
 
-    public boolean CanMerge(String string, int line) {
+    public boolean CanMerge(String string, int line, Stack<String> stack, String curOperator) {
+        if (!stack.isEmpty()) {
+            String preOperator = stack.pop();
+            /* 连续的除法或者是模运算不优化 */
+            switch (curOperator) {
+                case "%":
+                case "/":
+                    stack.push(preOperator);
+                    return false;
+                case "*":
+                    if (!preOperator.equals("*")) {
+                        stack.push(preOperator);
+                        return false;
+                    }
+                    break;
+                case "-":
+                case "+":    /* 减法也不优化了 */
+                    if (!preOperator.equals("+")) {
+                        stack.push(preOperator);
+                        return false;
+                    }
+                    break;
+            }
+            stack.push(preOperator);
+        }
         if (isDigit(string)) {
             return true;
         } else if (isTempVar(string)) {
             return false;
         } else if (isVar(string)) {
-            VarSymbol varSymbol = FindVarSymbolByName(curTable, string, line);
+            VarSymbol varSymbol = FindVarSymbolByName(curTable, GetVarName(string), line);
             if (varSymbol.getDimension() == 0) {
                 return varSymbol.getValue() != null;
             } else if (varSymbol.getDimension() == 1) {
@@ -484,12 +593,29 @@ public class Generator {
         return false;
     }
 
+    public void ReverseStack(Stack<String> stack) {
+        ArrayList<String> elements = new ArrayList<>();
+        while (!stack.isEmpty()) {
+            elements.add(stack.pop());
+        }
+        for (String element : elements) {
+            stack.push(element);
+        }
+    }
+
     public String GenMulExp(Node node) {
+        if (node.isPushingParams()) {
+            node.AdjustPushingParam(true);
+        }
         ArrayList<Node> children = node.getChildren();
         ArrayList<String> symbols = new ArrayList<>();
         Stack<String> ResultStack = new Stack<>();
         if (children.size() == 1) {
-            return GenUnaryExp(children.get(0));
+            String res = GenUnaryExp(children.get(0));
+            if (node.isPushingParams()) {
+                node.AdjustPushingParam(false);
+            }
+            return res;
         }
         for (Node item : children) {
             if (item.getContext().equals("<UnaryExp>")) {
@@ -499,22 +625,26 @@ public class Generator {
             }
         }
         MergeCountable(node.getLine(), symbols, ResultStack);
+        ReverseStack(ResultStack);
         if (ResultStack.size() != 1) {
             while (ResultStack.size() > 1) {
                 String num1 = ResultStack.pop(), op = ResultStack.pop(), num2 = ResultStack.pop();
                 String tempVar = DistributeVariable();
-                AddExp(op, tempVar, num2, num1);
+                AddExp(op, tempVar, num1, num2);
                 ResultStack.add(tempVar);
             }
+        }
+        if (node.isPushingParams()) {
+            node.AdjustPushingParam(false);
         }
         return ResultStack.pop();
     }
 
-    public String GenCond(Node node, String beginLabel, String endLabel, boolean type) {
+    public String GenCond(Node node, String beginLabel, String endLabel, int type) {
         return GenLOrExp(node.getChildren().get(0), beginLabel, endLabel, type);
     }
 
-    public String GenLOrExp(Node node, String beginLabel, String endLabel, boolean type) {
+    public String GenLOrExp(Node node, String beginLabel, String endLabel, int type) {
         int condCnt = 0;
         ArrayList<Node> children = node.getChildren();
         ArrayList<Node> LAndExps = new ArrayList<>();
@@ -529,25 +659,29 @@ public class Generator {
         condCnt++;
         for (int i = 0; i < length - 1; i++) {
             String CondLabel = DistributeCondLabel(condCnt, type);
-            GenLAndExp(LAndExps.get(i), beginLabel, CondLabel);
+            GenLAndExp(LAndExps.get(i), beginLabel, CondLabel, false);
             AddLabel(CondLabel, true);
             condCnt++;
         }
-        GenLAndExp(LAndExps.get(length - 1), beginLabel, endLabel);
+        GenLAndExp(LAndExps.get(length - 1), beginLabel, endLabel, true);
         return CondBegin;
     }
 
-    public void GenLAndExp(Node node, String beginLabel, String endLabel) {
+    public void GenLAndExp(Node node, String beginLabel, String endLabel, boolean isFinal) {
         ArrayList<Node> children = node.getChildren();
         int length = children.size();
         for (int i = 0; i < length - 1; i++) {
             if (children.get(i).getContext().equals("<EqExp>")) {
                 String res = GenEqExp(children.get(i));
-                AddCmp(res, endLabel, false);
+                AddCmp(res, endLabel, Branch.BEQ);
             }
         }
         String res = GenEqExp(children.get(length - 1));
-        AddCmp(res, beginLabel, true);
+        if (isFinal) {
+            AddCmp(res, endLabel, Branch.BEQ);
+        } else {
+            AddCmp(res, beginLabel, Branch.BNE);
+        }
     }
 
     public String GenEqExp(Node node) {
@@ -564,12 +698,15 @@ public class Generator {
                 symbols.add(item.getContext());
             }
         }
-        MergeCountable(node.getLine(), symbols, ResultStack);
+        for (String str : symbols) {
+            ResultStack.push(str);
+        }
+        ReverseStack(ResultStack);
         if (ResultStack.size() != 1) {
             while (ResultStack.size() > 1) {
                 String num1 = ResultStack.pop(), op = ResultStack.pop(), num2 = ResultStack.pop();
                 String tempVar = DistributeVariable();
-                AddExp(op, tempVar, num2, num1);
+                AddExp(op, tempVar, num1, num2);
                 ResultStack.add(tempVar);
             }
         }
@@ -590,12 +727,15 @@ public class Generator {
                 symbols.add(item.getContext());
             }
         }
-        MergeCountable(node.getLine(), symbols, ResultStack);
+        for (String str : symbols) {
+            ResultStack.push(str);
+        }
+        ReverseStack(ResultStack);
         if (ResultStack.size() != 1) {
             while (ResultStack.size() > 1) {
                 String num1 = ResultStack.pop(), op = ResultStack.pop(), num2 = ResultStack.pop();
                 String tempVar = DistributeVariable();
-                AddExp(op, tempVar, num2, num1);
+                AddExp(op, tempVar, num1, num2);
                 ResultStack.add(tempVar);
             }
         }
@@ -603,10 +743,17 @@ public class Generator {
     }
 
     public String GenUnaryExp(Node node) {
+        if (node.isPushingParams()) {
+            node.AdjustPushingParam(true);
+        }
         ArrayList<Node> children = node.getChildren();
         Node firstNode = children.get(0);
         if (children.size() == 1) {
-            return GenPrimaryExp(firstNode);
+            String res = GenPrimaryExp(firstNode);
+            if (node.isPushingParams()) {
+                node.AdjustPushingParam(false);
+            }
+            return res;
         }
         if ("<UnaryOp>".equals(firstNode.getContext())) {
             String rSym = GenUnaryExp(children.get(1));
@@ -614,12 +761,15 @@ public class Generator {
             if (isDigit(rSym)) {
                 if (note.equals("-")) {
                     return String.valueOf(-1 * Integer.parseInt(rSym));
-                } else {
+                } else if (!note.equals("!")) {
                     return String.valueOf(Integer.parseInt(rSym));
                 }
             }
             String lSym = DistributeVariable();
             AddExp(note, lSym, rSym);
+            if (node.isPushingParams()) {
+                node.AdjustPushingParam(false);
+            }
             return lSym;
         } else {
             FuncSymbol func = (FuncSymbol) tableHead.findName(firstNode.getContext());
@@ -628,6 +778,9 @@ public class Generator {
             }
             AddFuncCall(func.getName());
             String ret = DistributeVariable();
+            if (node.isPushingParams()) {
+                node.AdjustPushingParam(false);
+            }
             if (!func.getType().equals("void")) {
                 AddExp(ret, "RET");
                 return ret;
@@ -640,8 +793,10 @@ public class Generator {
         ArrayList<Node> children = node.getChildren();
         for (Node item : children) {
             if (item.getContext().equals("<Exp>")) {
+                item.AdjustPushingParam(true);
                 String res = GenExp(item);
                 iCodes.add(new FuncPush(res));
+                item.AdjustPushingParam(false);
             }
         }
     }
@@ -665,8 +820,15 @@ public class Generator {
                 break;
         }
         String res = temp.toString();
-        if (res.contains("[") && res.contains("]")) {
-            return AddLoad(res, node.getLine());
+        ArrayList<String> divided = DivideArrayString(res);
+        VarSymbol varSymbol = FindVarSymbolByName(curTable, GetVarName(divided.get(0)), node.getLine());
+        if (varSymbol != null) {
+            if (varSymbol.getValue() != null) {
+                return varSymbol.getValue();
+            }
+            if (varSymbol.getDimension() != 0) {
+                return AddLoad(res, node.getLine(), node.isPushingParams(), varSymbol);
+            }
         }
         return res;
     }
@@ -683,7 +845,7 @@ public class Generator {
         if (children.size() == 1) {
             return IdentifyVarLevel(varSymbol);
         } else {
-            StringBuilder name = new StringBuilder(children.get(0).getContext());
+            StringBuilder name = new StringBuilder(IdentifyVarLevel(varSymbol));
             for (Node item : children) {
                 if (item.getContext().equals("[") || item.getContext().equals("]")) {
                     name.append(item.getContext());
@@ -740,6 +902,12 @@ public class Generator {
                 children.get(1).getContext(), children.get(1).getLine());
         FuncParam funcParam = new FuncParam(varSymbol, IdentifyVarLevel(varSymbol));
         iCodes.add(funcParam);
+        for (Node item : children) {
+            if (item.getContext().equals("<ConstExp>")) {
+                String res = GenConstExp(item);
+                funcParam.setDim2(res);
+            }
+        }
         return funcParam;
     }
 
@@ -803,25 +971,39 @@ public class Generator {
         iCodes.add(new FuncCall(name));
     }
 
-    public void AddArrayLoad(String name, String target, String index) {
-        iCodes.add(new ArrayLoad(name, target, index));
+    public void AddArrayLoad(String name, String target, boolean la) {
+        iCodes.add(new ArrayLoad(name, target, la));
     }
 
-    public void AddArrayLoad(String name, String target, String index1, String index2) {
-        iCodes.add(new ArrayLoad(name, target, index1, index2));
+    public void AddArrayLoad(String name, String target, String index, boolean la) {
+        iCodes.add(new ArrayLoad(name, target, index, la));
     }
 
-    public String AddLoad(String element, int line) {
+    public void AddArrayLoad(String name, String target, String index1, String index2, boolean la) {
+        iCodes.add(new ArrayLoad(name, target, index1, index2, la));
+    }
+
+    public String AddLoad(String element, int line, boolean la, VarSymbol symbol) {
         ArrayList<String> division = DivideArrayString(element);
         String value = FindArrayElement(division, line);
         if (value != null) {
             return value;
         }
         String tempTarget = DistributeVariable();
-        if (division.size() == 2) {
-            AddArrayLoad(division.get(0), tempTarget, division.get(1));
-        } else {
-            AddArrayLoad(division.get(0), tempTarget, division.get(1), division.get(2));
+        if (division.size() == 1) {
+            AddArrayLoad(division.get(0), tempTarget, la);
+        } else if (division.size() == 2) {
+            if (symbol.getDimension() == 1) {
+                AddArrayLoad(division.get(0), tempTarget, division.get(1), false);
+            } else {
+                AddArrayLoad(division.get(0), tempTarget, division.get(1), la);
+            }
+        } else if (division.size() == 3) {
+            if (symbol.getDimension() == 2) {
+                AddArrayLoad(division.get(0), tempTarget, division.get(1), division.get(2), false);
+            } else {
+                AddArrayLoad(division.get(0), tempTarget, division.get(1), division.get(2), la);
+            }
         }
         return tempTarget;
     }
@@ -843,12 +1025,12 @@ public class Generator {
         }
     }
 
-    public void AddCmp(String source, String label, boolean target) {
-        iCodes.add(new Cmp(source, label, target));
+    public void AddCmp(String source, String label, int type) {
+        iCodes.add(new Cmp(source, label, type));
     }
 
-    public void AddJump(String target) {
-        iCodes.add(new Jump(target));
+    public void AddJump(String target, int type) {
+        iCodes.add(new Jump(target, type));
     }
 
     public ArrayList<String> DivideArrayString(String origin) {
@@ -856,7 +1038,7 @@ public class Generator {
         int length = origin.length();
         for (int i = 0; i < length; i++) {
             StringBuilder substring = new StringBuilder();
-            while (origin.charAt(i) != '[' && origin.charAt(i) != ']') {
+            while (i < length && origin.charAt(i) != '[' && origin.charAt(i) != ']') {
                 substring.append(origin.charAt(i));
                 i++;
             }
@@ -868,17 +1050,19 @@ public class Generator {
     }
 
     public String FindArrayElement(ArrayList<String> info, int line) {
-        VarSymbol varSymbol = FindVarSymbolByName(curTable, info.get(0), line);
-        if (varSymbol.getDimension() == 1) {
-            if (isDigit(info.get(1)) && Integer.parseInt(info.get(1)) < varSymbol.getInitVal().size()) {
-                return String.valueOf(varSymbol.getInitVal().get(Integer.parseInt(info.get(1))));
-            }
-        } else {
-            String index1 = info.get(1), index2 = info.get(2);
-            if (isDigit(index1) && isDigit(index2)) {
-                int index = Integer.parseInt(index1) * varSymbol.getSizeTwo() + Integer.parseInt(index2);
-                if (index < varSymbol.getInitVal().size()) {
-                    return String.valueOf(varSymbol.getInitVal().get(index));
+        VarSymbol varSymbol = FindVarSymbolByName(curTable, GetVarName(info.get(0)), line);
+        if (varSymbol.isConst()) {
+            if (varSymbol.getDimension() == 1) {
+                if (isDigit(info.get(1)) && Integer.parseInt(info.get(1)) < varSymbol.getInitVal().size()) {
+                    return String.valueOf(varSymbol.getInitVal().get(Integer.parseInt(info.get(1))));
+                }
+            } else {
+                String index1 = info.get(1), index2 = info.get(2);
+                if (isDigit(index1) && isDigit(index2)) {
+                    int index = Integer.parseInt(index1) * varSymbol.getSizeTwo() + Integer.parseInt(index2);
+                    if (index < varSymbol.getInitVal().size()) {
+                        return String.valueOf(varSymbol.getInitVal().get(index));
+                    }
                 }
             }
         }
@@ -915,12 +1099,14 @@ public class Generator {
         return "$WhileLabel_" + whileLabelCount + "$";
     }
 
-    public String DistributeCondLabel(int condCnt, boolean type) {
-        /* type is true --> While, type is false --> If */
-        if (type) {
+    public String DistributeCondLabel(int condCnt, int type) {
+        /* type is 0 --> While, type is 1 --> If, type is 2 --> Else */
+        if (type == 0) {
             return "$WhileLabel_" + whileLabelCount + "_Cond_" + condCnt + "$";
+        } else if (type == 1) {
+            return "$IfLabel_" + ifLabelCount + "_Cond_" + condCnt + "$";
         } else {
-            return "$IfLabel_" + whileLabelCount + "_Cond_" + condCnt + "$";
+            return "$ElseLabel_" + ifLabelCount + "_Cond_" + condCnt + "$";
         }
     }
 
@@ -933,27 +1119,27 @@ public class Generator {
     }
 
     public String DistributeIfLabel() {
-        return "$IfLabel_" + ifLabelCount;
+        return "$IfLabel_" + ifLabelCount + "$";
     }
 
     public String GetIfLabel() {
-        return "$IfLabel_" + ifLabelCount;
+        return "$IfLabel_" + ifLabelCount + "$";
     }
 
     public String DistributeIfEndLabel() {
-        return "$IfLabel_End_" + ifLabelCount;
+        return "$IfLabel_End_" + ifLabelCount + "$";
     }
 
     public String DistributeElseLabel() {
-        return "$ElseLabel_" + ifLabelCount;
+        return "$ElseLabel_" + ifLabelCount + "$";
     }
 
     public String DistributeElseEndLabel() {
-        return "$ElseLabel_End" + ifLabelCount;
+        return "$ElseLabel_End_" + ifLabelCount + "$";
     }
 
     public String GetElseLabel() {
-        return "$ElseLabel_" + ifLabelCount;
+        return "$ElseLabel_" + ifLabelCount + "$";
     }
 
     public void TravelBlock(int index) {
@@ -1003,36 +1189,6 @@ public class Generator {
                 return num1 / num2;
             case "%":
                 return num1 % num2;
-            case ">":
-                if (num1 > num2) {
-                    return 1;
-                }
-                return 0;
-            case ">=":
-                if (num1 >= num2) {
-                    return 1;
-                }
-                return 0;
-            case "<":
-                if (num1 < num2) {
-                    return 1;
-                }
-                return 0;
-            case "<=":
-                if (num1 <= num2) {
-                    return 1;
-                }
-                return 0;
-            case "==":
-                if (num1 == num2) {
-                    return 1;
-                }
-                return 0;
-            case "!=":
-                if (num1 != num2) {
-                    return 1;
-                }
-                return 0;
         }
         return 0;
     }

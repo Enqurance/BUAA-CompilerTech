@@ -7,8 +7,8 @@ import java.util.HashMap;
 public class MIPSTable {
     private final MIPSTable parent;
     private final HashMap<String, AddrSym> AddrSymbols = new HashMap<>();
+    private final HashMap<String, AddrSym> ConstAddrSymbols = new HashMap<>();
     private MIPSTable children;
-    private int StackTop;
 
     public MIPSTable(MIPSTable table) {
         this.parent = table;
@@ -30,20 +30,20 @@ public class MIPSTable {
         AddrSymbols.put(sym.getName(), sym);
     }
 
+    public void PutConstSymbol(AddrSym sym) {
+        ConstAddrSymbols.put(sym.getName(), sym);
+    }
+
     public boolean FindSymbol(String sym) {
         return AddrSymbols.containsKey(sym);
     }
 
+    public boolean FindConstSymbol(String sym) {
+        return ConstAddrSymbols.containsKey(sym);
+    }
+
     public void RemoveSymbol(AddrSym sym) {
         AddrSymbols.remove(sym.getName());
-    }
-
-    public void setStackTop(int stackTop) {
-        StackTop = stackTop;
-    }
-
-    public int getStackTop() {
-        return StackTop;
     }
 
     public AddrSym FindAddrSym(String name) {
@@ -59,5 +59,11 @@ public class MIPSTable {
 
     public HashMap<String, AddrSym> getAddrSymbols() {
         return AddrSymbols;
+    }
+
+    public void PrintAllAddrSymbols() {
+        for (String name : AddrSymbols.keySet()) {
+            System.out.println(name);
+        }
     }
 }

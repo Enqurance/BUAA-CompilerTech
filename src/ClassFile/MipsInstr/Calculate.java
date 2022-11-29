@@ -31,7 +31,20 @@ public class Calculate extends Instr {
                 return "\tmul " + t1 + " " + t2 + " " + t3;
             case "%":
             case "/":
-                return "\tdivu " + t1 + " " + t2;
+                return "\tdiv " + t1 + " " + t2;
+            case "==":
+            case "!":
+                return "\tseq " + t1 + " " + t2 + " " + t3;
+            case "!=":
+                return "\tsne " + t1 + " " + t2 + " " + t3;
+            case ">=":
+                return "\tsge " + t1 + " " + t2 + " " + t3;
+            case "<=":
+                return "\tsle " + t1 + " " + t2 + " " + t3;
+            case ">":
+                return "\tsgt " + t1 + " " + t2 + " " + t3;
+            case "<":
+                return "\tslt " + t1 + " " + t2 + " " + t3;
         }
         return null;
     }
