@@ -12,6 +12,7 @@ public class SymbolTable {
     private int childrenCount = 0;
     private final HashMap<String, FuncSymbol> funcSymbols = new HashMap<>();
     private final HashMap<String, VarSymbol> varSymbols = new HashMap<>();
+    private int WhileCount = 0;
 
     public SymbolTable(boolean isGlobal, boolean isWhile) {
         this.isGlobal = isGlobal;
@@ -101,6 +102,7 @@ public class SymbolTable {
         }
         return null;
     }
+
     public void setTableName(String tableName) {
         this.tableName = tableName;
     }
@@ -127,5 +129,14 @@ public class SymbolTable {
 
     public HashMap<String, VarSymbol> getVarSymbols() {
         return varSymbols;
+    }
+
+    public int getWhileCount() {
+        return WhileCount;
+    }
+
+
+    public void setWhileCount(int whileCount) {
+        WhileCount = whileCount;
     }
 }

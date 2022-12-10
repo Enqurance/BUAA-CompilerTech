@@ -1,526 +1,1755 @@
 .data
-	simple_const_a$0: .word 0
-	arr_1d_a$0:
-	.word 2
-	.word 3
-	.word 4
-	.word 5
-	.word 6
-	arr_2d_a$0:
-	.word 7
-	.word 8
-	.word 9
-	.word 10
-	arr_2d_b$0:
-	.word 44
-	.word 55
-	.word 66
-	.word 77
-	.word 88
-	.word 99
-	simple_cosnt_b$0: .word 0
-	arr_1d_b$0:
-	.word 11
-	.word 22
-	.word 33
-	.word 44
-	.word 55
-	.word 66
-	.word 77
-	.word 88
-	.word 99
-	simple_var_c$0: .word 0
-	simple_var_d$0: .word 0
-	arr_1d_c$0:
-	.word 0
-	.word 0
-	arr_1d_d$0:
-	.word 0
-	.word 0
-	.word 0
-	.word 0
-	.word 0
-	.word 0
-	.word 0
-	.word 0
-	.word 0
-	.word 0
-	arr_2d_c$0:
-	.word 0
-	.word 0
-	.word 0
-	.word 0
-	.word 0
-	.word 0
-	.word 0
-	.word 0
-	.word 0
-	arr_2d_d$0:
-	.word 0
-	.word 0
-	.word 0
-	.word 0
-	arr_2d_e$0:
-	.word 0
-	.word 0
-	.word 0
-	.word 0
-	.word 0
-	.word 0
-	.word 0
-	.word 0
-	.word 0
-	.word 0
-	.word 0
-	.word 0
-	.word 0
-	.word 0
-	.word 0
-	.word 0
-	.word 0
-	.word 0
-	.word 0
-	.word 0
-	.word 0
-	.word 0
-	.word 0
-	.word 0
-	.word 0
-	.word 0
-	.word 0
-	.word 0
-	.word 0
-	.word 0
-	.word 0
-	.word 0
-	.word 0
-	.word 0
-	.word 0
-	.word 0
-	.word 0
-	.word 0
-	.word 0
-	.word 0
-	.word 0
-	.word 0
-	.word 0
-	.word 0
-	.word 0
-	.word 0
-	.word 0
-	.word 0
-	.word 0
-	.word 0
-	.word 0
-	.word 0
-	.word 0
-	.word 0
-	.word 0
-	.word 0
-	.word 0
-	.word 0
-	.word 0
-	.word 0
-	.word 0
-	.word 0
-	.word 0
-	.word 0
-	.word 0
-	.word 0
-	.word 0
-	.word 0
-	.word 0
-	.word 0
-	.word 0
-	.word 0
-	.word 0
-	.word 0
-	.word 0
-	.word 0
-	.word 0
-	.word 0
-	.word 0
-	.word 0
-	.word 0
-	.word 0
-	.word 0
-	.word 0
-	.word 0
-	.word 0
-	.word 0
-	.word 0
-	.word 0
-	.word 0
-	.word 0
-	.word 0
-	.word 0
-	.word 0
-	.word 0
-	.word 0
-	.word 0
-	.word 0
-	.word 0
-	.word 0
-	$str$0: .asciiz "Successfully call a function with 3 types of paras.\n"
-	$str$1: .asciiz "20373453\n\n"
-	$str$2: .asciiz "\nJust get a number ["
-	$str$3: .asciiz "] (greater than 100).\n"
-	$str$4: .asciiz "\nJust get a number ["
-	$str$5: .asciiz "] (smaller than or equal to 100).\n"
-	$str$6: .asciiz "GLOBAL simple_var_c: "
-	$str$7: .asciiz "\n"
-	$str$8: .asciiz "lucky number: "
-	$str$9: .asciiz "\n"
-	$str$10: .asciiz "("
-	$str$11: .asciiz ")"
-	$str$12: .asciiz "\n"
-	$str$13: .asciiz "The ones digit of the lucky number is greater than 7.\n"
+	$str$0: .asciiz "Move from "
+	$str$1: .asciiz " to "
+	$str$2: .asciiz "\n"
+	$str$3: .asciiz "Move from "
+	$str$4: .asciiz " to "
+	$str$5: .asciiz "\n"
+	$str$6: .asciiz "Move from "
+	$str$7: .asciiz " to "
+	$str$8: .asciiz "\n"
+	$str$9: .asciiz "Move from "
+	$str$10: .asciiz " to "
+	$str$11: .asciiz "\n"
+	$str$12: .asciiz "Move from "
+	$str$13: .asciiz " to "
+	$str$14: .asciiz "\n"
+	$str$15: .asciiz "Move from "
+	$str$16: .asciiz " to "
+	$str$17: .asciiz "\n"
+	$str$18: .asciiz "Move from "
+	$str$19: .asciiz " to "
+	$str$20: .asciiz "\n"
+	$str$21: .asciiz "Move from "
+	$str$22: .asciiz " to "
+	$str$23: .asciiz "\n"
+	$str$24: .asciiz "Move from "
+	$str$25: .asciiz " to "
+	$str$26: .asciiz "\n"
+	$str$27: .asciiz " "
+	$str$28: .asciiz "\n"
+	$str$29: .asciiz " "
+	$str$30: .asciiz "\n"
+	$str$31: .asciiz "19373354\n"
+	$str$32: .asciiz "19373354\n"
 .text
-	li $t0 1
-	sw $t0 simple_const_a$0
-	li $t1 11
-	sw $t1 simple_cosnt_b$0
-	li $t2 327
-	sw $t2 simple_var_c$0
-	li $t3 896
-	li $t4 0
-	mul $t4 $t4 4
-	sw $t3 arr_1d_c$0($t4)
-	li $t5 1
-	li $t6 1
-	mul $t6 $t6 4
-	sw $t5 arr_1d_c$0($t6)
-	li $t7 3
-	li $t0 0
+$$main$$:
+	li $v0 5
+	syscall
+	sw $v0 0($sp)
+	la $a0 $str$31
+	li $v0 4
+	syscall
+	lw $t0 0($sp)
+	sw $t0 -4($sp)
+	li $t1 1
+	sw $t1 -8($sp)
+	li $t2 2
+	sw $t2 -12($sp)
+	li $t3 3
+	sw $t3 -16($sp)
+	subu $sp $sp 20
+	jal $$solve$$
+	addu $sp $sp 20
+	li $v0 5
+	syscall
+	sw $v0 0($sp)
+	li $t4 9
+	li $t5 0
+	mul $t5 $t5 4
+	addu $t5 $t5 -96
+	addu $t5 $sp $t5
+	sw $t4 0($t5)
+	li $t6 8
+	li $t7 1
+	mul $t7 $t7 4
+	addu $t7 $t7 -96
+	addu $t7 $sp $t7
+	sw $t6 0($t7)
+	li $t0 7
+	li $t1 2
+	mul $t1 $t1 4
+	addu $t1 $t1 -96
+	addu $t1 $sp $t1
+	sw $t0 0($t1)
+	li $t2 6
+	li $t3 3
+	mul $t3 $t3 4
+	addu $t3 $t3 -96
+	addu $t3 $sp $t3
+	sw $t2 0($t3)
+	li $t4 5
+	li $t5 4
+	mul $t5 $t5 4
+	addu $t5 $t5 -96
+	addu $t5 $sp $t5
+	sw $t4 0($t5)
+	li $t6 4
+	li $t7 5
+	mul $t7 $t7 4
+	addu $t7 $t7 -96
+	addu $t7 $sp $t7
+	sw $t6 0($t7)
+	li $t0 3
+	li $t1 6
+	mul $t1 $t1 4
+	addu $t1 $t1 -96
+	addu $t1 $sp $t1
+	sw $t0 0($t1)
+	li $t2 2
+	li $t3 7
+	mul $t3 $t3 4
+	addu $t3 $t3 -96
+	addu $t3 $sp $t3
+	sw $t2 0($t3)
+	li $t4 1
+	li $t5 8
+	mul $t5 $t5 4
+	addu $t5 $t5 -96
+	addu $t5 $sp $t5
+	sw $t4 0($t5)
+	li $t6 0
+	li $t7 9
+	mul $t7 $t7 4
+	addu $t7 $t7 -96
+	addu $t7 $sp $t7
+	sw $t6 0($t7)
+	li $t0 8
 	li $t1 0
-	mul $t0 $t0 2
+	mul $t1 $t1 4
+	addu $t1 $t1 -176
+	addu $t1 $sp $t1
+	sw $t0 0($t1)
+	li $t2 7
+	li $t3 1
+	mul $t3 $t3 4
+	addu $t3 $t3 -176
+	addu $t3 $sp $t3
+	sw $t2 0($t3)
+	li $t4 6
+	li $t5 2
+	mul $t5 $t5 4
+	addu $t5 $t5 -176
+	addu $t5 $sp $t5
+	sw $t4 0($t5)
+	li $t6 5
+	li $t7 3
+	mul $t7 $t7 4
+	addu $t7 $t7 -176
+	addu $t7 $sp $t7
+	sw $t6 0($t7)
+	li $t0 4
+	li $t1 4
+	mul $t1 $t1 4
+	addu $t1 $t1 -176
+	addu $t1 $sp $t1
+	sw $t0 0($t1)
+	li $t2 3
+	li $t3 5
+	mul $t3 $t3 4
+	addu $t3 $t3 -176
+	addu $t3 $sp $t3
+	sw $t2 0($t3)
+	li $t4 2
+	li $t5 6
+	mul $t5 $t5 4
+	addu $t5 $t5 -176
+	addu $t5 $sp $t5
+	sw $t4 0($t5)
+	li $t6 1
+	li $t7 7
+	mul $t7 $t7 4
+	addu $t7 $t7 -176
+	addu $t7 $sp $t7
+	sw $t6 0($t7)
+	li $t0 0
+	li $t1 8
+	mul $t1 $t1 4
+	addu $t1 $t1 -176
+	addu $t1 $sp $t1
+	sw $t0 0($t1)
+	li $t2 9
+	li $t3 9
+	mul $t3 $t3 4
+	addu $t3 $t3 -176
+	addu $t3 $sp $t3
+	sw $t2 0($t3)
+	li $t4 7
+	li $t5 0
+	li $t6 0
+	mul $t5 $t5 10
+	addu $t5 $t5 $t6
+	mul $t5 $t5 4
+	addu $t5 $t5 -296
+	addu $t5 $sp $t5
+	sw $t4 0($t5)
+	li $t7 6
+	li $t0 0
+	li $t1 1
+	mul $t0 $t0 10
 	addu $t0 $t0 $t1
 	mul $t0 $t0 4
-	sw $t7 arr_2d_d$0($t0)
-	li $t2 56
+	addu $t0 $t0 -296
+	addu $t0 $sp $t0
+	sw $t7 0($t0)
+	li $t2 5
 	li $t3 0
-	li $t4 1
-	mul $t3 $t3 2
+	li $t4 2
+	mul $t3 $t3 10
 	addu $t3 $t3 $t4
 	mul $t3 $t3 4
-	sw $t2 arr_2d_d$0($t3)
-	li $t5 45
-	li $t6 1
-	li $t7 0
-	mul $t6 $t6 2
+	addu $t3 $t3 -296
+	addu $t3 $sp $t3
+	sw $t2 0($t3)
+	li $t5 4
+	li $t6 0
+	li $t7 3
+	mul $t6 $t6 10
 	addu $t6 $t6 $t7
 	mul $t6 $t6 4
-	sw $t5 arr_2d_d$0($t6)
-	li $t0 16
-	li $t1 1
-	li $t2 1
-	mul $t1 $t1 2
-	addu $t1 $t1 $t2
-	mul $t1 $t1 4
-	sw $t0 arr_2d_d$0($t1)
-$$main$$:
-	li $t3 111
-	li $t4 0
-	mul $t4 $t4 4
-	addu $t4 $t4 -4
-	addu $t4 $sp $t4
-	sw $t3 0($t4)
-	li $t5 222
-	li $t6 1
-	mul $t6 $t6 4
-	addu $t6 $t6 -4
+	addu $t6 $t6 -296
 	addu $t6 $sp $t6
 	sw $t5 0($t6)
-	li $t7 10
-	sw $t7 -52($sp)
-	subu $sp $sp 56
-	jal $$put_stu_id$$
-	addu $sp $sp 56
-	subu $sp $sp 56
-	jal $$empty_func$$
-	addu $sp $sp 56
-	li $t0 2
-	sw $t0 simple_var_d$0
-	lw $t1 simple_var_d$0
-	sw $t1 -56($sp)
-	la $t2 arr_1d_c$0
-	sw $t2 -60($sp)
-	la $t3 arr_2d_d$0
-	sw $t3 -64($sp)
-	subu $sp $sp 68
-	jal $$para_only$$
-	addu $sp $sp 68
-$WhileLabel_1_Cond_0$:
-	lw $t4 -52($sp)
-	beq $t4 $0 $WhileLabel_End_1$
-$WhileLabel_1$:
-	lw $t6 -52($sp)
-	li $t7 1
-	subu $t5 $t6 $t7
-	sw $t5 -52($sp)
-	subu $sp $sp 68
-	jal $$get_then_print$$
-	addu $sp $sp 68
-	move $t0 $v1
-	li $t2 10
-	div $t0 $t2
-	mfhi $t1
-	li $t4 10
-	addu $t3 $t1 $t4
-	sw $t3 -8($sp)
-$IfLabel_1_Cond_0$:
-	lw $t6 -8($sp)
-	li $t7 10
-	sge $t5 $t6 $t7
-	beq $t5 $0 $IfLabel_End_1$
-$IfLabel_1$:
-	lw $t1 -8($sp)
-	li $t2 10
-	subu $t0 $t1 $t2
-	sw $t0 -8($sp)
-$IfLabel_End_1$:
-	la $a0 $str$8
-	li $v0 4
-	syscall
-	lw $a0 -8($sp)
-	li $v0 1
-	syscall
-	la $a0 $str$9
-	li $v0 4
-	syscall
-	li $t3 0
-	sw $t3 -68($sp)
+	li $t0 3
+	li $t1 0
+	li $t2 4
+	mul $t1 $t1 10
+	addu $t1 $t1 $t2
+	mul $t1 $t1 4
+	addu $t1 $t1 -296
+	addu $t1 $sp $t1
+	sw $t0 0($t1)
+	li $t3 2
 	li $t4 0
-	sw $t4 -72($sp)
-$WhileLabel_2_Cond_0$:
-	lw $t6 -68($sp)
-	li $t7 8
-	slt $t5 $t6 $t7
-	beq $t5 $0 $WhileLabel_End_2$
-$WhileLabel_2$:
-$IfLabel_2_Cond_0$:
-	lw $t1 -68($sp)
-	li $t2 2
-	seq $t0 $t1 $t2
-	beq $t0 $0 $IfLabel_End_2$
-$IfLabel_2$:
-	lw $t4 -68($sp)
-	li $t5 1
-	addu $t3 $t4 $t5
-	sw $t3 -68($sp)
-	j $WhileLabel_2$
-	j $ElseLabel_End_2$
-$IfLabel_End_2$:
-$ElseLabel_2$:
-$IfLabel_3_Cond_0$:
-	lw $t7 -8($sp)
-	li $t0 1
-	addu $t6 $t7 $t0
-	lw $t2 -68($sp)
-	sle $t1 $t6 $t2
-	beq $t1 $0 $IfLabel_End_3$
-$IfLabel_3$:
-	j $WhileLabel_End_2$
-$IfLabel_End_3$:
-$ElseLabel_End_2$:
-	lw $t4 -68($sp)
+	li $t5 5
+	mul $t4 $t4 10
+	addu $t4 $t4 $t5
 	mul $t4 $t4 4
-	lw $t3 arr_1d_b$0($t4)
-	la $a0 $str$10
-	li $v0 4
-	syscall
-	lw $a0 -68($sp)
-	li $v0 1
-	syscall
-	la $a0 $str$11
-	li $v0 4
-	syscall
-	move $a0 $t3
-	li $v0 1
-	syscall
-	la $a0 $str$12
-	li $v0 4
-	syscall
-	lw $t6 -68($sp)
-	mul $t6 $t6 4
-	lw $t5 arr_1d_b$0($t6)
-	lw $t7 -72($sp)
+	addu $t4 $t4 -296
+	addu $t4 $sp $t4
+	sw $t3 0($t4)
+	li $t6 1
+	li $t7 0
+	li $t0 6
+	mul $t7 $t7 10
+	addu $t7 $t7 $t0
 	mul $t7 $t7 4
-	addu $t7 $t7 -48
+	addu $t7 $t7 -296
 	addu $t7 $sp $t7
-	sw $t5 0($t7)
-	lw $t1 -72($sp)
+	sw $t6 0($t7)
+	li $t1 0
+	li $t2 0
+	li $t3 7
+	mul $t2 $t2 10
+	addu $t2 $t2 $t3
+	mul $t2 $t2 4
+	addu $t2 $t2 -296
+	addu $t2 $sp $t2
+	sw $t1 0($t2)
+	li $t4 9
+	li $t5 0
+	li $t6 8
+	mul $t5 $t5 10
+	addu $t5 $t5 $t6
+	mul $t5 $t5 4
+	addu $t5 $t5 -296
+	addu $t5 $sp $t5
+	sw $t4 0($t5)
+	li $t7 8
+	li $t0 0
+	li $t1 9
+	mul $t0 $t0 10
+	addu $t0 $t0 $t1
+	mul $t0 $t0 4
+	addu $t0 $t0 -296
+	addu $t0 $sp $t0
+	sw $t7 0($t0)
+	li $t2 6
+	li $t3 1
+	li $t4 0
+	mul $t3 $t3 10
+	addu $t3 $t3 $t4
+	mul $t3 $t3 4
+	addu $t3 $t3 -296
+	addu $t3 $sp $t3
+	sw $t2 0($t3)
+	li $t5 5
+	li $t6 1
+	li $t7 1
+	mul $t6 $t6 10
+	addu $t6 $t6 $t7
+	mul $t6 $t6 4
+	addu $t6 $t6 -296
+	addu $t6 $sp $t6
+	sw $t5 0($t6)
+	li $t0 4
+	li $t1 1
+	li $t2 2
+	mul $t1 $t1 10
+	addu $t1 $t1 $t2
+	mul $t1 $t1 4
+	addu $t1 $t1 -296
+	addu $t1 $sp $t1
+	sw $t0 0($t1)
+	li $t3 3
+	li $t4 1
+	li $t5 3
+	mul $t4 $t4 10
+	addu $t4 $t4 $t5
+	mul $t4 $t4 4
+	addu $t4 $t4 -296
+	addu $t4 $sp $t4
+	sw $t3 0($t4)
+	li $t6 2
+	li $t7 1
+	li $t0 4
+	mul $t7 $t7 10
+	addu $t7 $t7 $t0
+	mul $t7 $t7 4
+	addu $t7 $t7 -296
+	addu $t7 $sp $t7
+	sw $t6 0($t7)
+	li $t1 1
 	li $t2 1
-	addu $t0 $t1 $t2
-	sw $t0 -72($sp)
-	lw $t4 -68($sp)
+	li $t3 5
+	mul $t2 $t2 10
+	addu $t2 $t2 $t3
+	mul $t2 $t2 4
+	addu $t2 $t2 -296
+	addu $t2 $sp $t2
+	sw $t1 0($t2)
+	li $t4 0
+	li $t5 1
+	li $t6 6
+	mul $t5 $t5 10
+	addu $t5 $t5 $t6
+	mul $t5 $t5 4
+	addu $t5 $t5 -296
+	addu $t5 $sp $t5
+	sw $t4 0($t5)
+	li $t7 9
+	li $t0 1
+	li $t1 7
+	mul $t0 $t0 10
+	addu $t0 $t0 $t1
+	mul $t0 $t0 4
+	addu $t0 $t0 -296
+	addu $t0 $sp $t0
+	sw $t7 0($t0)
+	li $t2 8
+	li $t3 1
+	li $t4 8
+	mul $t3 $t3 10
+	addu $t3 $t3 $t4
+	mul $t3 $t3 4
+	addu $t3 $t3 -296
+	addu $t3 $sp $t3
+	sw $t2 0($t3)
+	li $t5 7
+	li $t6 1
+	li $t7 9
+	mul $t6 $t6 10
+	addu $t6 $t6 $t7
+	mul $t6 $t6 4
+	addu $t6 $t6 -296
+	addu $t6 $sp $t6
+	sw $t5 0($t6)
+	li $t0 5
+	li $t1 2
+	li $t2 0
+	mul $t1 $t1 10
+	addu $t1 $t1 $t2
+	mul $t1 $t1 4
+	addu $t1 $t1 -296
+	addu $t1 $sp $t1
+	sw $t0 0($t1)
+	li $t3 4
+	li $t4 2
+	li $t5 1
+	mul $t4 $t4 10
+	addu $t4 $t4 $t5
+	mul $t4 $t4 4
+	addu $t4 $t4 -296
+	addu $t4 $sp $t4
+	sw $t3 0($t4)
+	li $t6 3
+	li $t7 2
+	li $t0 2
+	mul $t7 $t7 10
+	addu $t7 $t7 $t0
+	mul $t7 $t7 4
+	addu $t7 $t7 -296
+	addu $t7 $sp $t7
+	sw $t6 0($t7)
+	li $t1 2
+	li $t2 2
+	li $t3 3
+	mul $t2 $t2 10
+	addu $t2 $t2 $t3
+	mul $t2 $t2 4
+	addu $t2 $t2 -296
+	addu $t2 $sp $t2
+	sw $t1 0($t2)
+	li $t4 1
+	li $t5 2
+	li $t6 4
+	mul $t5 $t5 10
+	addu $t5 $t5 $t6
+	mul $t5 $t5 4
+	addu $t5 $t5 -296
+	addu $t5 $sp $t5
+	sw $t4 0($t5)
+	li $t7 0
+	li $t0 2
+	li $t1 5
+	mul $t0 $t0 10
+	addu $t0 $t0 $t1
+	mul $t0 $t0 4
+	addu $t0 $t0 -296
+	addu $t0 $sp $t0
+	sw $t7 0($t0)
+	li $t2 9
+	li $t3 2
+	li $t4 6
+	mul $t3 $t3 10
+	addu $t3 $t3 $t4
+	mul $t3 $t3 4
+	addu $t3 $t3 -296
+	addu $t3 $sp $t3
+	sw $t2 0($t3)
+	li $t5 8
+	li $t6 2
+	li $t7 7
+	mul $t6 $t6 10
+	addu $t6 $t6 $t7
+	mul $t6 $t6 4
+	addu $t6 $t6 -296
+	addu $t6 $sp $t6
+	sw $t5 0($t6)
+	li $t0 7
+	li $t1 2
+	li $t2 8
+	mul $t1 $t1 10
+	addu $t1 $t1 $t2
+	mul $t1 $t1 4
+	addu $t1 $t1 -296
+	addu $t1 $sp $t1
+	sw $t0 0($t1)
+	li $t3 6
+	li $t4 2
+	li $t5 9
+	mul $t4 $t4 10
+	addu $t4 $t4 $t5
+	mul $t4 $t4 4
+	addu $t4 $t4 -296
+	addu $t4 $sp $t4
+	sw $t3 0($t4)
+	li $t6 0
+	sw $t6 -300($sp)
+$WhileLabel_7_Cond_0$:
+	lw $t0 -300($sp)
+	lw $t1 0($sp)
+	slt $t7 $t0 $t1
+	beq $t7 $0 $WhileLabel_End_7$
+$WhileLabel_7$:
+	lw $t3 -300($sp)
+	mul $t3 $t3 4
+	addu $t3 $t3 -96
+	addu $t3 $sp $t3
+	lw $t2 0($t3)
+	li $t5 2
+	lw $t6 -300($sp)
+	mul $t5 $t5 10
+	addu $t5 $t5 $t6
+	mul $t5 $t5 4
+	addu $t5 $t5 -296
+	addu $t5 $sp $t5
+	lw $t4 0($t5)
+	addu $t7 $t2 $t4
+	li $t1 1
+	addu $t0 $t7 $t1
+	lw $t2 -300($sp)
+	mul $t2 $t2 4
+	addu $t2 $t2 -96
+	addu $t2 $sp $t2
+	sw $t0 0($t2)
+	lw $t4 -300($sp)
+	mul $t4 $t4 4
+	addu $t4 $t4 -176
+	addu $t4 $sp $t4
+	lw $t3 0($t4)
+	li $t6 2
+	lw $t7 -300($sp)
+	mul $t6 $t6 10
+	addu $t6 $t6 $t7
+	mul $t6 $t6 4
+	addu $t6 $t6 -296
+	addu $t6 $sp $t6
+	lw $t5 0($t6)
+	addu $t0 $t3 $t5
+	li $t2 2
+	addu $t1 $t0 $t2
+	lw $t3 -300($sp)
+	mul $t3 $t3 4
+	addu $t3 $t3 -176
+	addu $t3 $sp $t3
+	sw $t1 0($t3)
+	li $t5 0
+	lw $t6 -300($sp)
+	mul $t5 $t5 10
+	addu $t5 $t5 $t6
+	mul $t5 $t5 4
+	addu $t5 $t5 -296
+	addu $t5 $sp $t5
+	lw $t4 0($t5)
+	li $t0 2
+	lw $t1 -300($sp)
+	mul $t0 $t0 10
+	addu $t0 $t0 $t1
+	mul $t0 $t0 4
+	addu $t0 $t0 -296
+	addu $t0 $sp $t0
+	lw $t7 0($t0)
+	addu $t2 $t4 $t7
+	li $t4 3
+	addu $t3 $t2 $t4
+	li $t5 0
+	lw $t6 -300($sp)
+	mul $t5 $t5 10
+	addu $t5 $t5 $t6
+	mul $t5 $t5 4
+	addu $t5 $t5 -296
+	addu $t5 $sp $t5
+	sw $t3 0($t5)
+	li $t0 1
+	lw $t1 -300($sp)
+	mul $t0 $t0 10
+	addu $t0 $t0 $t1
+	mul $t0 $t0 4
+	addu $t0 $t0 -296
+	addu $t0 $sp $t0
+	lw $t7 0($t0)
+	li $t3 2
+	lw $t4 -300($sp)
+	mul $t3 $t3 10
+	addu $t3 $t3 $t4
+	mul $t3 $t3 4
+	addu $t3 $t3 -296
+	addu $t3 $sp $t3
+	lw $t2 0($t3)
+	addu $t5 $t7 $t2
+	li $t7 4
+	addu $t6 $t5 $t7
+	li $t0 1
+	lw $t1 -300($sp)
+	mul $t0 $t0 10
+	addu $t0 $t0 $t1
+	mul $t0 $t0 4
+	addu $t0 $t0 -296
+	addu $t0 $sp $t0
+	sw $t6 0($t0)
+	lw $t3 -300($sp)
+	li $t4 1
+	addu $t2 $t3 $t4
+	sw $t2 -300($sp)
+	j $WhileLabel_7_Cond_0$
+$WhileLabel_End_7$:
+	li $t5 0
+	sw $t5 -300($sp)
+$WhileLabel_8_Cond_0$:
+	li $t6 114514
+	beq $t6 $0 $WhileLabel_End_8$
+$WhileLabel_8$:
+	li $t7 0
+	lw $t0 -300($sp)
+	mul $t0 $t0 4
+	addu $t0 $t0 -136
+	addu $t0 $sp $t0
+	sw $t7 0($t0)
+	lw $t2 -300($sp)
+	li $t3 1
+	addu $t1 $t2 $t3
+	sw $t1 -300($sp)
+$IfLabel_4_Cond_0$:
+	lw $t5 -300($sp)
+	lw $t6 0($sp)
+	sge $t4 $t5 $t6
+	beq $t4 $0 $IfLabel_End_4$
+$IfLabel_4$:
+	j $WhileLabel_End_8$
+$IfLabel_End_4$:
+	j $WhileLabel_8_Cond_0$
+$WhileLabel_End_8$:
+	li $t7 0x7fffefc4
+	li $t0 0x7fffef74
+	li $t1 0x7fffef9c
+	sw $t1 -304($sp)
+	sw $t0 -308($sp)
+	sw $t7 -312($sp)
+	lw $t2 -308($sp)
+	sw $t2 -316($sp)
+	lw $t3 -304($sp)
+	sw $t3 -320($sp)
+	li $t4 0
+	sw $t4 -324($sp)
+	lw $t5 0($sp)
+	sw $t5 -328($sp)
+	subu $sp $sp 332
+	jal $$dfs$$
+	addu $sp $sp 332
+	li $t6 0
+	sw $t6 -300($sp)
+$WhileLabel_9_Cond_0$:
+	li $t7 114514
+	beq $t7 $0 $WhileLabel_End_9$
+$WhileLabel_9$:
+	li $t0 0
+	lw $t1 -300($sp)
+	mul $t1 $t1 4
+	addu $t1 $t1 -136
+	addu $t1 $sp $t1
+	sw $t0 0($t1)
+	lw $t3 -300($sp)
+	li $t4 1
+	addu $t2 $t3 $t4
+	sw $t2 -300($sp)
+$IfLabel_5_Cond_0$:
+	lw $t6 -300($sp)
+	lw $t7 0($sp)
+	sge $t5 $t6 $t7
+	beq $t5 $0 $IfLabel_End_5$
+$IfLabel_5$:
+	j $WhileLabel_End_9$
+	j $ElseLabel_End_5$
+$IfLabel_End_5$:
+$ElseLabel_5$:
+$ElseLabel_End_5$:
+	j $WhileLabel_9_Cond_0$
+$WhileLabel_End_9$:
+	li $t0 0x7fffefc4
+	li $t1 0x7fffef74
+	li $t2 0x7fffef4c
+	sw $t1 -332($sp)
+	sw $t2 -336($sp)
+	sw $t0 -340($sp)
+	lw $t3 -332($sp)
+	sw $t3 -344($sp)
+	lw $t4 -336($sp)
+	sw $t4 -348($sp)
+	li $t5 0
+	sw $t5 -352($sp)
+	lw $t6 0($sp)
+	sw $t6 -356($sp)
+	subu $sp $sp 360
+	jal $$dfs$$
+	addu $sp $sp 360
+	li $t7 0
+	sw $t7 -300($sp)
+$WhileLabel_10_Cond_0$:
+	li $t0 114514
+	beq $t0 $0 $WhileLabel_End_10$
+$WhileLabel_10$:
+	li $t1 0
+	lw $t2 -300($sp)
+	mul $t2 $t2 4
+	addu $t2 $t2 -136
+	addu $t2 $sp $t2
+	sw $t1 0($t2)
+	lw $t4 -300($sp)
 	li $t5 1
 	addu $t3 $t4 $t5
-	sw $t3 -68($sp)
-	j $WhileLabel_2_Cond_0$
-$WhileLabel_End_2$:
-$IfLabel_4_Cond_0$:
-	lw $t7 -8($sp)
-	li $t0 1
-	addu $t6 $t7 $t0
-	lw $t2 -68($sp)
-	sne $t1 $t6 $t2
-	beq $t1 $0 $IfLabel_End_4$
-$IfLabel_4$:
-	la $a0 $str$13
-	li $v0 4
-	syscall
-$IfLabel_End_4$:
-	j $WhileLabel_1_Cond_0$
-$WhileLabel_End_1$:
-	subu $sp $sp 76
-	jal $$put_global_simple_var_c$$
-	addu $sp $sp 76
+	sw $t3 -300($sp)
+$IfLabel_6_Cond_0$:
+	lw $t7 -300($sp)
+	lw $t0 0($sp)
+	slt $t6 $t7 $t0
+	beq $t6 $0 $IfLabel_End_6$
+$IfLabel_6$:
+	j $WhileLabel_10_Cond_0$
+$IfLabel_End_6$:
+	j $WhileLabel_End_10$
+	j $WhileLabel_10_Cond_0$
+$WhileLabel_End_10$:
+	li $t1 0x7fffefc4
+	li $t2 0x7fffef74
+	li $t3 0x7fffeed4
+	li $t4 0
+	mul $t4 $t4 10
+	mul $t4 $t4 4
+	addu $t3 $t3 $t4
+	sw $t3 -360($sp)
+	sw $t2 -364($sp)
+	sw $t1 -368($sp)
+	lw $t5 -364($sp)
+	sw $t5 -372($sp)
+	lw $t6 -360($sp)
+	sw $t6 -376($sp)
+	li $t7 0
+	sw $t7 -380($sp)
+	lw $t0 0($sp)
+	sw $t0 -384($sp)
+	subu $sp $sp 388
+	jal $$dfs$$
+	addu $sp $sp 388
+	li $t1 0
+	sw $t1 -300($sp)
+$WhileLabel_11_Cond_0$:
+	li $t2 114514
+	beq $t2 $0 $WhileLabel_End_11$
+$WhileLabel_11$:
 	li $t3 0
-	move $v1 $t3
+	lw $t4 -300($sp)
+	mul $t4 $t4 4
+	addu $t4 $t4 -136
+	addu $t4 $sp $t4
+	sw $t3 0($t4)
+	lw $t6 -300($sp)
+	li $t7 1
+	addu $t5 $t6 $t7
+	sw $t5 -300($sp)
+$IfLabel_7_Cond_0$:
+	lw $t1 -300($sp)
+	lw $t2 0($sp)
+	slt $t0 $t1 $t2
+	beq $t0 $0 $IfLabel_End_7$
+$IfLabel_7$:
+	j $WhileLabel_11_Cond_0$
+	j $ElseLabel_End_7$
+$IfLabel_End_7$:
+$ElseLabel_7$:
+	j $WhileLabel_End_11$
+$ElseLabel_End_7$:
+	j $WhileLabel_11_Cond_0$
+$WhileLabel_End_11$:
+	li $t3 0x7fffefc4
+	li $t4 0x7fffef74
+	li $t5 0x7fffeed4
+	li $t6 1
+	mul $t6 $t6 10
+	mul $t6 $t6 4
+	addu $t5 $t5 $t6
+	sw $t5 -388($sp)
+	sw $t4 -392($sp)
+	sw $t3 -396($sp)
+	lw $t7 -392($sp)
+	sw $t7 -400($sp)
+	lw $t0 -388($sp)
+	sw $t0 -404($sp)
+	li $t1 0
+	sw $t1 -408($sp)
+	lw $t2 0($sp)
+	sw $t2 -412($sp)
+	subu $sp $sp 416
+	jal $$dfs$$
+	addu $sp $sp 416
+	li $t3 307728049
+	li $t4 0
+	li $t5 0
+	mul $t4 $t4 5
+	addu $t4 $t4 $t5
+	mul $t4 $t4 4
+	addu $t4 $t4 -512
+	addu $t4 $sp $t4
+	sw $t3 0($t4)
+	li $t6 -1625382311
+	li $t7 0
+	li $t0 1
+	mul $t7 $t7 5
+	addu $t7 $t7 $t0
+	mul $t7 $t7 4
+	addu $t7 $t7 -512
+	addu $t7 $sp $t7
+	sw $t6 0($t7)
+	li $t1 1271106322
+	li $t2 0
+	li $t3 2
+	mul $t2 $t2 5
+	addu $t2 $t2 $t3
+	mul $t2 $t2 4
+	addu $t2 $t2 -512
+	addu $t2 $sp $t2
+	sw $t1 0($t2)
+	li $t4 309930583
+	li $t5 0
+	li $t6 3
+	mul $t5 $t5 5
+	addu $t5 $t5 $t6
+	mul $t5 $t5 4
+	addu $t5 $t5 -512
+	addu $t5 $sp $t5
+	sw $t4 0($t5)
+	li $t7 2007032850
+	li $t0 0
+	li $t1 4
+	mul $t0 $t0 5
+	addu $t0 $t0 $t1
+	mul $t0 $t0 4
+	addu $t0 $t0 -512
+	addu $t0 $sp $t0
+	sw $t7 0($t0)
+	li $t2 1074055550
+	li $t3 1
+	li $t4 0
+	mul $t3 $t3 5
+	addu $t3 $t3 $t4
+	mul $t3 $t3 4
+	addu $t3 $t3 -512
+	addu $t3 $sp $t3
+	sw $t2 0($t3)
+	li $t5 2036831205
+	li $t6 1
+	li $t7 1
+	mul $t6 $t6 5
+	addu $t6 $t6 $t7
+	mul $t6 $t6 4
+	addu $t6 $t6 -512
+	addu $t6 $sp $t6
+	sw $t5 0($t6)
+	li $t0 -492323543
+	li $t1 1
+	li $t2 2
+	mul $t1 $t1 5
+	addu $t1 $t1 $t2
+	mul $t1 $t1 4
+	addu $t1 $t1 -512
+	addu $t1 $sp $t1
+	sw $t0 0($t1)
+	li $t3 -252604752
+	li $t4 1
+	li $t5 3
+	mul $t4 $t4 5
+	addu $t4 $t4 $t5
+	mul $t4 $t4 4
+	addu $t4 $t4 -512
+	addu $t4 $sp $t4
+	sw $t3 0($t4)
+	li $t6 1295820596
+	li $t7 1
+	li $t0 4
+	mul $t7 $t7 5
+	addu $t7 $t7 $t0
+	mul $t7 $t7 4
+	addu $t7 $t7 -512
+	addu $t7 $sp $t7
+	sw $t6 0($t7)
+	li $t1 728458994
+	li $t2 2
+	li $t3 0
+	mul $t2 $t2 5
+	addu $t2 $t2 $t3
+	mul $t2 $t2 4
+	addu $t2 $t2 -512
+	addu $t2 $sp $t2
+	sw $t1 0($t2)
+	li $t4 1673642498
+	li $t5 2
+	li $t6 1
+	mul $t5 $t5 5
+	addu $t5 $t5 $t6
+	mul $t5 $t5 4
+	addu $t5 $t5 -512
+	addu $t5 $sp $t5
+	sw $t4 0($t5)
+	li $t7 -51943305
+	li $t0 2
+	li $t1 2
+	mul $t0 $t0 5
+	addu $t0 $t0 $t1
+	mul $t0 $t0 4
+	addu $t0 $t0 -512
+	addu $t0 $sp $t0
+	sw $t7 0($t0)
+	li $t2 -1854253096
+	li $t3 2
+	li $t4 3
+	mul $t3 $t3 5
+	addu $t3 $t3 $t4
+	mul $t3 $t3 4
+	addu $t3 $t3 -512
+	addu $t3 $sp $t3
+	sw $t2 0($t3)
+	li $t5 -1024571774
+	li $t6 2
+	li $t7 4
+	mul $t6 $t6 5
+	addu $t6 $t6 $t7
+	mul $t6 $t6 4
+	addu $t6 $t6 -512
+	addu $t6 $sp $t6
+	sw $t5 0($t6)
+	li $t0 1430035460
+	li $t1 3
+	li $t2 0
+	mul $t1 $t1 5
+	addu $t1 $t1 $t2
+	mul $t1 $t1 4
+	addu $t1 $t1 -512
+	addu $t1 $sp $t1
+	sw $t0 0($t1)
+	li $t3 1705232663
+	li $t4 3
+	li $t5 1
+	mul $t4 $t4 5
+	addu $t4 $t4 $t5
+	mul $t4 $t4 4
+	addu $t4 $t4 -512
+	addu $t4 $sp $t4
+	sw $t3 0($t4)
+	li $t6 -1803769826
+	li $t7 3
+	li $t0 2
+	mul $t7 $t7 5
+	addu $t7 $t7 $t0
+	mul $t7 $t7 4
+	addu $t7 $t7 -512
+	addu $t7 $sp $t7
+	sw $t6 0($t7)
+	li $t1 -1485716863
+	li $t2 3
+	li $t3 3
+	mul $t2 $t2 5
+	addu $t2 $t2 $t3
+	mul $t2 $t2 4
+	addu $t2 $t2 -512
+	addu $t2 $sp $t2
+	sw $t1 0($t2)
+	li $t4 -1192520056
+	li $t5 3
+	li $t6 4
+	mul $t5 $t5 5
+	addu $t5 $t5 $t6
+	mul $t5 $t5 4
+	addu $t5 $t5 -512
+	addu $t5 $sp $t5
+	sw $t4 0($t5)
+	li $t7 -1503793409
+	li $t0 4
+	li $t1 0
+	mul $t0 $t0 5
+	addu $t0 $t0 $t1
+	mul $t0 $t0 4
+	addu $t0 $t0 -512
+	addu $t0 $sp $t0
+	sw $t7 0($t0)
+	li $t2 2027983592
+	li $t3 4
+	li $t4 1
+	mul $t3 $t3 5
+	addu $t3 $t3 $t4
+	mul $t3 $t3 4
+	addu $t3 $t3 -512
+	addu $t3 $sp $t3
+	sw $t2 0($t3)
+	li $t5 -1911831470
+	li $t6 4
+	li $t7 2
+	mul $t6 $t6 5
+	addu $t6 $t6 $t7
+	mul $t6 $t6 4
+	addu $t6 $t6 -512
+	addu $t6 $sp $t6
+	sw $t5 0($t6)
+	li $t0 -1387735054
+	li $t1 4
+	li $t2 3
+	mul $t1 $t1 5
+	addu $t1 $t1 $t2
+	mul $t1 $t1 4
+	addu $t1 $t1 -512
+	addu $t1 $sp $t1
+	sw $t0 0($t1)
+	li $t3 -274170342
+	li $t4 4
+	li $t5 4
+	mul $t4 $t4 5
+	addu $t4 $t4 $t5
+	mul $t4 $t4 4
+	addu $t4 $t4 -512
+	addu $t4 $sp $t4
+	sw $t3 0($t4)
+	li $t6 -39878981
+	li $t7 0
+	li $t0 0
+	mul $t7 $t7 5
+	addu $t7 $t7 $t0
+	mul $t7 $t7 4
+	addu $t7 $t7 -612
+	addu $t7 $sp $t7
+	sw $t6 0($t7)
+	li $t1 1475936537
+	li $t2 0
+	li $t3 1
+	mul $t2 $t2 5
+	addu $t2 $t2 $t3
+	mul $t2 $t2 4
+	addu $t2 $t2 -612
+	addu $t2 $sp $t2
+	sw $t1 0($t2)
+	li $t4 1944942266
+	li $t5 0
+	li $t6 2
+	mul $t5 $t5 5
+	addu $t5 $t5 $t6
+	mul $t5 $t5 4
+	addu $t5 $t5 -612
+	addu $t5 $sp $t5
+	sw $t4 0($t5)
+	li $t7 1579815806
+	li $t0 0
+	li $t1 3
+	mul $t0 $t0 5
+	addu $t0 $t0 $t1
+	mul $t0 $t0 4
+	addu $t0 $t0 -612
+	addu $t0 $sp $t0
+	sw $t7 0($t0)
+	li $t2 1734290467
+	li $t3 0
+	li $t4 4
+	mul $t3 $t3 5
+	addu $t3 $t3 $t4
+	mul $t3 $t3 4
+	addu $t3 $t3 -612
+	addu $t3 $sp $t3
+	sw $t2 0($t3)
+	li $t5 1606724733
+	li $t6 1
+	li $t7 0
+	mul $t6 $t6 5
+	addu $t6 $t6 $t7
+	mul $t6 $t6 4
+	addu $t6 $t6 -612
+	addu $t6 $sp $t6
+	sw $t5 0($t6)
+	li $t0 -1839064934
+	li $t1 1
+	li $t2 1
+	mul $t1 $t1 5
+	addu $t1 $t1 $t2
+	mul $t1 $t1 4
+	addu $t1 $t1 -612
+	addu $t1 $sp $t1
+	sw $t0 0($t1)
+	li $t3 1749681186
+	li $t4 1
+	li $t5 2
+	mul $t4 $t4 5
+	addu $t4 $t4 $t5
+	mul $t4 $t4 4
+	addu $t4 $t4 -612
+	addu $t4 $sp $t4
+	sw $t3 0($t4)
+	li $t6 1409364573
+	li $t7 1
+	li $t0 3
+	mul $t7 $t7 5
+	addu $t7 $t7 $t0
+	mul $t7 $t7 4
+	addu $t7 $t7 -612
+	addu $t7 $sp $t7
+	sw $t6 0($t7)
+	li $t1 -68127266
+	li $t2 1
+	li $t3 4
+	mul $t2 $t2 5
+	addu $t2 $t2 $t3
+	mul $t2 $t2 4
+	addu $t2 $t2 -612
+	addu $t2 $sp $t2
+	sw $t1 0($t2)
+	li $t4 1869282840
+	li $t5 2
+	li $t6 0
+	mul $t5 $t5 5
+	addu $t5 $t5 $t6
+	mul $t5 $t5 4
+	addu $t5 $t5 -612
+	addu $t5 $sp $t5
+	sw $t4 0($t5)
+	li $t7 1574753938
+	li $t0 2
+	li $t1 1
+	mul $t0 $t0 5
+	addu $t0 $t0 $t1
+	mul $t0 $t0 4
+	addu $t0 $t0 -612
+	addu $t0 $sp $t0
+	sw $t7 0($t0)
+	li $t2 1959861217
+	li $t3 2
+	li $t4 2
+	mul $t3 $t3 5
+	addu $t3 $t3 $t4
+	mul $t3 $t3 4
+	addu $t3 $t3 -612
+	addu $t3 $sp $t3
+	sw $t2 0($t3)
+	li $t5 -425501077
+	li $t6 2
+	li $t7 3
+	mul $t6 $t6 5
+	addu $t6 $t6 $t7
+	mul $t6 $t6 4
+	addu $t6 $t6 -612
+	addu $t6 $sp $t6
+	sw $t5 0($t6)
+	li $t0 -1281736928
+	li $t1 2
+	li $t2 4
+	mul $t1 $t1 5
+	addu $t1 $t1 $t2
+	mul $t1 $t1 4
+	addu $t1 $t1 -612
+	addu $t1 $sp $t1
+	sw $t0 0($t1)
+	li $t3 -1304579021
+	li $t4 3
+	li $t5 0
+	mul $t4 $t4 5
+	addu $t4 $t4 $t5
+	mul $t4 $t4 4
+	addu $t4 $t4 -612
+	addu $t4 $sp $t4
+	sw $t3 0($t4)
+	li $t6 -1777897472
+	li $t7 3
+	li $t0 1
+	mul $t7 $t7 5
+	addu $t7 $t7 $t0
+	mul $t7 $t7 4
+	addu $t7 $t7 -612
+	addu $t7 $sp $t7
+	sw $t6 0($t7)
+	li $t1 -1921297034
+	li $t2 3
+	li $t3 2
+	mul $t2 $t2 5
+	addu $t2 $t2 $t3
+	mul $t2 $t2 4
+	addu $t2 $t2 -612
+	addu $t2 $sp $t2
+	sw $t1 0($t2)
+	li $t4 1623258471
+	li $t5 3
+	li $t6 3
+	mul $t5 $t5 5
+	addu $t5 $t5 $t6
+	mul $t5 $t5 4
+	addu $t5 $t5 -612
+	addu $t5 $sp $t5
+	sw $t4 0($t5)
+	li $t7 -226241316
+	li $t0 3
+	li $t1 4
+	mul $t0 $t0 5
+	addu $t0 $t0 $t1
+	mul $t0 $t0 4
+	addu $t0 $t0 -612
+	addu $t0 $sp $t0
+	sw $t7 0($t0)
+	li $t2 824482268
+	li $t3 4
+	li $t4 0
+	mul $t3 $t3 5
+	addu $t3 $t3 $t4
+	mul $t3 $t3 4
+	addu $t3 $t3 -612
+	addu $t3 $sp $t3
+	sw $t2 0($t3)
+	li $t5 -1840038765
+	li $t6 4
+	li $t7 1
+	mul $t6 $t6 5
+	addu $t6 $t6 $t7
+	mul $t6 $t6 4
+	addu $t6 $t6 -612
+	addu $t6 $sp $t6
+	sw $t5 0($t6)
+	li $t0 -1238621050
+	li $t1 4
+	li $t2 2
+	mul $t1 $t1 5
+	addu $t1 $t1 $t2
+	mul $t1 $t1 4
+	addu $t1 $t1 -612
+	addu $t1 $sp $t1
+	sw $t0 0($t1)
+	li $t3 1453319654
+	li $t4 4
+	li $t5 3
+	mul $t4 $t4 5
+	addu $t4 $t4 $t5
+	mul $t4 $t4 4
+	addu $t4 $t4 -612
+	addu $t4 $sp $t4
+	sw $t3 0($t4)
+	li $t6 -1338682930
+	li $t7 4
+	li $t0 4
+	mul $t7 $t7 5
+	addu $t7 $t7 $t0
+	mul $t7 $t7 4
+	addu $t7 $t7 -612
+	addu $t7 $sp $t7
+	sw $t6 0($t7)
+	li $t1 0x7fffed34
+	li $t2 0x7fffedfc
+	li $t3 0x7fffed98
+	sw $t2 -716($sp)
+	sw $t3 -720($sp)
+	sw $t1 -724($sp)
+	lw $t4 -716($sp)
+	sw $t4 -728($sp)
+	lw $t5 -720($sp)
+	sw $t5 -732($sp)
+	li $t6 4
+	sw $t6 -736($sp)
+	subu $sp $sp 740
+	jal $$matrixMul$$
+	addu $sp $sp 740
+	li $t7 0x7fffed34
+	li $t0 0x7fffed98
+	li $t1 0x7fffedfc
+	sw $t0 -740($sp)
+	sw $t1 -744($sp)
+	sw $t7 -748($sp)
+	lw $t2 -740($sp)
+	sw $t2 -752($sp)
+	lw $t3 -744($sp)
+	sw $t3 -756($sp)
+	li $t4 5
+	sw $t4 -760($sp)
+	subu $sp $sp 764
+	jal $$matrixMul$$
+	addu $sp $sp 764
+$WhileLabel_12_Cond_0$:
+	li $t5 114514
+	beq $t5 $0 $WhileLabel_End_12$
+$WhileLabel_12$:
+	li $t6 0
+	move $v1 $t6
 	li $v0 10
 	syscall
-$$empty_func$$:
-	jr $ra
-$$para_only$$:
+	la $a0 $str$32
+	li $v0 4
+	syscall
+	j $WhileLabel_12_Cond_0$
+$WhileLabel_End_12$:
+	li $t7 0
+	move $v1 $t7
+	li $v0 10
+	syscall
+	li $v0 10
+	syscall
+$$move$$:
+	sw $ra 0($sp)
+$IfLabel_0_Cond_0$:
+	lw $t1 16($sp)
+	li $t2 2
+	seq $t0 $t1 $t2
+	beq $t0 $0 $IfLabel_End_0$
+$IfLabel_0$:
 	la $a0 $str$0
 	li $v0 4
 	syscall
-	jr $ra
-$$put_stu_id$$:
+	lw $a0 12($sp)
+	li $v0 1
+	syscall
 	la $a0 $str$1
 	li $v0 4
 	syscall
-	jr $ra
-$$sum_arr_1d$$:
-	li $t4 0
-	sw $t4 0($sp)
-	li $t5 0
-	sw $t5 -4($sp)
-$WhileLabel_0_Cond_0$:
-	lw $t7 4($sp)
-	li $t0 1
-	subu $t6 $t7 $t0
-	lw $t2 0($sp)
-	sle $t1 $t2 $t6
-	beq $t1 $0 $WhileLabel_End_0$
-$WhileLabel_0$:
-	lw $t4 0($sp)
-	mul $t4 $t4 4
-	lw $t3 8($sp)
-	addu $t3 $t3 $t4
-	lw $t3 0($t3)
-	lw $t6 -4($sp)
-	addu $t5 $t6 $t3
-	sw $t5 -4($sp)
-	lw $t0 0($sp)
-	li $t1 1
-	addu $t7 $t0 $t1
-	sw $t7 0($sp)
-	j $WhileLabel_0_Cond_0$
-$WhileLabel_End_0$:
-	lw $t2 -4($sp)
-	move $v1 $t2
-	jr $ra
-$$get_then_print$$:
-	sw $ra 0($sp)
-	li $t3 66
-	li $t4 0
-	mul $t4 $t4 4
-	addu $t4 $t4 -8
-	addu $t4 $sp $t4
-	sw $t3 0($t4)
-	li $t5 88
-	li $t6 1
-	mul $t6 $t6 4
-	addu $t6 $t6 -8
-	addu $t6 $sp $t6
-	sw $t5 0($t6)
-	li $v0 5
+	lw $a0 4($sp)
+	li $v0 1
 	syscall
-	sw $v0 -12($sp)
-$IfLabel_0_Cond_0$:
-	lw $t0 -12($sp)
-	li $t1 100
-	sgt $t7 $t0 $t1
-	beq $t7 $0 $IfLabel_End_0$
-$IfLabel_0$:
 	la $a0 $str$2
 	li $v0 4
-	syscall
-	lw $a0 -12($sp)
-	li $v0 1
 	syscall
 	la $a0 $str$3
 	li $v0 4
 	syscall
-	j $ElseLabel_End_0$
-$IfLabel_End_0$:
-$ElseLabel_0$:
+	lw $a0 12($sp)
+	li $v0 1
+	syscall
 	la $a0 $str$4
 	li $v0 4
 	syscall
-	lw $a0 -12($sp)
+	lw $a0 4($sp)
 	li $v0 1
 	syscall
 	la $a0 $str$5
 	li $v0 4
 	syscall
-$ElseLabel_End_0$:
-	lw $t2 -12($sp)
-	li $t3 0
-	li $t4 0
-	mul $t3 $t3 3
-	addu $t3 $t3 $t4
-	mul $t3 $t3 4
-	addu $t3 $t3 -40
-	addu $t3 $sp $t3
-	sw $t2 0($t3)
-	lw $t6 -12($sp)
-	li $t7 33
-	addu $t5 $t6 $t7
-	li $t0 0
-	li $t1 1
-	mul $t0 $t0 3
-	addu $t0 $t0 $t1
-	mul $t0 $t0 4
-	addu $t0 $t0 -40
-	addu $t0 $sp $t0
-	sw $t5 0($t0)
-	li $t2 5808
-	li $t3 0
-	li $t4 2
-	mul $t3 $t3 3
-	addu $t3 $t3 $t4
-	mul $t3 $t3 4
-	addu $t3 $t3 -40
-	addu $t3 $sp $t3
-	sw $t2 0($t3)
-	li $t5 0x7fffefd4
-	li $t6 0
-	mul $t6 $t6 3
-	mul $t6 $t6 4
-	addu $t5 $t5 $t6
-	sw $t5 -44($sp)
-	li $t7 3
-	sw $t7 -48($sp)
-	subu $sp $sp 52
-	jal $$sum_arr_1d$$
-	addu $sp $sp 52
-	move $t0 $v1
-	sw $t0 -16($sp)
-	lw $t1 -16($sp)
-	move $v1 $t1
 	lw $ra 0($sp)
 	jr $ra
-$$put_global_simple_var_c$$:
+$IfLabel_End_0$:
+	lw $t4 16($sp)
+	li $t5 2
+	subu $t3 $t4 $t5
+	sw $t3 -4($sp)
+	lw $t6 12($sp)
+	sw $t6 -8($sp)
+	lw $t7 4($sp)
+	sw $t7 -12($sp)
+	lw $t0 8($sp)
+	sw $t0 -16($sp)
+	subu $sp $sp 20
+	jal $$move$$
+	addu $sp $sp 20
 	la $a0 $str$6
 	li $v0 4
 	syscall
-	lw $a0 simple_var_c$0
+	lw $a0 12($sp)
 	li $v0 1
 	syscall
 	la $a0 $str$7
 	li $v0 4
 	syscall
+	lw $a0 4($sp)
+	li $v0 1
+	syscall
+	la $a0 $str$8
+	li $v0 4
+	syscall
+	la $a0 $str$9
+	li $v0 4
+	syscall
+	lw $a0 12($sp)
+	li $v0 1
+	syscall
+	la $a0 $str$10
+	li $v0 4
+	syscall
+	lw $a0 4($sp)
+	li $v0 1
+	syscall
+	la $a0 $str$11
+	li $v0 4
+	syscall
+	lw $t2 16($sp)
+	li $t3 2
+	subu $t1 $t2 $t3
+	sw $t1 -20($sp)
+	lw $t4 8($sp)
+	sw $t4 -24($sp)
+	lw $t5 12($sp)
+	sw $t5 -28($sp)
+	lw $t6 4($sp)
+	sw $t6 -32($sp)
+	subu $sp $sp 36
+	jal $$move$$
+	addu $sp $sp 36
+	lw $ra 0($sp)
+	jr $ra
+$$solve$$:
+	sw $ra 0($sp)
+$IfLabel_1_Cond_0$:
+	lw $t0 16($sp)
+	li $t1 2
+	seq $t7 $t0 $t1
+	beq $t7 $0 $IfLabel_End_1$
+$IfLabel_1$:
+	la $a0 $str$12
+	li $v0 4
+	syscall
+	lw $a0 12($sp)
+	li $v0 1
+	syscall
+	la $a0 $str$13
+	li $v0 4
+	syscall
+	lw $a0 8($sp)
+	li $v0 1
+	syscall
+	la $a0 $str$14
+	li $v0 4
+	syscall
+	la $a0 $str$15
+	li $v0 4
+	syscall
+	lw $a0 12($sp)
+	li $v0 1
+	syscall
+	la $a0 $str$16
+	li $v0 4
+	syscall
+	lw $a0 4($sp)
+	li $v0 1
+	syscall
+	la $a0 $str$17
+	li $v0 4
+	syscall
+	lw $ra 0($sp)
+	jr $ra
+$IfLabel_End_1$:
+	lw $t3 16($sp)
+	li $t4 2
+	subu $t2 $t3 $t4
+	sw $t2 -4($sp)
+	lw $t5 12($sp)
+	sw $t5 -8($sp)
+	lw $t6 8($sp)
+	sw $t6 -12($sp)
+	lw $t7 4($sp)
+	sw $t7 -16($sp)
+	subu $sp $sp 20
+	jal $$move$$
+	addu $sp $sp 20
+	la $a0 $str$18
+	li $v0 4
+	syscall
+	lw $a0 12($sp)
+	li $v0 1
+	syscall
+	la $a0 $str$19
+	li $v0 4
+	syscall
+	lw $a0 8($sp)
+	li $v0 1
+	syscall
+	la $a0 $str$20
+	li $v0 4
+	syscall
+	la $a0 $str$21
+	li $v0 4
+	syscall
+	lw $a0 12($sp)
+	li $v0 1
+	syscall
+	la $a0 $str$22
+	li $v0 4
+	syscall
+	lw $a0 8($sp)
+	li $v0 1
+	syscall
+	la $a0 $str$23
+	li $v0 4
+	syscall
+	lw $t1 16($sp)
+	li $t2 2
+	subu $t0 $t1 $t2
+	sw $t0 -20($sp)
+	lw $t3 4($sp)
+	sw $t3 -24($sp)
+	lw $t4 8($sp)
+	sw $t4 -28($sp)
+	lw $t5 12($sp)
+	sw $t5 -32($sp)
+	subu $sp $sp 36
+	jal $$move$$
+	addu $sp $sp 36
+	la $a0 $str$24
+	li $v0 4
+	syscall
+	lw $a0 8($sp)
+	li $v0 1
+	syscall
+	la $a0 $str$25
+	li $v0 4
+	syscall
+	lw $a0 4($sp)
+	li $v0 1
+	syscall
+	la $a0 $str$26
+	li $v0 4
+	syscall
+	lw $t7 16($sp)
+	li $t0 2
+	subu $t6 $t7 $t0
+	sw $t6 -36($sp)
+	lw $t1 12($sp)
+	sw $t1 -40($sp)
+	lw $t2 8($sp)
+	sw $t2 -44($sp)
+	lw $t3 4($sp)
+	sw $t3 -48($sp)
+	subu $sp $sp 52
+	jal $$solve$$
+	addu $sp $sp 52
+	lw $ra 0($sp)
+	jr $ra
+$$dfs$$:
+	sw $ra 0($sp)
+$IfLabel_2_Cond_0$:
+	lw $t5 8($sp)
+	lw $t6 4($sp)
+	seq $t4 $t5 $t6
+	beq $t4 $0 $IfLabel_End_2$
+$IfLabel_2$:
+	li $t7 0
+	sw $t7 -4($sp)
+$WhileLabel_0_Cond_0$:
+	lw $t1 -4($sp)
+	lw $t2 4($sp)
+	slt $t0 $t1 $t2
+	beq $t0 $0 $WhileLabel_End_0$
+$WhileLabel_0$:
+	lw $t4 -4($sp)
+	mul $t4 $t4 4
+	lw $t3 20($sp)
+	addu $t3 $t3 $t4
+	lw $t3 0($t3)
+	lw $t6 -4($sp)
+	li $t7 1
+	addu $t5 $t6 $t7
+	mul $t5 $t5 4
+	lw $t0 12($sp)
+	addu $t0 $t0 $t5
+	lw $t0 0($t0)
+	addu $t1 $t3 $t0
+	move $a0 $t1
+	li $v0 1
+	syscall
+	la $a0 $str$27
+	li $v0 4
+	syscall
+	lw $t3 -4($sp)
+	li $t4 1
+	addu $t2 $t3 $t4
+	sw $t2 -4($sp)
+	j $WhileLabel_0_Cond_0$
+$WhileLabel_End_0$:
+	la $a0 $str$28
+	li $v0 4
+	syscall
+	lw $ra 0($sp)
+	jr $ra
+$IfLabel_End_2$:
+	li $t5 0
+	sw $t5 -8($sp)
+$WhileLabel_1_Cond_0$:
+	lw $t7 -8($sp)
+	lw $t0 4($sp)
+	slt $t6 $t7 $t0
+	beq $t6 $0 $WhileLabel_End_1$
+$WhileLabel_1$:
+$IfLabel_3_Cond_0$:
+	lw $t2 -8($sp)
+	mul $t2 $t2 4
+	lw $t1 16($sp)
+	addu $t1 $t1 $t2
+	lw $t1 0($t1)
+	seq $t1 $t1 $0
+	move $t3 $t1
+	beq $t3 $0 $IfLabel_End_3$
+$IfLabel_3$:
+	li $t4 1
+	lw $t5 -8($sp)
+	mul $t5 $t5 4
+	lw $t6 16($sp)
+	addu $t5 $t6 $t5
+	sw $t4 0($t5)
+	lw $t7 -8($sp)
+	lw $t0 8($sp)
+	mul $t0 $t0 4
+	lw $t1 20($sp)
+	addu $t0 $t1 $t0
+	sw $t7 0($t0)
+	lw $t2 20($sp)
+	lw $t3 16($sp)
+	lw $t4 12($sp)
+	lw $t6 8($sp)
+	li $t7 1
+	addu $t5 $t6 $t7
+	sw $t4 -12($sp)
+	sw $t3 -16($sp)
+	sw $t5 -20($sp)
+	sw $t2 -24($sp)
+	lw $t0 -16($sp)
+	sw $t0 -28($sp)
+	lw $t1 -12($sp)
+	sw $t1 -32($sp)
+	lw $t2 -20($sp)
+	sw $t2 -36($sp)
+	lw $t3 4($sp)
+	sw $t3 -40($sp)
+	subu $sp $sp 44
+	jal $$dfs$$
+	addu $sp $sp 44
+	li $t4 0
+	lw $t5 -8($sp)
+	mul $t5 $t5 4
+	lw $t6 16($sp)
+	addu $t5 $t6 $t5
+	sw $t4 0($t5)
+$IfLabel_End_3$:
+	lw $t0 -8($sp)
+	li $t1 1
+	addu $t7 $t0 $t1
+	sw $t7 -8($sp)
+	j $WhileLabel_1_Cond_0$
+$WhileLabel_End_1$:
+	lw $ra 0($sp)
+	jr $ra
+$$matrixPrint$$:
+	li $t2 0
+	sw $t2 0($sp)
+$WhileLabel_2_Cond_0$:
+	lw $t4 0($sp)
+	lw $t5 4($sp)
+	slt $t3 $t4 $t5
+	beq $t3 $0 $WhileLabel_End_2$
+$WhileLabel_2$:
+	li $t6 0
+	sw $t6 -4($sp)
+$WhileLabel_3_Cond_0$:
+	lw $t0 -4($sp)
+	lw $t1 4($sp)
+	slt $t7 $t0 $t1
+	beq $t7 $0 $WhileLabel_End_3$
+$WhileLabel_3$:
+	lw $t3 0($sp)
+	lw $t4 -4($sp)
+	mul $t3 $t3 5
+	addu $t3 $t3 $t4
+	mul $t3 $t3 4
+	lw $t2 8($sp)
+	addu $t2 $t2 $t3
+	lw $t2 0($t2)
+	move $a0 $t2
+	li $v0 1
+	syscall
+	la $a0 $str$29
+	li $v0 4
+	syscall
+	lw $t6 -4($sp)
+	li $t7 1
+	addu $t5 $t6 $t7
+	sw $t5 -4($sp)
+	j $WhileLabel_3_Cond_0$
+$WhileLabel_End_3$:
+	lw $t1 0($sp)
+	li $t2 1
+	addu $t0 $t1 $t2
+	sw $t0 0($sp)
+	j $WhileLabel_2_Cond_0$
+$WhileLabel_End_2$:
+	la $a0 $str$30
+	li $v0 4
+	syscall
+	jr $ra
+$$matrixMul$$:
+	sw $ra 0($sp)
+	li $t3 0
+	sw $t3 -4($sp)
+	lw $t4 12($sp)
+	sw $t4 -8($sp)
+	lw $t5 4($sp)
+	sw $t5 -12($sp)
+	subu $sp $sp 16
+	jal $$matrixPrint$$
+	addu $sp $sp 16
+	lw $t6 8($sp)
+	sw $t6 -16($sp)
+	lw $t7 4($sp)
+	sw $t7 -20($sp)
+	subu $sp $sp 24
+	jal $$matrixPrint$$
+	addu $sp $sp 24
+$WhileLabel_4_Cond_0$:
+	lw $t1 -4($sp)
+	lw $t2 4($sp)
+	slt $t0 $t1 $t2
+	beq $t0 $0 $WhileLabel_End_4$
+$WhileLabel_4$:
+	li $t3 0
+	sw $t3 -24($sp)
+$WhileLabel_5_Cond_0$:
+	lw $t5 -24($sp)
+	lw $t6 4($sp)
+	slt $t4 $t5 $t6
+	beq $t4 $0 $WhileLabel_End_5$
+$WhileLabel_5$:
+	li $t7 0
+	sw $t7 -28($sp)
+	li $t0 0
+	lw $t1 -4($sp)
+	lw $t2 -24($sp)
+	mul $t1 $t1 5
+	addu $t1 $t1 $t2
+	mul $t1 $t1 4
+	lw $t3 16($sp)
+	addu $t1 $t3 $t1
+	sw $t0 0($t1)
+$WhileLabel_6_Cond_0$:
+	lw $t5 -28($sp)
+	lw $t6 4($sp)
+	slt $t4 $t5 $t6
+	beq $t4 $0 $WhileLabel_End_6$
+$WhileLabel_6$:
+	lw $t0 -4($sp)
+	lw $t1 -24($sp)
+	mul $t0 $t0 5
+	addu $t0 $t0 $t1
+	mul $t0 $t0 4
+	lw $t7 16($sp)
+	addu $t7 $t7 $t0
+	lw $t7 0($t7)
+	lw $t3 -4($sp)
+	lw $t4 -28($sp)
+	mul $t3 $t3 5
+	addu $t3 $t3 $t4
+	mul $t3 $t3 4
+	lw $t2 12($sp)
+	addu $t2 $t2 $t3
+	lw $t2 0($t2)
+	lw $t6 -28($sp)
+	sw $t7 -32($sp)
+	lw $t7 -24($sp)
+	mul $t6 $t6 5
+	addu $t6 $t6 $t7
+	mul $t6 $t6 4
+	lw $t5 8($sp)
+	addu $t5 $t5 $t6
+	lw $t5 0($t5)
+	mul $t0 $t2 $t5
+	lw $t2 -32($sp)
+	addu $t1 $t2 $t0
+	lw $t3 -4($sp)
+	lw $t4 -24($sp)
+	mul $t3 $t3 5
+	addu $t3 $t3 $t4
+	mul $t3 $t3 4
+	lw $t5 16($sp)
+	addu $t3 $t5 $t3
+	sw $t1 0($t3)
+	lw $t7 -28($sp)
+	li $t0 1
+	addu $t6 $t7 $t0
+	sw $t6 -28($sp)
+	j $WhileLabel_6_Cond_0$
+$WhileLabel_End_6$:
+	lw $t2 -24($sp)
+	li $t3 1
+	addu $t1 $t2 $t3
+	sw $t1 -24($sp)
+	j $WhileLabel_5_Cond_0$
+$WhileLabel_End_5$:
+	lw $t5 -4($sp)
+	li $t6 1
+	addu $t4 $t5 $t6
+	sw $t4 -4($sp)
+	j $WhileLabel_4_Cond_0$
+$WhileLabel_End_4$:
+	lw $t7 12($sp)
+	sw $t7 -36($sp)
+	lw $t0 4($sp)
+	sw $t0 -40($sp)
+	subu $sp $sp 44
+	jal $$matrixPrint$$
+	addu $sp $sp 44
+	lw $t1 8($sp)
+	sw $t1 -44($sp)
+	lw $t2 4($sp)
+	sw $t2 -48($sp)
+	subu $sp $sp 52
+	jal $$matrixPrint$$
+	addu $sp $sp 52
+	lw $t3 16($sp)
+	sw $t3 -52($sp)
+	lw $t4 4($sp)
+	sw $t4 -56($sp)
+	subu $sp $sp 60
+	jal $$matrixPrint$$
+	addu $sp $sp 60
+	lw $ra 0($sp)
 	jr $ra

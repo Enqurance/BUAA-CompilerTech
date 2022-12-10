@@ -10,6 +10,8 @@ public class Node {
     private final ArrayList<Node> children = new ArrayList<>();
     private final int line;
     private boolean PushingParams = false;
+    private String WhileCondLabel = null;
+    private String WhileEndLabel = null;
 
     /* type == 0 ==> isEnd*/
     /* type == 1 ==> isNotEnd*/
@@ -100,5 +102,21 @@ public class Node {
 
     public boolean isPushingParams() {
         return PushingParams;
+    }
+
+    public void setWhileCondLabel(String whileBeginLabel) {
+        WhileCondLabel = whileBeginLabel;
+    }
+
+    public void setWhileEndLabel(String whileEndLabel) {
+        WhileEndLabel = whileEndLabel;
+    }
+
+    public String getWhileCondLabel() {
+        return WhileCondLabel;
+    }
+
+    public String getWhileEndLabel() {
+        return WhileEndLabel;
     }
 }

@@ -1,201 +1,565 @@
 $$Init$$:
-const int simple_const_a$0
-simple_const_a$0 = 1
-arr int arr_1d_a$0[5]
-arr int arr_2d_a$0[2][2]
-arr int arr_2d_b$0[3][2]
-const int simple_cosnt_b$0
-simple_cosnt_b$0 = 11
-arr int arr_1d_b$0[9]
-var int simple_var_c$0
-simple_var_c$0 = 327
-var int simple_var_d$0
-arr int arr_1d_c$0[2]
-store arr_1d_c$0[0] 896
-store arr_1d_c$0[1] 1
-arr int arr_1d_d$0[10]
-arr int arr_2d_c$0[3][3]
-arr int arr_2d_d$0[2][2]
-store arr_2d_d$0[0][0] 3
-store arr_2d_d$0[0][1] 56
-store arr_2d_d$0[1][0] 45
-store arr_2d_d$0[1][1] 16
-arr int arr_2d_e$0[10][10]
-$$empty_func$$:
-void empty_func
-$$para_only$$:
-void para_only
+$$move$$:
+void move
+para int n$0
 para int a$0
-para int b$0[]
-para int c$0[][2]
-const str $str$0 = Successfully call a function with 3 types of paras.\n
+para int b$0
+para int c$0
+$IfLabel_0_Cond_0$:
+#t0# = n$0 == 2
+if not #t0# goto $IfLabel_End_0$
+$IfLabel_0$:
+const str $str$0 = Move from 
 printf $str$0
-goto $ra
-$$put_stu_id$$:
-void put_stu_id
-const str $str$1 = 20373453\n\n
+printf a$0
+const str $str$1 =  to 
 printf $str$1
+printf c$0
+const str $str$2 = \n
+printf $str$2
+const str $str$3 = Move from 
+printf $str$3
+printf a$0
+const str $str$4 =  to 
+printf $str$4
+printf c$0
+const str $str$5 = \n
+printf $str$5
 goto $ra
-$$sum_arr_1d$$:
-int sum_arr_1d
-para int arr$0[]
-para int length$0
+$IfLabel_End_0$:
+#t1# = n$0 - 2
+push #t1#
+push a$0
+push c$0
+push b$0
+call move
+const str $str$6 = Move from 
+printf $str$6
+printf a$0
+const str $str$7 =  to 
+printf $str$7
+printf c$0
+const str $str$8 = \n
+printf $str$8
+const str $str$9 = Move from 
+printf $str$9
+printf a$0
+const str $str$10 =  to 
+printf $str$10
+printf c$0
+const str $str$11 = \n
+printf $str$11
+#t3# = n$0 - 2
+push #t3#
+push b$0
+push a$0
+push c$0
+call move
+$$solve$$:
+void solve
+para int n$0
+para int a$0
+para int b$0
+para int c$0
+$IfLabel_1_Cond_0$:
+#t5# = n$0 == 2
+if not #t5# goto $IfLabel_End_1$
+$IfLabel_1$:
+const str $str$12 = Move from 
+printf $str$12
+printf a$0
+const str $str$13 =  to 
+printf $str$13
+printf b$0
+const str $str$14 = \n
+printf $str$14
+const str $str$15 = Move from 
+printf $str$15
+printf a$0
+const str $str$16 =  to 
+printf $str$16
+printf c$0
+const str $str$17 = \n
+printf $str$17
+goto $ra
+$IfLabel_End_1$:
+#t6# = n$0 - 2
+push #t6#
+push a$0
+push b$0
+push c$0
+call move
+const str $str$18 = Move from 
+printf $str$18
+printf a$0
+const str $str$19 =  to 
+printf $str$19
+printf b$0
+const str $str$20 = \n
+printf $str$20
+const str $str$21 = Move from 
+printf $str$21
+printf a$0
+const str $str$22 =  to 
+printf $str$22
+printf b$0
+const str $str$23 = \n
+printf $str$23
+#t8# = n$0 - 2
+push #t8#
+push c$0
+push b$0
+push a$0
+call move
+const str $str$24 = Move from 
+printf $str$24
+printf b$0
+const str $str$25 =  to 
+printf $str$25
+printf c$0
+const str $str$26 = \n
+printf $str$26
+#t10# = n$0 - 2
+push #t10#
+push a$0
+push b$0
+push c$0
+call solve
+$$dfs$$:
+void dfs
+para int src$0[]
+para int vis$0[]
+para int reflect$0[]
+para int cur$0
+para int tot$0
+$IfLabel_2_Cond_0$:
+#t12# = cur$0 == tot$0
+if not #t12# goto $IfLabel_End_2$
+$IfLabel_2$:
 var int i$0
 i$0 = 0
-var int sum$0
-sum$0 = 0
 $WhileLabel_0_Cond_0$:
-#t0# = length$0 - 1
-#t1# = i$0 <= #t0#
-if not #t1# goto $WhileLabel_End_0$
+#t13# = i$0 < tot$0
+if not #t13# goto $WhileLabel_End_0$
 $WhileLabel_0$:
-load #t2# arr$0[i$0]
-#t3# = sum$0 + #t2#
-sum$0 = #t3#
-#t4# = i$0 + 1
-i$0 = #t4#
+load #t14# src$0[i$0]
+#t15# = i$0 + 1
+load #t16# reflect$0[#t15#]
+#t17# = #t14# + #t16#
+printf #t17#
+const str $str$27 =  
+printf $str$27
+#t18# = i$0 + 1
+i$0 = #t18#
 goto $WhileLabel_0_Cond_0$
 $WhileLabel_End_0$:
-RET = sum$0
-$$get_then_print$$:
-int get_then_print
-arr int const_tmp$0[2]
-store const_tmp$0[0] 66
-store const_tmp$0[1] 88
-var int tmp$0
-var int ans$0
-arr int ret$0[2][3]
-scanf #t5#
-tmp$0 = #t5#
-$IfLabel_0_Cond_0$:
-#t6# = tmp$0 > 100
-if not #t6# goto $IfLabel_End_0$
-$IfLabel_0$:
-const str $str$2 = \nJust get a number [
-printf $str$2
-printf tmp$0
-const str $str$3 = ] (greater than 100).\n
-printf $str$3
-goto $ElseLabel_End_0$
-$IfLabel_End_0$:
-$ElseLabel_0$:
-const str $str$4 = \nJust get a number [
-printf $str$4
-printf tmp$0
-const str $str$5 = ] (smaller than or equal to 100).\n
-printf $str$5
-$ElseLabel_End_0$:
-store ret$0[0][0] tmp$0
-#t7# = tmp$0 + 33
-store ret$0[0][1] #t7#
-store ret$0[0][2] 5808
-load address #t8# ret$0[0]
-push #t8#
-push 3
-call sum_arr_1d
-#t9# = RET
-ans$0 = #t9#
-RET = ans$0
-$$put_global_simple_var_c$$:
-void put_global_simple_var_c
-const str $str$6 = GLOBAL simple_var_c: 
-printf $str$6
-printf simple_var_c$0
-const str $str$7 = \n
-printf $str$7
+const str $str$28 = \n
+printf $str$28
+goto $ra
+$IfLabel_End_2$:
+var int i$0
+i$0 = 0
+$WhileLabel_1_Cond_0$:
+#t19# = i$0 < tot$0
+if not #t19# goto $WhileLabel_End_1$
+$WhileLabel_1$:
+$IfLabel_3_Cond_0$:
+load #t20# vis$0[i$0]
+#t21# = ! #t20#
+if not #t21# goto $IfLabel_End_3$
+$IfLabel_3$:
+store vis$0[i$0] 1
+store src$0[cur$0] i$0
+load address #t22# src$0
+load address #t23# vis$0
+load address #t24# reflect$0
+#t25# = cur$0 + 1
+push #t22#
+push #t23#
+push #t24#
+push #t25#
+push tot$0
+call dfs
+store vis$0[i$0] 0
+$IfLabel_End_3$:
+#t27# = i$0 + 1
+i$0 = #t27#
+goto $WhileLabel_1_Cond_0$
+$WhileLabel_End_1$:
+goto $ra
+$$matrixPrint$$:
+void matrixPrint
+para int src$0[][5]
+para int total$0
+var int i$0
+i$0 = 0
+$WhileLabel_2_Cond_0$:
+#t28# = i$0 < total$0
+if not #t28# goto $WhileLabel_End_2$
+$WhileLabel_2$:
+var int j$0
+j$0 = 0
+$WhileLabel_3_Cond_0$:
+#t29# = j$0 < total$0
+if not #t29# goto $WhileLabel_End_3$
+$WhileLabel_3$:
+load #t30# src$0[i$0][j$0]
+printf #t30#
+const str $str$29 =  
+printf $str$29
+#t31# = j$0 + 1
+j$0 = #t31#
+goto $WhileLabel_3_Cond_0$
+$WhileLabel_End_3$:
+#t32# = i$0 + 1
+i$0 = #t32#
+goto $WhileLabel_2_Cond_0$
+$WhileLabel_End_2$:
+const str $str$30 = \n
+printf $str$30
+goto $ra
+$$matrixMul$$:
+void matrixMul
+para int ans$0[][5]
+para int srcA$0[][5]
+para int srcB$0[][5]
+para int total$0
+var int i$0
+i$0 = 0
+load address #t33# srcA$0
+push #t33#
+push total$0
+call matrixPrint
+load address #t35# srcB$0
+push #t35#
+push total$0
+call matrixPrint
+$WhileLabel_4_Cond_0$:
+#t37# = i$0 < total$0
+if not #t37# goto $WhileLabel_End_4$
+$WhileLabel_4$:
+var int j$0
+j$0 = 0
+$WhileLabel_5_Cond_0$:
+#t38# = j$0 < total$0
+if not #t38# goto $WhileLabel_End_5$
+$WhileLabel_5$:
+var int k$0
+k$0 = 0
+store ans$0[i$0][j$0] 0
+$WhileLabel_6_Cond_0$:
+#t39# = k$0 < total$0
+if not #t39# goto $WhileLabel_End_6$
+$WhileLabel_6$:
+load #t40# ans$0[i$0][j$0]
+load #t41# srcA$0[i$0][k$0]
+load #t42# srcB$0[k$0][j$0]
+#t43# = #t41# * #t42#
+#t44# = #t40# + #t43#
+store ans$0[i$0][j$0] #t44#
+#t45# = k$0 + 1
+k$0 = #t45#
+goto $WhileLabel_6_Cond_0$
+$WhileLabel_End_6$:
+#t46# = j$0 + 1
+j$0 = #t46#
+goto $WhileLabel_5_Cond_0$
+$WhileLabel_End_5$:
+#t47# = i$0 + 1
+i$0 = #t47#
+goto $WhileLabel_4_Cond_0$
+$WhileLabel_End_4$:
+load address #t48# srcA$0
+push #t48#
+push total$0
+call matrixPrint
+load address #t50# srcB$0
+push #t50#
+push total$0
+call matrixPrint
+load address #t52# ans$0
+push #t52#
+push total$0
+call matrixPrint
 goto $ra
 $$main$$:
 int main
-arr int kkk$0[2]
-store kkk$0[0] 111
-store kkk$0[1] 222
 var int n$0
-arr int ans$0[10]
-var int t$0
-t$0 = 10
-call put_stu_id
-call empty_func
-simple_var_d$0 = 2
-push simple_var_d$0
-load address #t12# arr_1d_c$0
-push #t12#
-load address #t13# arr_2d_d$0
-push #t13#
-call para_only
-$WhileLabel_1_Cond_0$:
-if not t$0 goto $WhileLabel_End_1$
-$WhileLabel_1$:
-#t15# = t$0 - 1
-t$0 = #t15#
-call get_then_print
-#t16# = RET
-#t17# = #t16# % 10
-#t18# = #t17# + 10
-n$0 = #t18#
-$IfLabel_1_Cond_0$:
-#t19# = n$0 >= 10
-if not #t19# goto $IfLabel_End_1$
-$IfLabel_1$:
-#t20# = n$0 - 10
-n$0 = #t20#
-$IfLabel_End_1$:
-const str $str$8 = lucky number: 
-printf $str$8
-printf n$0
-const str $str$9 = \n
-printf $str$9
-var int simple_var_c$1
-simple_var_c$1 = 0
-var int index$0
-index$0 = 0
-$WhileLabel_2_Cond_0$:
-#t21# = simple_var_c$1 < 8
-if not #t21# goto $WhileLabel_End_2$
-$WhileLabel_2$:
-$IfLabel_2_Cond_0$:
-#t22# = simple_var_c$1 == 2
-if not #t22# goto $IfLabel_End_2$
-$IfLabel_2$:
-#t23# = simple_var_c$1 + 1
-simple_var_c$1 = #t23#
-goto $WhileLabel_2$
-goto $ElseLabel_End_2$
-$IfLabel_End_2$:
-$ElseLabel_2$:
-$IfLabel_3_Cond_0$:
-#t24# = n$0 + 1
-#t25# = #t24# <= simple_var_c$1
-if not #t25# goto $IfLabel_End_3$
-$IfLabel_3$:
-goto $WhileLabel_End_2$
-$IfLabel_End_3$:
-$ElseLabel_End_2$:
-load #t26# arr_1d_b$0[simple_var_c$1]
-const str $str$10 = (
-printf $str$10
-printf simple_var_c$1
-const str $str$11 = )
-printf $str$11
-printf #t26#
-const str $str$12 = \n
-printf $str$12
-load #t27# arr_1d_b$0[simple_var_c$1]
-store ans$0[index$0] #t27#
-#t28# = index$0 + 1
-index$0 = #t28#
-#t29# = simple_var_c$1 + 1
-simple_var_c$1 = #t29#
-goto $WhileLabel_2_Cond_0$
-$WhileLabel_End_2$:
+scanf #t54#
+n$0 = #t54#
+const str $str$31 = 19373354\n
+printf $str$31
+push n$0
+push 1
+push 2
+push 3
+call solve
+scanf #t56#
+n$0 = #t56#
+arr int src$0[10]
+arr int a$0[10]
+store a$0[0] 9
+store a$0[1] 8
+store a$0[2] 7
+store a$0[3] 6
+store a$0[4] 5
+store a$0[5] 4
+store a$0[6] 3
+store a$0[7] 2
+store a$0[8] 1
+store a$0[9] 0
+arr int vis$0[10]
+arr int b$0[10]
+store b$0[0] 8
+store b$0[1] 7
+store b$0[2] 6
+store b$0[3] 5
+store b$0[4] 4
+store b$0[5] 3
+store b$0[6] 2
+store b$0[7] 1
+store b$0[8] 0
+store b$0[9] 9
+arr int c$0[3][10]
+store c$0[0][0] 7
+store c$0[0][1] 6
+store c$0[0][2] 5
+store c$0[0][3] 4
+store c$0[0][4] 3
+store c$0[0][5] 2
+store c$0[0][6] 1
+store c$0[0][7] 0
+store c$0[0][8] 9
+store c$0[0][9] 8
+store c$0[1][0] 6
+store c$0[1][1] 5
+store c$0[1][2] 4
+store c$0[1][3] 3
+store c$0[1][4] 2
+store c$0[1][5] 1
+store c$0[1][6] 0
+store c$0[1][7] 9
+store c$0[1][8] 8
+store c$0[1][9] 7
+store c$0[2][0] 5
+store c$0[2][1] 4
+store c$0[2][2] 3
+store c$0[2][3] 2
+store c$0[2][4] 1
+store c$0[2][5] 0
+store c$0[2][6] 9
+store c$0[2][7] 8
+store c$0[2][8] 7
+store c$0[2][9] 6
+var int i$0
+i$0 = 0
+$WhileLabel_7_Cond_0$:
+#t57# = i$0 < n$0
+if not #t57# goto $WhileLabel_End_7$
+$WhileLabel_7$:
+load #t58# a$0[i$0]
+load #t59# c$0[2][i$0]
+#t60# = #t58# + #t59#
+#t61# = #t60# + 1
+store a$0[i$0] #t61#
+load #t62# b$0[i$0]
+load #t63# c$0[2][i$0]
+#t64# = #t62# + #t63#
+#t65# = #t64# + 2
+store b$0[i$0] #t65#
+load #t66# c$0[0][i$0]
+load #t67# c$0[2][i$0]
+#t68# = #t66# + #t67#
+#t69# = #t68# + 3
+store c$0[0][i$0] #t69#
+load #t70# c$0[1][i$0]
+load #t71# c$0[2][i$0]
+#t72# = #t70# + #t71#
+#t73# = #t72# + 4
+store c$0[1][i$0] #t73#
+#t74# = i$0 + 1
+i$0 = #t74#
+goto $WhileLabel_7_Cond_0$
+$WhileLabel_End_7$:
+i$0 = 0
+$WhileLabel_8_Cond_0$:
+if not 114514 goto $WhileLabel_End_8$
+$WhileLabel_8$:
+store vis$0[i$0] 0
+#t75# = i$0 + 1
+i$0 = #t75#
 $IfLabel_4_Cond_0$:
-#t30# = n$0 + 1
-#t31# = #t30# != simple_var_c$1
-if not #t31# goto $IfLabel_End_4$
+#t76# = i$0 >= n$0
+if not #t76# goto $IfLabel_End_4$
 $IfLabel_4$:
-const str $str$13 = The ones digit of the lucky number is greater than 7.\n
-printf $str$13
+goto $WhileLabel_End_8$
 $IfLabel_End_4$:
-goto $WhileLabel_1_Cond_0$
-$WhileLabel_End_1$:
-call put_global_simple_var_c
+goto $WhileLabel_8_Cond_0$
+$WhileLabel_End_8$:
+load address #t77# src$0
+load address #t78# vis$0
+load address #t79# a$0
+push #t77#
+push #t78#
+push #t79#
+push 0
+push n$0
+call dfs
+i$0 = 0
+$WhileLabel_9_Cond_0$:
+if not 114514 goto $WhileLabel_End_9$
+$WhileLabel_9$:
+store vis$0[i$0] 0
+#t81# = i$0 + 1
+i$0 = #t81#
+$IfLabel_5_Cond_0$:
+#t82# = i$0 >= n$0
+if not #t82# goto $IfLabel_End_5$
+$IfLabel_5$:
+goto $WhileLabel_End_9$
+goto $ElseLabel_End_5$
+$IfLabel_End_5$:
+$ElseLabel_5$:
+$ElseLabel_End_5$:
+goto $WhileLabel_9_Cond_0$
+$WhileLabel_End_9$:
+load address #t83# src$0
+load address #t84# vis$0
+load address #t85# b$0
+push #t83#
+push #t84#
+push #t85#
+push 0
+push n$0
+call dfs
+i$0 = 0
+$WhileLabel_10_Cond_0$:
+if not 114514 goto $WhileLabel_End_10$
+$WhileLabel_10$:
+store vis$0[i$0] 0
+#t87# = i$0 + 1
+i$0 = #t87#
+$IfLabel_6_Cond_0$:
+#t88# = i$0 < n$0
+if not #t88# goto $IfLabel_End_6$
+$IfLabel_6$:
+goto $WhileLabel_10_Cond_0$
+$IfLabel_End_6$:
+goto $WhileLabel_End_10$
+goto $WhileLabel_10_Cond_0$
+$WhileLabel_End_10$:
+load address #t89# src$0
+load address #t90# vis$0
+load address #t91# c$0[0]
+push #t89#
+push #t90#
+push #t91#
+push 0
+push n$0
+call dfs
+i$0 = 0
+$WhileLabel_11_Cond_0$:
+if not 114514 goto $WhileLabel_End_11$
+$WhileLabel_11$:
+store vis$0[i$0] 0
+#t93# = i$0 + 1
+i$0 = #t93#
+$IfLabel_7_Cond_0$:
+#t94# = i$0 < n$0
+if not #t94# goto $IfLabel_End_7$
+$IfLabel_7$:
+goto $WhileLabel_11_Cond_0$
+goto $ElseLabel_End_7$
+$IfLabel_End_7$:
+$ElseLabel_7$:
+goto $WhileLabel_End_11$
+$ElseLabel_End_7$:
+goto $WhileLabel_11_Cond_0$
+$WhileLabel_End_11$:
+load address #t95# src$0
+load address #t96# vis$0
+load address #t97# c$0[1]
+push #t95#
+push #t96#
+push #t97#
+push 0
+push n$0
+call dfs
+arr int d$0[5][5]
+store d$0[0][0] 307728049
+store d$0[0][1] -1625382311
+store d$0[0][2] 1271106322
+store d$0[0][3] 309930583
+store d$0[0][4] 2007032850
+store d$0[1][0] 1074055550
+store d$0[1][1] 2036831205
+store d$0[1][2] -492323543
+store d$0[1][3] -252604752
+store d$0[1][4] 1295820596
+store d$0[2][0] 728458994
+store d$0[2][1] 1673642498
+store d$0[2][2] -51943305
+store d$0[2][3] -1854253096
+store d$0[2][4] -1024571774
+store d$0[3][0] 1430035460
+store d$0[3][1] 1705232663
+store d$0[3][2] -1803769826
+store d$0[3][3] -1485716863
+store d$0[3][4] -1192520056
+store d$0[4][0] -1503793409
+store d$0[4][1] 2027983592
+store d$0[4][2] -1911831470
+store d$0[4][3] -1387735054
+store d$0[4][4] -274170342
+arr int e$0[5][5]
+store e$0[0][0] -39878981
+store e$0[0][1] 1475936537
+store e$0[0][2] 1944942266
+store e$0[0][3] 1579815806
+store e$0[0][4] 1734290467
+store e$0[1][0] 1606724733
+store e$0[1][1] -1839064934
+store e$0[1][2] 1749681186
+store e$0[1][3] 1409364573
+store e$0[1][4] -68127266
+store e$0[2][0] 1869282840
+store e$0[2][1] 1574753938
+store e$0[2][2] 1959861217
+store e$0[2][3] -425501077
+store e$0[2][4] -1281736928
+store e$0[3][0] -1304579021
+store e$0[3][1] -1777897472
+store e$0[3][2] -1921297034
+store e$0[3][3] 1623258471
+store e$0[3][4] -226241316
+store e$0[4][0] 824482268
+store e$0[4][1] -1840038765
+store e$0[4][2] -1238621050
+store e$0[4][3] 1453319654
+store e$0[4][4] -1338682930
+arr int f$0[5][5]
+load address #t99# f$0
+load address #t100# d$0
+load address #t101# e$0
+push #t99#
+push #t100#
+push #t101#
+push 4
+call matrixMul
+load address #t103# f$0
+load address #t104# e$0
+load address #t105# d$0
+push #t103#
+push #t104#
+push #t105#
+push 5
+call matrixMul
+$WhileLabel_12_Cond_0$:
+if not 114514 goto $WhileLabel_End_12$
+$WhileLabel_12$:
+RET = 0
+const str $str$32 = 19373354\n
+printf $str$32
+goto $WhileLabel_12_Cond_0$
+$WhileLabel_End_12$:
 RET = 0

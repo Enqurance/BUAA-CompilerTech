@@ -1,10 +1,17 @@
 package ClassFile.InterCode;
 
+import ClassFile.FuncSymbol;
+import ClassFile.VarSymbol;
+
+import java.util.ArrayList;
+
 public class FuncCall extends ICode {
     private final String FuncName;
+    private final ArrayList<VarSymbol> varSymbols;
 
-    public FuncCall(String FuncName) {
-        this.FuncName = FuncName;
+    public FuncCall(FuncSymbol funcSymbol) {
+        this.FuncName = funcSymbol.getName();
+        this.varSymbols = funcSymbol.getVarSymbols();
     }
 
     @Override
@@ -20,5 +27,13 @@ public class FuncCall extends ICode {
 
     public String getFuncName() {
         return FuncName;
+    }
+
+    public ArrayList<VarSymbol> getVarSymbols() {
+        return varSymbols;
+    }
+
+    public int GetParamsCount() {
+        return varSymbols.size();
     }
 }

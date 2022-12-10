@@ -39,11 +39,23 @@ public class Global extends Instr {
         } else if (type == 1) {
             /* type 1 is String */
             return "\t" + name + ": .asciiz \"" + context + "\"";
-        } else{
+        } else {
             /* type is 2 or 3 is Array */
-            StringBuilder str = new StringBuilder("\t" + name + ":");
+            boolean flag = false;
             for (Integer integer : values) {
-                str.append("\n\t.word ").append(integer);
+                if (integer != 0) {
+                    flag = true;
+                    break;
+                }
+            }
+            StringBuilder str = new StringBuilder();
+            if (flag) {
+                str.append("\t").append(name).append(":");
+                for (Integer integer : values) {
+                    str.append("\n\t.word ").append(integer);
+                }
+            } else {
+                str.append("\t").append(name).append(": ").append(".space ").append(values.size() * 4);
             }
             return str.toString();
         }

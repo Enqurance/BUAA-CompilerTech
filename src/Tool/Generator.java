@@ -37,7 +37,7 @@ public class Generator {
     private final ArrayList<ICode> iCodes = new ArrayList<>();
     private int variableCount = 0;
     private int whileLabelCount = -1;
-    private int ifLabelCount = 0;
+    private int ifLabelCount = -1;
     private int strCount = 0;
 
     public Generator(Node head, SymbolTable table) {
@@ -356,24 +356,27 @@ public class Generator {
                 break;
             case "<Block>":
                 curTable = curTable.GetNextChild();
+                if (curTable.isWhile()) {
+                    curTable.setWhileCount(whileLabelCount);
+                }
                 GenBlock(firstNode);
                 break;
             case "if":
                 if (children.size() == 5) {
+                    ifLabelCount++;
                     String IfBegin = DistributeIfLabel();
                     String IfEnd = DistributeIfEndLabel();
                     GenCond(children.get(2), IfBegin, IfEnd, 1);
-                    ifLabelCount++;
                     AddLabel(IfBegin, true);
                     GenStmt(children.get(4));
                     AddLabel(IfEnd, true);
                 } else if (children.size() == 7) {
+                    ifLabelCount++;
                     String IfBegin = DistributeIfLabel();
                     String IfEnd = DistributeIfEndLabel();
                     String ElseBegin = DistributeElseLabel();
                     String ElseEnd = DistributeElseEndLabel();
                     GenCond(children.get(2), IfBegin, IfEnd, 1);
-                    ifLabelCount++;
                     AddLabel(IfBegin, true);
                     GenStmt(children.get(4));
                     AddJump(ElseEnd, JumpTo.J);
@@ -388,16 +391,28 @@ public class Generator {
                 String endLabel = DistributeWhileLabelEnd();
                 String beginLabel = DistributeWhileLabel();
                 String CondBegin = GenCond(children.get(2), beginLabel, endLabel, 0);
+                children.get(0).setWhileCondLabel(CondBegin);   // 将标签存入Node中
+                children.get(0).setWhileEndLabel(endLabel);
                 AddLabel(beginLabel, true);
                 GenStmt(children.get(4));
                 AddJump(CondBegin, JumpTo.J);
                 AddLabel(endLabel, true);
                 break;
             case "break":
-                AddJump(GetWhileLabelEnd(), JumpTo.J);
+                Node test1 = node.getParent().getChildren().get(0);
+                if (test1.getContext().equals("while")) {    // 没有块，直接跟break
+                    AddJump(test1.getWhileEndLabel(), JumpTo.J);
+                    break;
+                }
+                AddJump(GetBreakLabel(curTable), JumpTo.J);
                 break;
             case "continue":
-                AddJump(GetWhileLabel(), JumpTo.J);
+                Node test2 = node.getParent().getChildren().get(0);
+                if (test2.getContext().equals("while")) {    // 没有块，直接跟break
+                    AddJump(test2.getWhileCondLabel(), JumpTo.J);
+                    break;
+                }
+                AddJump(GetContinueLabel(curTable), JumpTo.J);
                 break;
             case "return":
                 if (children.size() == 2) {
@@ -776,7 +791,7 @@ public class Generator {
             if (children.get(2).getContext().equals("<FuncRParams>")) {
                 GenFuncRParams(children.get(2));
             }
-            AddFuncCall(func.getName());
+            AddFuncCall(func);
             String ret = DistributeVariable();
             if (node.isPushingParams()) {
                 node.AdjustPushingParam(false);
@@ -791,13 +806,18 @@ public class Generator {
 
     public void GenFuncRParams(Node node) {
         ArrayList<Node> children = node.getChildren();
+        ArrayList<String> results = new ArrayList<>();
         for (Node item : children) {
             if (item.getContext().equals("<Exp>")) {
                 item.AdjustPushingParam(true);
                 String res = GenExp(item);
-                iCodes.add(new FuncPush(res));
+                results.add(res);
+//                iCodes.add(new FuncPush(res));
                 item.AdjustPushingParam(false);
             }
+        }
+        for (String res : results) {
+            iCodes.add(new FuncPush(res));
         }
     }
 
@@ -967,8 +987,8 @@ public class Generator {
         iCodes.add(new Printf(name));
     }
 
-    public void AddFuncCall(String name) {
-        iCodes.add(new FuncCall(name));
+    public void AddFuncCall(FuncSymbol funcSymbol) {
+        iCodes.add(new FuncCall(funcSymbol));
     }
 
     public void AddArrayLoad(String name, String target, boolean la) {
@@ -1140,6 +1160,28 @@ public class Generator {
 
     public String GetElseLabel() {
         return "$ElseLabel_" + ifLabelCount + "$";
+    }
+
+    public String GetBreakLabel(SymbolTable table) {
+        if (table == null) {
+            return "Error";
+        } else {
+            if (table.isWhile()) {
+                return "$WhileLabel_End_" + table.getWhileCount() + "$";
+            }
+            return GetBreakLabel(table.getParent());
+        }
+    }
+
+    public String GetContinueLabel(SymbolTable table) {
+        if (table == null) {
+            return "Error";
+        } else {
+            if (table.isWhile()) {
+                return "$WhileLabel_" + table.getWhileCount() + "_Cond_0$";
+            }
+            return GetContinueLabel(table.getParent());
+        }
     }
 
     public void TravelBlock(int index) {

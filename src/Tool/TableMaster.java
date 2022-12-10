@@ -464,12 +464,11 @@ public class TableMaster {
                 }
                 break;
             case "break":
-                if (SearchWhile(curTable) == null) {
-                    Error.addErrorMessage(children.get(0).getLine(), "m");
-                }
             case "continue":
                 if (SearchWhile(curTable) == null) {
-                    Error.addErrorMessage(children.get(0).getLine(), "m");
+                    if (!node.getParent().getChildren().get(0).getContext().equals("while")) {
+                        Error.addErrorMessage(children.get(0).getLine(), "m");
+                    }
                 }
                 break;
             case "return":

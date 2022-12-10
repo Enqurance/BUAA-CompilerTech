@@ -94,14 +94,8 @@ public class MIPSTranslator {
                 }
                 AddrSym sym = new AddrSym(code.GetLSym(), AddrSym.Global);
                 sym.setDim(decl.getVarSymbol().getSizeOne(), decl.getVarSymbol().getSizeTwo());
+                sym.setDimension(decl.getVarSymbol().getDimension());
                 curTable.PutSymbol(sym);
-            }
-        }
-        for (String key : FuncLabels.keySet()) {
-            for (ICode code : FuncLabels.get(key)) {
-                if (code instanceof ConstDecl) {
-                    MIPSCodes.add(new Global(Global.INTEGER, code.GetLSym()));
-                }
             }
         }
     }
@@ -242,7 +236,12 @@ public class MIPSTranslator {
 
     public void TranslateConstDecl(ICode code) {
         ConstDecl constDecl = (ConstDecl) code;
-        curTable.PutConstSymbol(new AddrSym(constDecl.GetLSym(), AddrSym.Global));
+        if (((ConstDecl) code).isGlobal()) {
+            curTable.PutConstSymbol(new AddrSym(constDecl.GetLSym(), AddrSym.Global));
+        } else {
+            curTable.PutConstSymbol(new AddrSym(constDecl.GetLSym(), Integer.toString(SPOffset), constDecl.isGlobal()));
+            StackGrow();
+        }
     }
 
     public void TranslateVarDecl(ICode code) {
@@ -286,7 +285,9 @@ public class MIPSTranslator {
                 AddAssign(Integer.toString(Syscall.PRINT_STRING), RegDistributor.V0Reg, Assign.LI);
                 AddSyscall();
             } else {
-                if (isGlobalVar(target) || isConstVar(target)) {
+                /*TODO*/
+//                if (isGlobalVar(target) || isConstVar(target)) {
+                if (isGlobalVar(target)) {
                     AddLoad(RegDistributor.A0Reg, target, Load.LW);
                 } else {
                     AddrSym addrSym = curTable.FindAddrSym(target);
@@ -313,7 +314,9 @@ public class MIPSTranslator {
             AddAssign(RegDistributor.V0Reg, reg, Assign.MOVE);
         } else {
             addrSym = curTable.FindAddrSym(name);
-            if (isGlobalVar(name) || isConstVar(name)) {
+            /*TODO*/
+//            if (isGlobalVar(name) || isConstVar(name)) {
+            if (isGlobalVar(name)) {
                 AddStore(RegDistributor.V0Reg, name);
             } else {
                 AddStore(RegDistributor.V0Reg, RegDistributor.SPReg, addrSym.getOffset());
@@ -326,10 +329,10 @@ public class MIPSTranslator {
         FuncCall funcCall = (FuncCall) code;
         String FuncLabel = "$$" + funcCall.getFuncName() + "$$";
         AddCalculate("-", RegDistributor.SPReg, RegDistributor.SPReg, Integer.toString(Math.abs(SPOffset)));
-        SPAddr -= SPOffset;
         AddJumpTo(FuncLabel, JumpTo.JAL);
         AddCalculate("+", RegDistributor.SPReg, RegDistributor.SPReg, Integer.toString(Math.abs(SPOffset)));
-        SPAddr += SPOffset;
+//        AddCalculate("+", RegDistributor.SPReg, RegDistributor.SPReg, Integer.toString(Math.abs(SPOffset - 4 * funcCall.GetParamsCount())));
+//        StackBack(4 * funcCall.GetParamsCount());
     }
 
     public void TranslateFunParams(ArrayList<FuncParam> funcParams) {
@@ -353,7 +356,7 @@ public class MIPSTranslator {
         /* 若传递数组，则只Push一个地址，并且要修改对应的AddrSym的Offset */
         FuncPush push = (FuncPush) code;
         String target = FetchSym(push.getTarget());
-        PutTempVarAddrSymbol(); /* 将尚未使用的临时变量存入栈中 */
+        PutTempVarAddrSymbol(target); /* 将尚未使用的临时变量存入栈中 */
         AddStore(target, RegDistributor.SPReg, Integer.toString(SPOffset));
         StackGrow();
     }
@@ -415,7 +418,13 @@ public class MIPSTranslator {
             } else if (sym.isGlobal()) {    /* 如果是全局数组，那么取其标签地址 */
                 AddLoad(reg, sym.getName(), Load.LA);
             } else {    /* 如果是局部数组，那么取其偏移 */
-                AddAssign("0x" + Integer.toHexString(sym.getAbsAddr()), reg, Assign.LI);    /* 取出数组的绝对地址 */
+                if (curFunc.equals("$$main$$:")) {
+                    /* Main函数的局部数组地址是可确定的 */
+                    AddAssign("0x" + Integer.toHexString(sym.getAbsAddr()), reg, Assign.LI);    /* 取出数组的绝对地址 */
+                } else {
+                    /* 函数的局部数组地址需要依靠SP栈指针和偏移 */
+                    AddCalculate("+", reg, RegDistributor.SPReg, sym.getOffset());
+                }
             }
             if (sym.getDimension() == 1) {
                 /* 实参是1维的 */
@@ -584,7 +593,8 @@ public class MIPSTranslator {
             TranslateAssign(sym, reg);
             return reg;
         } else if (isVar(sym)) {    /* 右侧要求全局和局部变量，都是马上使用，不用登记 */
-            if (isGlobalVar(sym) || isConstVar(sym)) {     /* 全局变量，分配一个寄存器并使用lw Label */
+//            if (isGlobalVar(sym) || isConstVar(sym)) {     /* 全局变量，分配一个寄存器并使用lw Label */
+            if (isGlobalVar(sym)) {
                 String reg = DistributeReg();
                 AddLoad(reg, sym, Load.LW);
                 return reg;
@@ -624,7 +634,8 @@ public class MIPSTranslator {
             if (reg1.equals(reg2)) {
                 reg1 = FetchSym(rSym1);
             }
-            if (isGlobalVar(lSym) || isConstVar(lSym)) {
+//            if (isGlobalVar(lSym) || isConstVar(lSym)) {
+            if (isGlobalVar(lSym)) {
                 /* 左侧使用全局变量或常量，应使用sw Label */
                 AddCalculate(exp.getOperator(), reg3, reg1, reg2);
                 AddStore(reg3, lSym);
@@ -662,7 +673,8 @@ public class MIPSTranslator {
             AddCalculate(operator, reg, reg, RegDistributor.ZEROReg);
         }
         if (isVar(lSym)) {
-            if (isGlobalVar(lSym) || isConstVar(lSym)) {
+//            if (isGlobalVar(lSym) || isConstVar(lSym)) {
+            if (isGlobalVar(lSym)) {
                 /* 左侧使用全局变量或常量，应使用sw Label */
                 AddStore(reg, lSym);
             } else {
@@ -676,7 +688,8 @@ public class MIPSTranslator {
             AddAssign(reg, tReg, Assign.MOVE);
         } else if (isFuncRet(lSym)) {
             /* 左侧是返回值，向V1中保存右侧值
-             * 注意，出现返回值表示可能存在的函数返回，需要安排跳转语句 */
+             * 注意，出现返回值表示可能存在的函数返回，需要安排跳转语句
+             * 如果在Main函数中遇到了Ret，就应当结束程序 */
             AddAssign(reg, RegDistributor.V1Reg, Assign.MOVE);
             if (!curFunc.equals("$$main$$:")) {
                 if (curTable.FindSymbol(RegDistributor.RAReg)) {
@@ -684,6 +697,9 @@ public class MIPSTranslator {
                     AddLoad(RegDistributor.RAReg, RegDistributor.SPReg, ra.getOffset());
                 }
                 AddJumpTo(RegDistributor.RAReg, JumpTo.JR);
+            } else {
+                AddAssign("10", RegDistributor.V0Reg, Assign.LI);
+                AddSyscall();
             }
         }
     }
@@ -766,6 +782,10 @@ public class MIPSTranslator {
         SPOffset += 4;
     }
 
+    public void StackBack(int length) {
+        SPOffset += length;
+    }
+
     public boolean isEmpty(String string) {
         return string.isEmpty();
     }
@@ -833,6 +853,17 @@ public class MIPSTranslator {
             curTable.PutSymbol(new AddrSym(tempVar, Integer.toString(SPOffset), !AddrSym.Global));
             AddStore(TempReg.get(tempVar), RegDistributor.SPReg, Integer.toString(SPOffset));
             StackGrow();
+        }
+        TempReg.clear();
+    }
+
+    public void PutTempVarAddrSymbol(String target) {
+        for (String tempVar : TempReg.keySet()) {
+            if (!TempReg.get(tempVar).equals(target)) {
+                curTable.PutSymbol(new AddrSym(tempVar, Integer.toString(SPOffset), !AddrSym.Global));
+                AddStore(TempReg.get(tempVar), RegDistributor.SPReg, Integer.toString(SPOffset));
+                StackGrow();
+            }
         }
         TempReg.clear();
     }

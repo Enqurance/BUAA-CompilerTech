@@ -32,6 +32,7 @@ public class MIPSTable {
 
     public void PutConstSymbol(AddrSym sym) {
         ConstAddrSymbols.put(sym.getName(), sym);
+        AddrSymbols.put(sym.getName(), sym);
     }
 
     public boolean FindSymbol(String sym) {
