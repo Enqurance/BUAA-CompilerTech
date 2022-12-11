@@ -658,8 +658,11 @@ public class TableMaster {
             return;
         }
         Node stmt = blockItem.getChildren().get(0);
+        int flag = 0;
         for (Node node : stmt.getChildren()) {
-            if (node.getType() == 1 && node.getContext().equals("<Exp>")) {
+            if (node.getType() == 0 && node.getContext().equals("return")) {
+                flag++;
+            } else if (flag == 1 && node.getType() == 1 && node.getContext().equals("<Exp>")) {
                 return;
             }
         }
