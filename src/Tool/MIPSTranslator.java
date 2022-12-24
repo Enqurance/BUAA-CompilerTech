@@ -46,7 +46,6 @@ public class MIPSTranslator {
     private final ArrayList<Instr> MIPSCodes = new ArrayList<>();
     private final Stack<Integer> SPRecord = new Stack<>();
     private int SPOffset = 0;
-    private int SPAddr = 0x7fffeffc;
     private final RegDistributor regDistributor = new RegDistributor();
     private final MIPSTable headTable = new MIPSTable(null);
     private MIPSTable curTable = headTable;
@@ -282,6 +281,7 @@ public class MIPSTranslator {
         } else if (isVar(target)) {
             if (isGlobalStr(target)) {
                 AddLoad(RegDistributor.A0Reg, target, Load.LA);
+
                 AddAssign(Integer.toString(Syscall.PRINT_STRING), RegDistributor.V0Reg, Assign.LI);
                 AddSyscall();
             } else {
@@ -368,6 +368,7 @@ public class MIPSTranslator {
         AddrSym sym = new AddrSym(arrayDecl.GetLSym(), Integer.toString(SPOffset + 4), array.isGlobal());
         sym.setDim(arrayDecl.getVarSymbol().getSizeOne(), arrayDecl.getVarSymbol().getSizeTwo());
         sym.setDimension(arrayDecl.getVarSymbol().getDimension());
+        int SPAddr = 0x7fffeffc;
         sym.setAbsAddr(SPAddr + SPOffset + 4);
         curTable.PutSymbol(sym);
     }
@@ -431,7 +432,7 @@ public class MIPSTranslator {
                 if (!arrayLoad.getIndex1().equals("-1")) {
                     /* 形参是0维的，传递数值 */
                     String index1 = FetchSym(arrayLoad.getIndex1());
-                    AddCalculate("*", index1, index1, "4"); /* 元素偏移 */
+                    AddCalculate("<<", index1, index1, "2"); /* 元素偏移 */
                     AddCalculate("+", reg, reg, index1);    /* 数组地址+元素偏移 */
                     AddLoad(reg, reg, "0");
                 }
@@ -444,14 +445,14 @@ public class MIPSTranslator {
                     String index2 = FetchSym(arrayLoad.getIndex2());
                     AddCalculate("*", index1, index1, String.valueOf(sym.getDim2()));
                     AddCalculate("+", index1, index1, index2);
-                    AddCalculate("*", index1, index1, "4"); /* 元素偏移 */
+                    AddCalculate("<<", index1, index1, "2"); /* 元素偏移 */
                     AddCalculate("+", reg, reg, index1);    /* 数组地址+元素偏移 */
                     AddLoad(reg, reg, "0");
                 } else if (!arrayLoad.getIndex1().equals("-1")) {
                     /* 形参是1维的，传递对应行的起始地址 */
                     String index1 = FetchSym(arrayLoad.getIndex1());
                     AddCalculate("*", index1, index1, String.valueOf(sym.getDim2()));
-                    AddCalculate("*", index1, index1, "4"); /* 行偏移 */
+                    AddCalculate("<<", index1, index1, "2"); /* 行偏移 */
                     AddCalculate("+", reg, reg, index1);    /* 数组地址+行偏移 */
                 }
                 /* 形参是2维的，直接传递起始地址 */
@@ -462,20 +463,20 @@ public class MIPSTranslator {
                 if (sym.isGlobal()) {
                     /* 全局数组都使用标签+偏移进行访问 */
                     /* lw $t1 label($index_offset) */
-                    AddCalculate("*", index1, index1, "4"); /* 元素偏移 */
+                    AddCalculate("<<", index1, index1, "2"); /* 元素偏移 */
                     AddLoad(reg, sym.getName(), index1, Load.LW);   /* 全局标签+偏移 */
                 } else {
                     /* 局部数组需要区分到底是参数还是变量 */
                     if (sym.isParam()) {
                         /* 参数访问：lw $t1 0($abs + $index_offset) */
-                        AddCalculate("*", index1, index1, "4");     /* 元素偏移 */
+                        AddCalculate("<<", index1, index1, "2");     /* 元素偏移 */
                         AddLoad(reg, RegDistributor.SPReg, sym.getOffset());    /* 参数数组的绝对地址 */
                         AddCalculate("+", reg, reg, index1);    /* 参数数组的绝对地址+元素偏移 */
                         AddLoad(reg, reg, "0");
                     } else {
                         /* 变量访问：lw $t1 0($sp + $offset + $index_offset) */
                         /* offset为相对sp的偏移，是负数 */
-                        AddCalculate("*", index1, index1, "4");     /* 元素偏移 */
+                        AddCalculate("<<", index1, index1, "2");     /* 元素偏移 */
                         AddCalculate("+", index1, index1, sym.getOffset()); /* 局部数组偏移+元素偏移 */
                         AddCalculate("+", index1, RegDistributor.SPReg, index1); /* 栈指针+局部数组偏移+元素偏移 */
                         AddLoad(reg, index1, "0");
@@ -485,7 +486,7 @@ public class MIPSTranslator {
                 String index2 = FetchSym(arrayLoad.getIndex2());
                 AddCalculate("*", index1, index1, String.valueOf(sym.getDim2()));
                 AddCalculate("+", index1, index1, index2);
-                AddCalculate("*", index1, index1, "4"); /* 元素偏移 */
+                AddCalculate("<<", index1, index1, "2"); /* 元素偏移 */
                 if (sym.isGlobal()) {
                     /* lw $t1 label($index_offset), index_offset = (index1 * col + index2) * 4 */
                     AddLoad(reg, sym.getName(), index1, Load.LW);   /* 全局标签+元素偏移 */
@@ -511,19 +512,19 @@ public class MIPSTranslator {
         if (arrayStore.getDim() == 1) {
             if (sym.isGlobal()) {
                 /* sw $t1, label($index_offset) */
-                AddCalculate("*", index1, index1, "4"); /* 元素偏移 */
+                AddCalculate("<<", index1, index1, "2"); /* 元素偏移 */
                 AddStore(source, index1, sym.getName());    /* 标签+元素偏移 */
             } else {
                 if (sym.isParam()) {
                     /* 参数访问sw $t1, 0($abs + $index_offset) */
                     String abs = DistributeReg();
-                    AddCalculate("*", index1, index1, "4"); /* 元素偏移 */
+                    AddCalculate("<<", index1, index1, "2"); /* 元素偏移 */
                     AddLoad(abs, RegDistributor.SPReg, sym.getOffset());    /* 参数数组绝对地址 */
                     AddCalculate("+", index1, abs, index1); /* 参数数组绝对地址+元素偏移 */
                     AddStore(source, index1, "0");
                 } else {
                     /* 变量访问sw $t1, 0($sp + $offset + $index_offset) */
-                    AddCalculate("*", index1, index1, "4"); /* 元素偏移 */
+                    AddCalculate("<<", index1, index1, "2"); /* 元素偏移 */
                     AddCalculate("+", index1, index1, sym.getOffset()); /* 局部数组偏移+元素偏移 */
                     AddCalculate("+", index1, RegDistributor.SPReg, index1); /* 栈指针+局部数组偏移+元素偏移 */
                     AddStore(source, index1, "0");
@@ -533,7 +534,7 @@ public class MIPSTranslator {
             String index2 = FetchSym(arrayStore.getIndex2());
             AddCalculate("*", index1, index1, String.valueOf(sym.getDim2()));
             AddCalculate("+", index1, index1, index2);
-            AddCalculate("*", index1, index1, "4"); /* 元素偏移 */
+            AddCalculate("<<", index1, index1, "2"); /* 元素偏移 */
             if (sym.isGlobal()) {
                 /* sw $t1, label($index_offset) */
                 AddStore(source, index1, sym.getName());    /* 全局标签+元素偏移 */
@@ -630,9 +631,18 @@ public class MIPSTranslator {
             String reg3 = DistributeReg();  /* 这里的寄存器分配属于原子操作，分配完了马上使用，故而不需要登记 */
             String reg1 = FetchSym(rSym1);
             TempReg.put(rSym1, reg1);
-            String reg2 = FetchSym(rSym2);
-            if (reg1.equals(reg2)) {
-                reg1 = FetchSym(rSym1);
+            //            String reg2 = FetchSym(rSym2);
+//            if (reg1.equals(reg2)) {
+//                reg1 = FetchSym(rSym1);
+//            }
+            String reg2;
+            if (rSym1.equals(rSym2)) {
+                reg2 = reg1;
+            } else {
+                reg2 = FetchSym(rSym2);
+                if (reg1.equals(reg2)) {
+                    reg1 = FetchSym(rSym1);
+                }
             }
 //            if (isGlobalVar(lSym) || isConstVar(lSym)) {
             if (isGlobalVar(lSym)) {
@@ -653,9 +663,18 @@ public class MIPSTranslator {
             String reg = DistributeReg(lSym);
             String reg1 = FetchSym(rSym1);
             TempReg.put(rSym1, reg1);
-            String reg2 = FetchSym(rSym2);
-            if (reg1.equals(reg2)) {
-                reg1 = FetchSym(rSym1);
+            //            String reg2 = FetchSym(rSym2);
+//            if (reg1.equals(reg2)) {
+//                reg1 = FetchSym(rSym1);
+//            }
+            String reg2;
+            if (rSym1.equals(rSym2)) {
+                reg2 = reg1;
+            } else {
+                reg2 = FetchSym(rSym2);
+                if (reg1.equals(reg2)) {
+                    reg1 = FetchSym(rSym1);
+                }
             }
             TempReg.remove(rSym1);
             TempReg.remove(rSym2);
@@ -741,6 +760,9 @@ public class MIPSTranslator {
             case ">":
             case "<":
             case "!":
+            case "<<":
+            case ">>":
+            case ">>>":
                 MIPSCodes.add(new Calculate(operator, t1, t2, t3));
                 break;
             case "%":

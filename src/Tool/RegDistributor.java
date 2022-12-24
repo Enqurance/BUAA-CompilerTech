@@ -60,6 +60,7 @@ public class RegDistributor {
     private int TempRegPtr = 8;
 
     public String TempRegDistribute() {
+//        if (TempRegPtr == 16) {
         if (TempRegPtr == 16) {
             TempRegPtr = 8;
         }

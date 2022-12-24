@@ -45,6 +45,12 @@ public class Calculate extends Instr {
                 return "\tsgt " + t1 + " " + t2 + " " + t3;
             case "<":
                 return "\tslt " + t1 + " " + t2 + " " + t3;
+            case "<<":
+                return "\tsll " + t1 + " " + t2 + " " + t3;
+            case ">>":
+                return "\tsrl " + t1 + " " + t2 + " " + t3;
+            case ">>>":
+                return "\tsra " + t1 + " " + t2 + " " + t3;
         }
         return null;
     }

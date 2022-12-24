@@ -280,9 +280,9 @@ public class Generator {
             symbol.SetSize(Integer.parseInt(DimOne));
             symbol.SetSize(Integer.parseInt(DimTwo));
             VarSymbol varSymbol = FindVarSymbolByName(curTable, GetVarName(DimTwo), node.getLine());
-            if (varSymbol != null) {
-                System.out.println(varSymbol.getValue());
-            }
+//            if (varSymbol != null) {
+//                System.out.println(varSymbol.getValue());
+//            }
             arrayDecl.setSym1(DimOne);
             arrayDecl.setSym2(DimTwo);
             if (symbol.isGlobal()) {
@@ -644,6 +644,10 @@ public class Generator {
         if (ResultStack.size() != 1) {
             while (ResultStack.size() > 1) {
                 String num1 = ResultStack.pop(), op = ResultStack.pop(), num2 = ResultStack.pop();
+                if (num2.equals("1") && (op.equals("*") || op.equals("/"))) {
+                    ResultStack.push(num1);
+                    continue;
+                }
                 String tempVar = DistributeVariable();
                 AddExp(op, tempVar, num1, num2);
                 ResultStack.add(tempVar);
@@ -1242,4 +1246,5 @@ public class Generator {
     public ArrayList<ICode> getCodes() {
         return iCodes;
     }
+
 }
