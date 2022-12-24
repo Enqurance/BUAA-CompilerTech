@@ -1,21 +1,150 @@
 $$Init$$:
-$$f1$$:
-void f1
+const int N$0
+N$0 = 10
 arr int a$0[10]
 store a$0[0] 0
-store a$0[1] 0
-store a$0[2] 0
-store a$0[3] 0
-store a$0[4] 0
-store a$0[5] 0
-store a$0[6] 0
-store a$0[7] 0
-store a$0[8] 0
-store a$0[9] 0
-$$x$$:
-int x
-para int b$0
+store a$0[1] 1
+store a$0[2] 2
+store a$0[3] 3
+store a$0[4] 4
+store a$0[5] 5
+store a$0[6] 6
+store a$0[7] 7
+store a$0[8] 8
+store a$0[9] 9
+$$fib$$:
+int fib
+para int i$0
+$IfLabel_0_Cond_0$:
+#t0# = i$0 == 1
+if not #t0# goto $IfLabel_End_0$
+$IfLabel_0$:
 RET = 1
+$IfLabel_End_0$:
+$IfLabel_1_Cond_0$:
+#t1# = i$0 == 2
+if not #t1# goto $IfLabel_End_1$
+$IfLabel_1$:
+RET = 2
+$IfLabel_End_1$:
+#t2# = i$0 - 1
+push #t2#
+call fib
+#t3# = RET
+#t4# = i$0 - 2
+push #t4#
+call fib
+#t5# = RET
+#t6# = #t3# + #t5#
+RET = #t6#
 $$main$$:
 int main
-printf 111
+var int i$0
+i$0 = 2
+var int j$0
+j$0 = 5
+const int a1$0
+a1$0 = 1
+const int a2$0
+a2$0 = 2
+scanf #t7#
+i$0 = #t7#
+scanf #t8#
+j$0 = #t8#
+#t9# = i$0 * j$0
+#t10# = - #t9#
+push 4
+call fib
+#t11# = RET
+#t12# = #t10# * #t11#
+load #t13# a$0[1]
+#t14# = #t12# + 0
+#t15# = #t14# + #t13#
+#t16# = #t15# - 0
+#t17# = #t16# * 5
+i$0 = #t17#
+push 5
+call fib
+#t18# = RET
+#t19# = #t18# + 2
+push #t19#
+call fib
+#t20# = RET
+#t21# = 1197 - #t20#
+#t22# = #t21# + -10091
+j$0 = #t22#
+var int k$0
+k$0 = -6
+$WhileLabel_0_Cond_0$:
+#t23# = i$0 <= 100
+if not #t23# goto $WhileLabel_End_0$
+$WhileLabel_0$:
+load #t24# a$0[0]
+#t25# = k$0 * k$0
+#t26# = #t24# + #t25#
+store a$0[0] #t26#
+load #t27# a$0[1]
+#t28# = k$0 * k$0
+#t29# = #t27# + #t28#
+store a$0[1] #t29#
+load #t30# a$0[2]
+#t31# = k$0 * k$0
+#t32# = #t30# + #t31#
+store a$0[2] #t32#
+load #t33# a$0[3]
+#t34# = k$0 * k$0
+#t35# = #t33# + #t34#
+store a$0[3] #t35#
+load #t36# a$0[4]
+#t37# = k$0 * k$0
+#t38# = #t36# + #t37#
+store a$0[4] #t38#
+load #t39# a$0[5]
+#t40# = k$0 * k$0
+#t41# = #t39# + #t40#
+store a$0[5] #t41#
+load #t42# a$0[6]
+#t43# = k$0 * k$0
+#t44# = #t42# + #t43#
+store a$0[6] #t44#
+load #t45# a$0[7]
+#t46# = k$0 * k$0
+#t47# = #t45# + #t46#
+store a$0[7] #t47#
+load #t48# a$0[8]
+#t49# = k$0 * k$0
+#t50# = #t48# + #t49#
+store a$0[8] #t50#
+load #t51# a$0[9]
+#t52# = k$0 * k$0
+#t53# = #t51# + #t52#
+store a$0[9] #t53#
+#t54# = i$0 + 1
+i$0 = #t54#
+goto $WhileLabel_0_Cond_0$
+$WhileLabel_End_0$:
+i$0 = 0
+$WhileLabel_1_Cond_0$:
+#t55# = i$0 < 10
+if not #t55# goto $WhileLabel_End_1$
+$WhileLabel_1$:
+load #t56# a$0[i$0]
+printf #t56#
+const str $str$0 = , 
+printf $str$0
+#t57# = i$0 + 1
+i$0 = #t57#
+goto $WhileLabel_1_Cond_0$
+$WhileLabel_End_1$:
+const str $str$1 = \n
+printf $str$1
+printf i$0
+const str $str$2 = , 
+printf $str$2
+printf j$0
+const str $str$3 = , 
+printf $str$3
+printf k$0
+const str $str$4 = \n
+printf $str$4
+RET = 0
