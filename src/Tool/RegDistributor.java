@@ -9,7 +9,7 @@ public class RegDistributor {
     public static String V1Reg = "$v1";
     public static String A0Reg = "$a0";
     public static String RAReg = "$ra";
-    private final HashMap<Integer, String> RegName = new HashMap<Integer, String>() {
+    private static final HashMap<Integer, String> RegName = new HashMap<Integer, String>() {
         {
             put(0, "$zero");
             put(1, "$at");
@@ -67,5 +67,9 @@ public class RegDistributor {
         String name = RegName.get(TempRegPtr);
         TempRegPtr++;
         return name;
+    }
+
+    public static String GetReg(int num) {
+        return RegName.get(num);
     }
 }
