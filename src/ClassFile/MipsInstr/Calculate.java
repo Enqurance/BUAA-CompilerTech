@@ -1,10 +1,10 @@
 package ClassFile.MipsInstr;
 
 public class Calculate extends Instr {
-    private final String operator;
+    private String operator;
     private final String t1;
     private final String t2;
-    private final String t3;
+    private String t3;
 
     public Calculate(String operator, String t1, String t2, String t3) {
         this.operator = operator;
@@ -53,5 +53,29 @@ public class Calculate extends Instr {
                 return "\tsra " + t1 + " " + t2 + " " + t3;
         }
         return null;
+    }
+
+    public String getOperator() {
+        return operator;
+    }
+
+    public String getT1() {
+        return t1;
+    }
+
+    public String getT2() {
+        return t2;
+    }
+
+    public String getT3() {
+        return t3;
+    }
+
+    public void setT3(String t3) {
+        this.t3 = t3;
+    }
+
+    public void setOperator(String operator) {
+        this.operator = operator;
     }
 }

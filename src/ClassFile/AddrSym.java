@@ -11,6 +11,7 @@ public class AddrSym {
     public static boolean Global = true;
     private int AbsAddr;
     private boolean isParam = false;
+    private int times;
 
     public AddrSym(String name, String offset, String reg, boolean isGlobal) {
         this.name = name;
@@ -100,5 +101,17 @@ public class AddrSym {
 
     public void setDimension(int dimension) {
         this.dimension = dimension;
+    }
+
+    public int getTimes() {
+        return times;
+    }
+
+    public void addTimes() {
+        this.times++;
+    }
+
+    public void clearTimes() {
+        this.times = 0;
     }
 }

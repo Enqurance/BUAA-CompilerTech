@@ -41,7 +41,7 @@ void printAll(int q[][3]){
 void donothing(int a[]){
     a[0] = a[0] + a[0];
     a[0] = a[0]/2;
-    return ; 
+    return ;
 }
 void init(){
     printf("Hello world!\n");
@@ -76,11 +76,12 @@ int main()
                 j = j + 1;
             }
         }
+        printf("i is %d\n", i);
         i = i + 1;
     }
     j = 0;
     if(op==1){
-        y = sub(y,a[op]); 
+        y = sub(y,a[op]);
         //y = y%y/y*y+op;
     }
     if(a[4]>1){

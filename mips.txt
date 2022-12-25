@@ -1,18 +1,310 @@
 .data
+	N$0: .word 0
+	a$0: .space 40
+	$str$0: .asciiz ", "
+	$str$1: .asciiz "\n"
+	$str$2: .asciiz ", "
+	$str$3: .asciiz ", "
+	$str$4: .asciiz "\n"
 .text
+	li $t0 10
+	sw $t0 N$0
+	li $t1 0
+	li $t2 0
+	sll $t8 $t2 2
+	sw $t1 a$0($t8)
+	li $t3 1
+	li $t4 1
+	sll $t8 $t4 2
+	sw $t3 a$0($t8)
+	li $t5 2
+	li $t6 2
+	sll $t8 $t6 2
+	sw $t5 a$0($t8)
+	li $t7 3
+	li $t0 3
+	sll $t8 $t0 2
+	sw $t7 a$0($t8)
+	li $t1 4
+	li $t2 4
+	sll $t8 $t2 2
+	sw $t1 a$0($t8)
+	li $t3 5
+	li $t4 5
+	sll $t8 $t4 2
+	sw $t3 a$0($t8)
+	li $t5 6
+	li $t6 6
+	sll $t8 $t6 2
+	sw $t5 a$0($t8)
+	li $t7 7
+	li $t0 7
+	sll $t8 $t0 2
+	sw $t7 a$0($t8)
+	li $t1 8
+	li $t2 8
+	sll $t8 $t2 2
+	sw $t1 a$0($t8)
+	li $t3 9
+	li $t4 9
+	sll $t8 $t4 2
+	sw $t3 a$0($t8)
 $$main$$:
+	li $t5 2
+	sw $t5 0($sp)
+	li $t6 5
+	sw $t6 -4($sp)
+	li $t7 1
+	sw $t7 -8($sp)
+	li $t0 2
+	sw $t0 -12($sp)
 	li $v0 5
 	syscall
 	sw $v0 0($sp)
-	li $t1 1
+	li $v0 5
+	syscall
+	sw $v0 -4($sp)
 	lw $t2 0($sp)
-	addu $t0 $t1 $t2
-	li $t4 3
-	addu $t3 $t0 $t4
-	sw $t3 -4($sp)
+	move $s3 $t2
+	lw $t3 -4($sp)
+	move $s4 $t3
+	mul $t1 $t2 $t3
+	subu $t1 $0 $t1
+	move $t4 $t1
+	li $t5 4
+	sw $t4 -16($sp)
+	sw $t5 -20($sp)
+	subu $sp $sp 24
+	jal $$fib$$
+	addu $sp $sp 24
+	move $t6 $v1
+	lw $t0 -16($sp)
+	mul $t7 $t0 $t6
+	li $t2 1
+	sll $t8 $t2 2
+	lw $t1 a$0($t8)
+	li $t4 0
+	addu $t3 $t7 $t4
+	addu $t5 $t3 $t1
+	li $t7 0
+	subu $t6 $t5 $t7
+	li $t1 5
+	mul $t0 $t6 $t1
+	sw $t0 0($sp)
+	li $t2 5
+	sw $t2 -24($sp)
+	subu $sp $sp 28
+	jal $$fib$$
+	addu $sp $sp 28
+	move $t3 $v1
+	li $t5 2
+	addu $t4 $t3 $t5
+	sw $t4 -28($sp)
+	subu $sp $sp 32
+	jal $$fib$$
+	addu $sp $sp 32
+	move $t6 $v1
+	li $t0 1197
+	subu $t7 $t0 $t6
+	li $t2 -10091
+	addu $t1 $t7 $t2
+	sw $t1 -4($sp)
+	li $t3 -6
+	sw $t3 -32($sp)
+$WhileLabel_0_Cond_0$:
+	lw $t5 0($sp)
+	move $s3 $t5
+	li $t6 100
+	sle $t4 $t5 $t6
+	beq $t4 $0 $WhileLabel_End_0$
+$WhileLabel_0$:
+	li $t0 0
+	sll $t8 $t0 2
+	lw $t7 a$0($t8)
+	lw $t2 -32($sp)
+	move $s3 $t2
+	mul $t1 $t2 $t2
+	addu $t3 $t7 $t1
+	li $t4 0
+	sll $t8 $t4 2
+	sw $t3 a$0($t8)
+	li $t6 1
+	sll $t8 $t6 2
+	lw $t5 a$0($t8)
+	mul $t7 $s3 $s3
+	addu $t0 $t5 $t7
+	li $t1 1
+	sll $t8 $t1 2
+	sw $t0 a$0($t8)
+	li $t3 2
+	sll $t8 $t3 2
+	lw $t2 a$0($t8)
+	mul $t4 $s3 $s3
+	addu $t5 $t2 $t4
+	li $t6 2
+	sll $t8 $t6 2
+	sw $t5 a$0($t8)
+	li $t0 3
+	sll $t8 $t0 2
+	lw $t7 a$0($t8)
+	mul $t1 $s3 $s3
+	addu $t2 $t7 $t1
+	li $t3 3
+	sll $t8 $t3 2
+	sw $t2 a$0($t8)
+	li $t5 4
+	sll $t8 $t5 2
+	lw $t4 a$0($t8)
+	mul $t6 $s3 $s3
+	addu $t7 $t4 $t6
+	li $t0 4
+	sll $t8 $t0 2
+	sw $t7 a$0($t8)
+	li $t2 5
+	sll $t8 $t2 2
+	lw $t1 a$0($t8)
+	mul $t3 $s3 $s3
+	addu $t4 $t1 $t3
+	li $t5 5
+	sll $t8 $t5 2
+	sw $t4 a$0($t8)
+	li $t7 6
+	sll $t8 $t7 2
+	lw $t6 a$0($t8)
+	mul $t0 $s3 $s3
+	addu $t1 $t6 $t0
+	li $t2 6
+	sll $t8 $t2 2
+	sw $t1 a$0($t8)
+	li $t4 7
+	sll $t8 $t4 2
+	lw $t3 a$0($t8)
+	mul $t5 $s3 $s3
+	addu $t6 $t3 $t5
+	li $t7 7
+	sll $t8 $t7 2
+	sw $t6 a$0($t8)
+	li $t1 8
+	sll $t8 $t1 2
+	lw $t0 a$0($t8)
+	mul $t2 $s3 $s3
+	addu $t3 $t0 $t2
+	li $t4 8
+	sll $t8 $t4 2
+	sw $t3 a$0($t8)
+	li $t6 9
+	sll $t8 $t6 2
+	lw $t5 a$0($t8)
+	mul $t7 $s3 $s3
+	addu $t0 $t5 $t7
+	li $t1 9
+	sll $t8 $t1 2
+	sw $t0 a$0($t8)
+	lw $t3 0($sp)
+	move $s4 $t3
+	li $t4 1
+	addu $t2 $t3 $t4
+	sw $t2 0($sp)
+	j $WhileLabel_0_Cond_0$
+$WhileLabel_End_0$:
+	li $t5 0
+	sw $t5 0($sp)
+$WhileLabel_1_Cond_0$:
+	lw $t7 0($sp)
+	move $s3 $t7
+	li $t0 10
+	slt $t6 $t7 $t0
+	beq $t6 $0 $WhileLabel_End_1$
+$WhileLabel_1$:
+	lw $t2 0($sp)
+	move $s3 $t2
+	sll $t8 $t2 2
+	lw $t1 a$0($t8)
+	move $a0 $t1
+	li $v0 1
+	syscall
+	la $a0 $str$0
+	li $v0 4
+	syscall
+	li $t4 1
+	addu $t3 $s3 $t4
+	sw $t3 0($sp)
+	j $WhileLabel_1_Cond_0$
+$WhileLabel_End_1$:
+	la $a0 $str$1
+	li $v0 4
+	syscall
+	lw $a0 0($sp)
+	li $v0 1
+	syscall
+	la $a0 $str$2
+	li $v0 4
+	syscall
+	lw $a0 -4($sp)
+	li $v0 1
+	syscall
+	la $a0 $str$3
+	li $v0 4
+	syscall
+	lw $a0 -32($sp)
+	li $v0 1
+	syscall
+	la $a0 $str$4
+	li $v0 4
+	syscall
 	li $t5 0
 	move $v1 $t5
 	li $v0 10
 	syscall
 	li $v0 10
 	syscall
+$$fib$$:
+	sw $ra 0($sp)
+$IfLabel_0_Cond_0$:
+	lw $t7 4($sp)
+	move $s3 $t7
+	li $t0 1
+	seq $t6 $t7 $t0
+	beq $t6 $0 $IfLabel_End_0$
+$IfLabel_0$:
+	li $t1 1
+	move $v1 $t1
+	lw $ra 0($sp)
+	jr $ra
+$IfLabel_End_0$:
+$IfLabel_1_Cond_0$:
+	lw $t3 4($sp)
+	move $s3 $t3
+	li $t4 2
+	seq $t2 $t3 $t4
+	beq $t2 $0 $IfLabel_End_1$
+$IfLabel_1$:
+	li $t5 2
+	move $v1 $t5
+	lw $ra 0($sp)
+	jr $ra
+$IfLabel_End_1$:
+	lw $t7 4($sp)
+	move $s3 $t7
+	li $t0 1
+	subu $t6 $t7 $t0
+	sw $t6 -4($sp)
+	subu $sp $sp 8
+	jal $$fib$$
+	addu $sp $sp 8
+	move $t1 $v1
+	lw $t3 4($sp)
+	move $s3 $t3
+	li $t4 2
+	subu $t2 $t3 $t4
+	sw $t1 -8($sp)
+	sw $t2 -12($sp)
+	subu $sp $sp 16
+	jal $$fib$$
+	addu $sp $sp 16
+	move $t5 $v1
+	lw $t7 -8($sp)
+	addu $t6 $t7 $t5
+	move $v1 $t6
+	lw $ra 0($sp)
+	jr $ra

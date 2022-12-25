@@ -36,6 +36,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Stack;
 
 public class MIPSTranslator {
@@ -55,6 +56,9 @@ public class MIPSTranslator {
      * 这样在新的函数中，根据现有的寄存器分配原则，它的值可能会被覆盖。所以设计一个
      * HashMap，用于保存未消亡的临时变量和它的偏移。由于临时变量名称唯一，仅保存
      * 偏移即可。在Fetch的时候加入，Use的时候取出 */
+    private final HashMap<String, String> SReg = new HashMap<>();
+    private final HashSet<String> RegPool = new HashSet<>();
+    private final HashMap<String, AddrSym> RegSym = new HashMap<>();
 
 
     public MIPSTranslator(ICodeStorage storage) {
@@ -70,6 +74,7 @@ public class MIPSTranslator {
         TranslateInitCodes();
         TranslateMainFuncCode();
         TranslateFuncCode();
+        ReduceCalculation();
     }
 
     public void TranslateGlobalCodes() {
@@ -177,6 +182,7 @@ public class MIPSTranslator {
         }
         TranslateFunParams(funcParams);
         TranslateLabel(codes.get(0));
+        CleanReg();
         codes.remove(0);
         for (ICode code : codes) {
             if (code instanceof FuncCall) {
@@ -231,6 +237,7 @@ public class MIPSTranslator {
                 break;
             }
         }
+        CleanReg();
     }
 
     public void TranslateConstDecl(ICode code) {
@@ -285,8 +292,6 @@ public class MIPSTranslator {
                 AddAssign(Integer.toString(Syscall.PRINT_STRING), RegDistributor.V0Reg, Assign.LI);
                 AddSyscall();
             } else {
-                /*TODO*/
-//                if (isGlobalVar(target) || isConstVar(target)) {
                 if (isGlobalVar(target)) {
                     AddLoad(RegDistributor.A0Reg, target, Load.LW);
                 } else {
@@ -314,8 +319,6 @@ public class MIPSTranslator {
             AddAssign(RegDistributor.V0Reg, reg, Assign.MOVE);
         } else {
             addrSym = curTable.FindAddrSym(name);
-            /*TODO*/
-//            if (isGlobalVar(name) || isConstVar(name)) {
             if (isGlobalVar(name)) {
                 AddStore(RegDistributor.V0Reg, name);
             } else {
@@ -326,6 +329,7 @@ public class MIPSTranslator {
 
     public void TranslateCall(ICode code) {
         PutTempVarAddrSymbol();
+        CleanReg();
         FuncCall funcCall = (FuncCall) code;
         String FuncLabel = "$$" + funcCall.getFuncName() + "$$";
         AddCalculate("-", RegDistributor.SPReg, RegDistributor.SPReg, Integer.toString(Math.abs(SPOffset)));
@@ -389,6 +393,7 @@ public class MIPSTranslator {
     }
 
     public void TranslateLabel(ICode code) {
+        CleanReg();
         Label label = (Label) code;
         AddMipsLabel(label.toString());
     }
@@ -557,7 +562,6 @@ public class MIPSTranslator {
         }
     }
 
-
     public String DistributeReg(String temp) {
         String tempReg = regDistributor.TempRegDistribute();
         /* 分配寄存器的时候，如果遇到某一个寄存器已经被占用，则将该寄存器内容弹出
@@ -589,6 +593,52 @@ public class MIPSTranslator {
         }
     }
 
+    public void DistributeSReg(String sym, String source) {
+        for (int i = 16; i < 19; i++) {
+            String reg = RegDistributor.GetReg(i);
+            /* 该sym未被分配且寄存器池中没有某个寄存器，此函数分配全局变量 */
+            if (!SReg.containsKey(sym) && !RegPool.contains(reg)) {
+                System.out.println("Match " + reg + " to " + sym);
+                RegPool.add(reg);
+                SReg.put(sym, reg);
+                AddAssign(source, reg, Assign.MOVE);
+                break;
+            }
+        }
+    }
+
+    public void DistributeSReg(String sym, String source, AddrSym addrSym) {
+        for (int i = 19; i < 24; i++) {
+            String reg = RegDistributor.GetReg(i);
+            /* 该sym未被分配且寄存器池中没有某个寄存器 */
+            if (!SReg.containsKey(sym) && !RegPool.contains(reg)) {
+                System.out.println("Match " + reg + " to " + sym);
+                RegPool.add(reg);
+                SReg.put(sym, reg);
+                AddAssign(source, reg, Assign.MOVE);
+                break;
+            }
+        }
+    }
+
+    public String MapSReg(String sym) {
+        return SReg.get(sym);
+    }
+
+    public void RemoveSReg(String sym) {
+        if (SReg.containsKey(sym)) {
+            System.out.println("Remove " + sym + " from " + SReg.get(sym));
+        }
+        RegPool.remove(sym);
+        SReg.remove(sym);
+    }
+
+    public void CleanReg() {
+        /* 编译函数前清空寄存器池 */
+        RegPool.clear();
+        SReg.clear();
+    }
+
 
     public String FetchSym(String sym) {    /* 取用一个Sym */
         if (isDigit(sym)) {     /* 数字，直接分发一个寄存器 */
@@ -597,16 +647,20 @@ public class MIPSTranslator {
             return reg;
         } else if (isVar(sym)) {    /* 右侧要求全局和局部变量，都是马上使用，不用登记 */
 //            if (isGlobalVar(sym) || isConstVar(sym)) {     /* 全局变量，分配一个寄存器并使用lw Label */
+            if (MapSReg(sym) != null) {
+                return MapSReg(sym);
+            }
+            String reg = DistributeReg();
             if (isGlobalVar(sym)) {
-                String reg = DistributeReg();
                 AddLoad(reg, sym, Load.LW);
-                return reg;
+                DistributeSReg(sym, reg);
             } else {    /* 局部变量，分配一个寄存器并使用lw reg offset($sp) */
                 AddrSym addrSym = curTable.FindAddrSym(sym);
-                String reg = DistributeReg();
                 AddLoad(reg, RegDistributor.SPReg, addrSym.getOffset());
-                return reg;
+                addrSym.addTimes();
+                DistributeSReg(sym, reg, addrSym);
             }
+            return reg;
         } else if (isTemp(sym)) {
             /* 临时变量，如果该临时变量已经被分配到临时寄存器，则返回其对应寄存器；
              * 否则，该临时变量应当被存入了符号表，需要查表 */
@@ -630,6 +684,7 @@ public class MIPSTranslator {
 
     public void UseSym(String lSym, String rSym1, String rSym2, Exp exp) {
         if (isVar(lSym)) {
+            RemoveSReg(lSym);
             String reg3 = DistributeReg();  /* 这里的寄存器分配属于原子操作，分配完了马上使用，故而不需要登记 */
             String reg1 = FetchSym(rSym1);
             TempReg.put(rSym1, reg1);
@@ -656,6 +711,7 @@ public class MIPSTranslator {
                 AddrSym addrSym = curTable.FindAddrSym(lSym);
                 AddCalculate(exp.getOperator(), reg3, reg1, reg2);
                 AddStore(reg3, RegDistributor.SPReg, addrSym.getOffset());
+                addrSym.clearTimes();
             }
             TempReg.remove(rSym1);
             TempReg.remove(rSym2);
@@ -694,6 +750,7 @@ public class MIPSTranslator {
             AddCalculate(operator, reg, reg, RegDistributor.ZEROReg);
         }
         if (isVar(lSym)) {
+            RemoveSReg(lSym);
 //            if (isGlobalVar(lSym) || isConstVar(lSym)) {
             if (isGlobalVar(lSym)) {
                 /* 左侧使用全局变量或常量，应使用sw Label */
@@ -702,6 +759,7 @@ public class MIPSTranslator {
                 /* 左侧使用局部变量，应当使用sw reg offset($sp) */
                 AddrSym addrSym = curTable.FindAddrSym(lSym);
                 AddStore(reg, RegDistributor.SPReg, addrSym.getOffset());
+                addrSym.clearTimes();
             }
         } else if (isTemp(lSym)) {
             /* 左侧使用临时变量，分配寄存器并保存值，更新寄存器记录 */
@@ -922,4 +980,28 @@ public class MIPSTranslator {
         }
     }
 
+    public void ReduceCalculation() {
+        for (int i = 0; i < MIPSCodes.size(); i++) {
+            if (MIPSCodes.get(i) instanceof Calculate) {
+                Calculate calculate = (Calculate) MIPSCodes.get(i);
+                if (calculate.getOperator().equals("*")) {
+                    if (isDigit(calculate.getT3()) && Integer.parseInt(calculate.getT3()) > 0) {
+                        int j = 0, num = Integer.parseInt(calculate.getT3());
+                        while (Math.pow(2, j) < num) {
+                            j++;
+                        }
+                        if (num == Math.pow(2, j - 1) + 1) {
+                            calculate.setOperator("<<");
+                            calculate.setT3(Integer.toString(j - 1));
+                            MIPSCodes.add(i + 1, new Calculate("+", calculate.getT1(), calculate.getT1(), calculate.getT2()));
+                        } else if (num == Math.pow(2, j) - 1) {
+                            calculate.setOperator("<<");
+                            calculate.setT3(Integer.toString(j));
+                            MIPSCodes.add(i + 1, new Calculate("-", calculate.getT1(), calculate.getT1(), calculate.getT2()));
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
