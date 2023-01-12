@@ -47,10 +47,18 @@ public class Calculate extends Instr {
                 return "\tslt " + t1 + " " + t2 + " " + t3;
             case "<<":
                 return "\tsll " + t1 + " " + t2 + " " + t3;
+            case "<<v":
+                return "\tslv " + t1 + " " + t2 + " " + t3;
             case ">>":
                 return "\tsrl " + t1 + " " + t2 + " " + t3;
             case ">>>":
                 return "\tsra " + t1 + " " + t2 + " " + t3;
+            case ">>v":
+                return "\tsrlv " + t1 + " " + t2 + " " + t3;
+            case ">>>v":
+                return "\tsrav " + t1 + " " + t2 + " " + t3;
+            case "msh":
+                return "\tmult " + t2 + " " + t3 + "\n\tmfhi " + t1;
         }
         return null;
     }

@@ -50,6 +50,7 @@ public class Generator {
     public void Generate() {
         AddLabel("Init", false);
         GenCompUnit(treeHead);
+        divImprove();
     }
 
     public void GenCompUnit(Node node) {
@@ -1245,6 +1246,98 @@ public class Generator {
 
     public ArrayList<ICode> getCodes() {
         return iCodes;
+    }
+
+    private ArrayList<Integer> chooseMultiplier(int d) {
+        ArrayList<Integer> result = new ArrayList<>();
+        int n = 32;
+        int l = (int) Math.ceil(Math.log(d) / Math.log(2));
+        int shPost = l;
+        long mLow = (long) Math.floor(Math.pow(2, n + l) / d);
+        long mHigh = (long) Math.floor((Math.pow(2, n + l) + Math.pow(2, n + l - 31)) / d);
+        while (Math.floor(mLow / 2) < Math.floor(mHigh / 2) && shPost > 0) {
+            mLow = (long) Math.floor(mLow / 2);
+            mHigh = (long) Math.floor(mHigh / 2);
+            shPost -= 1;
+        }
+        result.add((int) mHigh);
+        result.add(shPost);
+        result.add(l);
+        return result;
+    }
+
+    private void divImprove() {
+        for (int i = 0; i < iCodes.size(); i++) {
+            if (iCodes.get(i) instanceof Exp) {
+                Exp exp = (Exp) iCodes.get(i);
+                if (exp.getOperator().equals("/")) {
+                    boolean isPositive;
+                    String op1 = exp.getRSym_1();
+                    String op2 = exp.getRSym_2();
+                    String result = exp.getLSym();
+
+                    if (isDigit(op2)) {
+                        int opNum2 = Integer.parseInt(op2);
+                        isPositive = opNum2 > 0;
+                        opNum2 = Math.abs(opNum2);
+                        ArrayList<Integer> params = chooseMultiplier(opNum2);
+                        int m = params.get(0);
+                        int shpost = params.get(1);
+                        int l = params.get(2);
+                        if (opNum2 == 1) {
+                            if (isPositive) {
+//                            iCodes.set(i, "sll " + op1 + "," + 0 + "," + result);
+                                iCodes.set(i, new Exp("<<v", result, op1, Integer.toString(0)));
+                            } else {
+//                            iCodes.add(i + 1, "minus " + result + "," + op1);
+                                iCodes.add(i + 1, new Exp("-", result, op1));
+                            }
+                        } else if (opNum2 == Math.pow(2, l)) {
+                            String last = "#RegT9#";
+                            String temp1 = DistributeVariable();
+                            String temp2 = DistributeVariable();
+                            String temp3 = DistributeVariable();
+//                        iCodes.set(i, "srk " + op1 + "," + Integer.toString(l - 1) + "," + temp1);
+                            iCodes.set(i, new Exp(last, op1));
+                            iCodes.add(i + 1, new Exp(">>>v", temp1, last, Integer.toString(l - 1)));
+//                        iCodes.add(i + 1, "srl " + temp1 + "," + Integer.toString(32 - l) + "," + temp2);
+                            iCodes.add(i + 2, new Exp(">>v", temp2, temp1, Integer.toString(32 - l)));
+                            iCodes.add(i + 3, new Exp("+", temp3, temp2, last));
+                            if (isPositive) {
+//                            iCodes.add(i + 3, "sra " + temp3 + "," + l + "," + result);
+                                iCodes.add(i + 4, new Exp(">>>v", result, temp3, Integer.toString(l)));
+                            } else {
+                                String temp4 = DistributeVariable();
+//                            iCodes.add(i + 3, "sra " + temp3 + "," + l + "," + temp4);
+//                            iCodes.add(i + 4, "minus " + result + "," + temp4);
+                                iCodes.add(i + 4, new Exp(">>>v", temp4, temp3, Integer.toString(l)));
+                                iCodes.add(i + 5, new Exp("-", result, temp4));
+                            }
+                        } else if (m < Math.pow(2, 31)) {
+                            String last = "#RegT9#";
+                            String temp1 = DistributeVariable();
+                            String temp2 = DistributeVariable();
+                            String temp3 = DistributeVariable();
+                            iCodes.set(i, new Exp(last, op1));
+                            iCodes.add(i + 1, new Exp("msh", temp1, Integer.toString(m), last));
+                            iCodes.add(i + 2, new Exp(">>>v", temp2, temp1, Integer.toString(shpost)));
+//                            iCodes.add(i + 2, "slt " + op1 + "," + 0 + "," + temp3);
+                            iCodes.add(i + 3, new Exp("<", temp3, last, Integer.toString(0)));
+                            if (isPositive) {
+//                            iCodes.add(i + 3, "add " + temp2 + "," + temp3 + "," + result);
+                                iCodes.add(i + 4, new Exp("+", result, temp2, temp3));
+                            } else {
+                                String temp4 = DistributeVariable();
+//                            iCodes.add(i + 3, "add " + temp2 + "," + temp3 + "," + temp4);
+//                            iCodes.add(i + 4, "minus " + result + "," + temp4);
+                                iCodes.add(i + 4, new Exp("+", temp4, temp2, temp3));
+                                iCodes.add(i + 5, new Exp("-", result, temp4));
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 
 }

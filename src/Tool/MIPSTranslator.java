@@ -74,7 +74,6 @@ public class MIPSTranslator {
         TranslateInitCodes();
         TranslateMainFuncCode();
         TranslateFuncCode();
-        ReduceCalculation();
     }
 
     public void TranslateGlobalCodes() {
@@ -563,6 +562,9 @@ public class MIPSTranslator {
     }
 
     public String DistributeReg(String temp) {
+        if (temp.equals("#RegT9#")) {
+            return RegDistributor.GetReg(25);
+        }
         String tempReg = regDistributor.TempRegDistribute();
         /* 分配寄存器的时候，如果遇到某一个寄存器已经被占用，则将该寄存器内容弹出
          * 并登记符号表，记录偏移 */
@@ -678,6 +680,8 @@ public class MIPSTranslator {
             return DistributeReg(sym);
         } else if (isFuncRet(sym)) {
             return RegDistributor.V1Reg;
+        } else if (isRegT9(sym)) {
+            return RegDistributor.GetReg(25);
         }
         return null;
     }
@@ -761,7 +765,7 @@ public class MIPSTranslator {
                 AddStore(reg, RegDistributor.SPReg, addrSym.getOffset());
                 addrSym.clearTimes();
             }
-        } else if (isTemp(lSym)) {
+        } else if (isTemp(lSym) || isRegT9(lSym)) {
             /* 左侧使用临时变量，分配寄存器并保存值，更新寄存器记录 */
             String tReg = DistributeReg(lSym);
             AddAssign(reg, tReg, Assign.MOVE);
@@ -823,6 +827,10 @@ public class MIPSTranslator {
             case "<<":
             case ">>":
             case ">>>":
+            case "<<v":
+            case ">>v":
+            case ">>>v":
+            case "msh":
                 MIPSCodes.add(new Calculate(operator, t1, t2, t3));
                 break;
             case "%":
@@ -882,6 +890,10 @@ public class MIPSTranslator {
 
     public boolean isReg(String string) {
         return string.contains("$");
+    }
+
+    public boolean isRegT9(String temp) {
+        return temp.equals("#RegT9#");
     }
 
     public boolean isFuncRet(String string) {
@@ -977,31 +989,6 @@ public class MIPSTranslator {
         System.out.println("This is a MIPSTable...");
         for (AddrSym sym : curTable.getAddrSymbols().values()) {
             System.out.println(sym.getName() + " " + sym.getOffset());
-        }
-    }
-
-    public void ReduceCalculation() {
-        for (int i = 0; i < MIPSCodes.size(); i++) {
-            if (MIPSCodes.get(i) instanceof Calculate) {
-                Calculate calculate = (Calculate) MIPSCodes.get(i);
-                if (calculate.getOperator().equals("*")) {
-                    if (isDigit(calculate.getT3()) && Integer.parseInt(calculate.getT3()) > 0) {
-                        int j = 0, num = Integer.parseInt(calculate.getT3());
-                        while (Math.pow(2, j) < num) {
-                            j++;
-                        }
-                        if (num == Math.pow(2, j - 1) + 1) {
-                            calculate.setOperator("<<");
-                            calculate.setT3(Integer.toString(j - 1));
-                            MIPSCodes.add(i + 1, new Calculate("+", calculate.getT1(), calculate.getT1(), calculate.getT2()));
-                        } else if (num == Math.pow(2, j) - 1) {
-                            calculate.setOperator("<<");
-                            calculate.setT3(Integer.toString(j));
-                            MIPSCodes.add(i + 1, new Calculate("-", calculate.getT1(), calculate.getT1(), calculate.getT2()));
-                        }
-                    }
-                }
-            }
         }
     }
 }

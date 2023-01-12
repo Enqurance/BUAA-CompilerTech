@@ -1,41 +1,51 @@
-const int N = 10;
-int a[10] = {0,1,2,3,4,5,6,7,8,9};
-int fib(int i) {
-    if (i == 1) {
+int a,b,c,d,e,i=0;
+
+int func0(int a,int b) {
+    int i = 0;
+    int c = 128;
+    return (a+b)%c;
+}
+
+int func1(int a) {
+    i = i + 1;
+    return i;
+}
+
+int func2(int a,int b) {
+    if (a % b == 0) {
         return 1;
     }
-    if (i == 2) {
-        return 2;
-    }
-    return fib(i - 1) + fib(i - 2);
+    return 0;
 }
-int main()
-{    
-    int i = 2,j = 5;
-    const int a1 = 1, a2 = 2;
+
+int func3() {
+    printf("glo_i = %d\n",i);
+    int tt0,tt1,t2,tt3,tt4,v=1906;
+    while (i < 10000) {
+        int v = a * 4 * 32 * a / a / 32;
+        b = func0(b,v);
+        tt0 = a*4 + b + c ;
+        tt1 = a*4 + b + c + d;
+        t2 = a*4 + b + c + d + e;
+        tt3 = a*4 + b + c + d + e;
+        tt4 = a*4 + b + c + d + e;
+        if (func2(i,1000)) {
+            printf("sum = %d\n", tt0 + tt1 + t2 + tt3 + tt4);
+        }
+        func1(i);
+    }
+    return tt0 + tt1 + t2 + tt3 + tt4;
+}
+
+int main() {
+    int i = 0;
+    a = getint();
+    b = getint();
+    c = getint();
+    d = getint();
+    e = getint();
     i = getint();
-    j = getint();
-    i = (-(i * j) * fib(4) + 0 + a[1] * 1 - 1/2) * 5;
-    j = 7*5923%56*57 - fib(fib(5)+2) + (a1+a2-(89/2*36-53) /1*6-2*(45*56/85-56+35*56/4-9));
-    int k = +-+6;
-    while (i <= 100) {
-	a[0] = a[0] + k * k;
-	a[1] = a[1] + k * k;
-	a[2] = a[2] + k * k;
-	a[3] = a[3] + k * k;
-	a[4] = a[4] + k * k;
-	a[5] = a[5] + k * k;
-	a[6] = a[6] + k * k;
-	a[7] = a[7] + k * k;
-	a[8] = a[8] + k * k;
-	a[9] = a[9] + k * k;
-	i = i + 1;
-    }
-    i = 0;
-    while (i < 10) {
-	printf("%d, ", a[i]);
-	i = i + 1;
-    }
-    printf("\n%d, %d, %d\n", i, j, k);
+    printf("main_i = %d\n",i);
+    printf("%d\n",func3());
     return 0;
 }
